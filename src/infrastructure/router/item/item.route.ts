@@ -21,13 +21,13 @@ function configureItemRoutes(app: Express, socketAdapter: SocketAdapter) {
     *   Iniciar controller
     */
     
-    const ItemCtrl = new ItemController(itemUseCase, socketAdapter);
+    const itemCtrl = new ItemController(itemUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/items/:filter?/:page?/:perPage?`, ItemCtrl.getAllCtrl);
-    app.get(`/${process.env.BASE_URL_API}/item/:itm_uuid`, ItemCtrl.getCtrl);
-    app.post(`/${process.env.BASE_URL_API}/item`, ItemCtrl.insertCtrl);
-    app.put(`/${process.env.BASE_URL_API}/item/:itm_uuid`, ItemCtrl.updateCtrl);
-    app.delete(`/${process.env.BASE_URL_API}/item/:itm_uuid`, ItemCtrl.deleteCtrl);
+    app.get(`/${process.env.BASE_URL_API}/items/:filter?/:page?/:perPage?`, itemCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/item/:itm_uuid`, itemCtrl.getCtrl);
+    app.post(`/${process.env.BASE_URL_API}/item`, itemCtrl.insertCtrl);
+    app.put(`/${process.env.BASE_URL_API}/item/:itm_uuid`, itemCtrl.updateCtrl);
+    app.delete(`/${process.env.BASE_URL_API}/item/:itm_uuid`, itemCtrl.deleteCtrl);
 }
 
 export default configureItemRoutes;
