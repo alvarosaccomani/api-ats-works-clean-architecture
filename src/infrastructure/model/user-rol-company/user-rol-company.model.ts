@@ -1,0 +1,44 @@
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../../db/sequelize';
+import { UserRolCompanyEntity } from "../../../domain/user-rol-company/user-rol-company.entity";
+
+export class SequelizeUserRolCompany extends Model<UserRolCompanyEntity, Omit<UserRolCompanyEntity, 'id'>> {
+  declare cmp_uuid: string;
+  declare usrrolcmp_uuid: string;
+  declare usr_uuid: string;
+  declare rol_uuid: string;
+  declare usrrolcmp_createdat: Date;
+  declare usrrolcmp_updatedat: Date;
+}
+
+SequelizeUserRolCompany.init({
+  cmp_uuid: {
+    type: DataTypes.STRING, 
+    primaryKey: true
+  },
+  usrrolcmp_uuid: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  usr_uuid: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  rol_uuid: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  usrrolcmp_createdat: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  usrrolcmp_updatedat: {
+    type: DataTypes.DATE,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  timestamps: false,
+  tableName: 'usrrolcmp_usersrolescompanies'
+});
+SequelizeUserRolCompany.sync();
