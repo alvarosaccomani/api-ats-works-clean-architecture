@@ -1,0 +1,35 @@
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../../db/sequelize';
+import { RolEntity } from "../../../domain/rol/rol.entity";
+
+export class SequelizeRol extends Model<RolEntity, Omit<RolEntity, 'id'>> {
+  declare rol_uuid: string;
+  declare rol_name: string;
+  declare rol_createdat: Date;
+  declare rol_updatedat: Date;
+}
+
+SequelizeRol.init({
+  rol_uuid: {
+    type: DataTypes.STRING, 
+    primaryKey: true/*,
+    autoIncrement: true*/
+  },
+  rol_name: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  rol_createdat: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  rol_updatedat: {
+    type: DataTypes.DATE,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  timestamps: false,
+  tableName: 'rol_roles'
+});
+SequelizeRol.sync();
