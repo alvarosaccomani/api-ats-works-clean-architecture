@@ -9,6 +9,7 @@ export class UserRolCompanyController {
         this.insertCtrl = this.insertCtrl.bind(this);
         this.updateCtrl = this.updateCtrl.bind(this);
         this.deleteCtrl = this.deleteCtrl.bind(this);
+        this.getUserRolesCompanyByUserCtrl = this.getUserRolesCompanyByUserCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -146,6 +147,25 @@ export class UserRolCompanyController {
             return res.status(400).json({
                 success: false,
                 message: 'No se pudo eliminar el user rol company.',
+                error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getUserRolesCompanyByUserCtrl(req: Request, res: Response) {
+        try {
+            const usr_uuid = req.params.usr_uuid;
+            const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompanyByUser(usr_uuid);
+            return res.status(200).send({
+                success: true,
+                message: 'User roles company retornados.',
+                data: userRolesCompany
+            });
+        } catch (error: any) {
+            console.error('Error en getUserRolesCompanyByUserCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar los user roles company',
                 error: error.message, // Mensaje claro del error
             });
         }

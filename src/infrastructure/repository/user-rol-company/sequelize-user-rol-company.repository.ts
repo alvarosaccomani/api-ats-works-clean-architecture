@@ -1,6 +1,8 @@
 import { UserRolCompanyEntity } from "../../../domain/user-rol-company/user-rol-company.entity";
 import { UserRolCompanyRepository } from "../../../domain/user-rol-company/user-rol-company.repository";
 import { SequelizeUserRolCompany } from "../../model/user-rol-company/user-rol-company.model";
+import { SequelizeCompany } from "../../model/company/company.model";
+import { SequelizeRol } from "../../model/rol/rol.model";
 
 export class SequelizeRepository implements UserRolCompanyRepository {
     async getUserRolesCompany(): Promise<UserRolCompanyEntity[] | null> {
@@ -87,6 +89,30 @@ export class SequelizeRepository implements UserRolCompanyRepository {
             return userRolCompany;
         } catch (error: any) {
             console.error('Error en deleteUserRolCompany:', error.message);
+            throw error;
+        }
+    }
+    async getUserRolesCompanyByUser(usr_uuid: string): Promise<UserRolCompanyEntity[] | null> {
+        try {
+            let config = {
+                where: {},
+                include: [
+                    { as: 'cmp', model: SequelizeCompany },
+                    { as: 'rol', model: SequelizeRol }
+                ]
+            }
+            if (usr_uuid && usr_uuid !== 'null') {
+                config.where = { 
+                    usr_uuid: usr_uuid
+                }
+            }
+            const userRolesCompany = await SequelizeUserRolCompany.findAll(config);
+            if(!userRolesCompany) {
+                throw new Error(`No hay user rol company para el usuario con el Id: ${usr_uuid}`);
+            }
+            return userRolesCompany;
+        } catch (error: any) {
+            console.error('Error en getUserRolesCompanyByUser:', error.message);
             throw error;
         }
     }

@@ -1,6 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { UserRolCompanyEntity } from "../../../domain/user-rol-company/user-rol-company.entity";
+import { SequelizeCompany } from '../company/company.model';
+import { SequelizeRol } from '../rol/rol.model';
 
 export class SequelizeUserRolCompany extends Model<UserRolCompanyEntity, Omit<UserRolCompanyEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -40,5 +42,13 @@ SequelizeUserRolCompany.init({
   sequelize,
   timestamps: false,
   tableName: 'usrrolcmp_usersrolescompanies'
+});
+SequelizeUserRolCompany.belongsTo(SequelizeCompany, {
+  as: 'cmp',
+  foreignKey: 'cmp_uuid'
+});
+SequelizeUserRolCompany.belongsTo(SequelizeRol, {
+  as: 'rol',
+  foreignKey: 'rol_uuid'
 });
 SequelizeUserRolCompany.sync();

@@ -10,6 +10,7 @@ export class UserRolCompanyUseCase {
         this.createUserRolCompany = this.createUserRolCompany.bind(this);
         this.updateUserRolCompany = this.updateUserRolCompany.bind(this);
         this.deleteUserRolCompany = this.deleteUserRolCompany.bind(this);
+        this.getUserRolesCompanyByUser = this.getUserRolesCompanyByUser.bind(this);
     }
 
     public async getUserRolesCompany() {
@@ -84,6 +85,16 @@ export class UserRolCompanyUseCase {
             return userRolCompany;
         } catch (error: any) {
             console.error('Error en existUserRolCompany (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async getUserRolesCompanyByUser(usr_uuid: string) {
+        try {
+            const userRolesCompany = this.userRolCompanyRepository.getUserRolesCompanyByUser(usr_uuid);
+            return userRolesCompany;
+        } catch (error: any) {
+            console.error('Error en getUserRolesCompanyByUser (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }
