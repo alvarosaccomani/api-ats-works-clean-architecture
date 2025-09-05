@@ -12,9 +12,9 @@ export class CompanyItemUseCase {
         this.deleteCompanyItem = this.deleteCompanyItem.bind(this);
     }
 
-    public async getCompanyItems() {
+    public async getCompanyItems(cmp_uuid: string) {
         try {
-            const companyItems = this.companyItemRepository.getCompanyItems();
+            const companyItems = this.companyItemRepository.getCompanyItems(cmp_uuid);
             if(!companyItems) {
                 throw new Error('No hay companies.');
             }

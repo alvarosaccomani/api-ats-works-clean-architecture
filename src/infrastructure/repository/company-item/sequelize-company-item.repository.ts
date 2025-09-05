@@ -1,11 +1,20 @@
 import { CompanyItemEntity } from "../../../domain/company-item/company-item.entity";
 import { CompanyItemRepository } from "../../../domain/company-item/company-item.repository";
 import { SequelizeCompanyItem } from "../../model/company-item/company-item.model";
+import { SequelizeItem } from "../../model/item/item.model";
 
 export class SequelizeRepository implements CompanyItemRepository {
-    async getCompanyItems(): Promise<CompanyItemEntity[] | null> {
+    async getCompanyItems(cmp_uuid: string): Promise<CompanyItemEntity[] | null> {
         try {
-            const companyItems = await SequelizeCompanyItem.findAll();
+            let config = {
+                where: {
+                    cmp_uuid: cmp_uuid ?? null
+                },
+                include: [
+                    { as: 'itm', model: SequelizeItem }
+                ]
+            }
+            const companyItems = await SequelizeCompanyItem.findAll(config);
             if(!companyItems) {
                 throw new Error(`No hay company items`)
             };

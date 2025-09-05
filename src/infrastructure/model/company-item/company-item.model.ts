@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { CompanyItemEntity } from "../../../domain/company-item/company-item.entity";
+import { SequelizeItem } from '../item/item.model';
 
 export class SequelizeCompanyItem extends Model<CompanyItemEntity, Omit<CompanyItemEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -35,5 +36,9 @@ SequelizeCompanyItem.init({
   sequelize,
   timestamps: false,
   tableName: 'cmpitm_companyitems'
+});
+SequelizeCompanyItem.belongsTo(SequelizeItem, {
+  as: 'itm',
+  foreignKey: 'itm_uuid'
 });
 SequelizeCompanyItem.sync();

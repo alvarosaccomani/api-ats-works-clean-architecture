@@ -23,7 +23,7 @@ function configureCompanyItemRoutes(app: Express, socketAdapter: SocketAdapter) 
     
     const companyItemCtrl = new CompanyItemController(companyItemUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/company-items/:filter?/:page?/:perPage?`, companyItemCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/company-items/:cmp_uuid/:filter?/:page?/:perPage?`, companyItemCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/company-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid`, companyItemCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/company-item`, companyItemCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/company-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid`, companyItemCtrl.updateCtrl);

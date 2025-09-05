@@ -13,7 +13,15 @@ export class CompanyItemController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const companies = await this.companyItemUseCase.getCompanyItems()
+            const cmp_uuid = req.params.cmp_uuid;
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar la company item.',
+                    error: 'Debe proporcionar un Id de company item.'
+                });
+            }
+            const companies = await this.companyItemUseCase.getCompanyItems(cmp_uuid)
             return res.status(200).send({
                 success: true,
                 message: 'Companies items retornados.',
