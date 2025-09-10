@@ -23,7 +23,7 @@ function configureModelItemRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const modelItemCtrl = new ModelItemController(modelItemUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/model-items/:filter?/:page?/:perPage?`, modelItemCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/model-items/:cmp_uuid/:filter?/:page?/:perPage?`, modelItemCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/model-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid/:mitm_uuid`, modelItemCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/model-item`, modelItemCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/model-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid/:mitm_uuid`, modelItemCtrl.updateCtrl);

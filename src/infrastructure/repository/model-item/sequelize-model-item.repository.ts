@@ -1,11 +1,18 @@
 import { ModelItemEntity } from "../../../domain/model-item/model-item.entity";
 import { ModelItemRepository } from "../../../domain/model-item/model-item.repository";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
+import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
+import { SequelizeDataType } from "../../model/data-type/data-type.model";
 
 export class SequelizeRepository implements ModelItemRepository {
-    async getModelItems(): Promise<ModelItemEntity[] | null> {
+    async getModelItems(cmp_uuid: string): Promise<ModelItemEntity[] | null> {
         try {
-            const modelItems = await SequelizeModelItem.findAll();
+
+            const modelItems = await SequelizeModelItem.findAll({ 
+                where: { 
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            });
             if(!modelItems) {
                 throw new Error(`No hay model items`)
             };
@@ -22,7 +29,19 @@ export class SequelizeRepository implements ModelItemRepository {
                     cmp_uuid: cmp_uuid ?? null,
                     itm_uuid: itm_uuid ?? null,
                     cmpitm_uuid: cmpitm_uuid ?? null
-                } 
+                },
+                include: [
+                    { 
+                        as: 'detailModelItems', 
+                        model: SequelizeDetailModelItem,
+                        include: [
+                            { 
+                                as: 'dtp', 
+                                model: SequelizeDataType
+                            }
+                        ] 
+                    }
+                ] 
             });
             if(!modelItem) {
                 throw new Error(`No hay model item con el Id: ${cmp_uuid}`);

@@ -12,9 +12,9 @@ export class ModelItemUseCase {
         this.deleteModelItem = this.deleteModelItem.bind(this);
     }
 
-    public async getModelItems() {
+    public async getModelItems(cmp_uuid: string) {
         try {
-            const modelItems = this.modelItemRepository.getModelItems();
+            const modelItems = this.modelItemRepository.getModelItems(cmp_uuid);
             if(!modelItems) {
                 throw new Error('No hay model items.');
             }
