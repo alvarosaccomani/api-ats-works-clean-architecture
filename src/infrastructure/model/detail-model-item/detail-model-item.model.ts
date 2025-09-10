@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { DetailModelItemEntity } from "../../../domain/detail-model-item/detail-model-item.entity";
+import { SequelizeDataType } from '../data-type/data-type.model';
 
 export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<DetailModelItemEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -75,5 +76,9 @@ SequelizeDetailModelItem.init({
   sequelize,
   timestamps: false,
   tableName: 'dmitm_detailsmodelsitems'
+});
+SequelizeDetailModelItem.belongsTo(SequelizeDataType, {
+    foreignKey: 'dtp_uuid',
+    as: 'dtp'
 });
 SequelizeDetailModelItem.sync();
