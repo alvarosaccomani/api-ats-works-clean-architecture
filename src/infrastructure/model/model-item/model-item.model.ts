@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { ModelItemEntity } from "../../../domain/model-item/model-item.entity";
+import { SequelizeDetailModelItem } from "../detail-model-item/detail-model-item.model";
 
 export class SequelizeModelItem extends Model<ModelItemEntity, Omit<ModelItemEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -55,5 +56,10 @@ SequelizeModelItem.init({
   sequelize,
   timestamps: false,
   tableName: 'mitm_modelsitems'
+});
+SequelizeModelItem.hasMany(SequelizeDetailModelItem, {
+    foreignKey: 'mitm_uuid',
+    sourceKey: 'mitm_uuid',
+    as: 'detailModelItems'
 });
 SequelizeModelItem.sync();
