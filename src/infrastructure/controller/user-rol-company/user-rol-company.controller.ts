@@ -14,7 +14,15 @@ export class UserRolCompanyController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany()
+            const cmp_uuid = req.params.cmp_uuid;
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los user roles company.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany(cmp_uuid)
             return res.status(200).send({
                 success: true,
                 message: 'User roles company retornados.',

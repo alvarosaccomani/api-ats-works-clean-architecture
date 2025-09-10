@@ -13,9 +13,9 @@ export class UserRolCompanyUseCase {
         this.getUserRolesCompanyByUser = this.getUserRolesCompanyByUser.bind(this);
     }
 
-    public async getUserRolesCompany() {
+    public async getUserRolesCompany(cmp_uuid: string) {
         try {
-            const userRolesCompany = this.userRolCompanyRepository.getUserRolesCompany();
+            const userRolesCompany = this.userRolCompanyRepository.getUserRolesCompany(cmp_uuid);
             if(!userRolesCompany) {
                 throw new Error('No hay users roles companies.');
             }

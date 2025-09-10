@@ -23,7 +23,7 @@ function configureUserRolCompanyRoutes(app: Express, socketAdapter: SocketAdapte
     
     const userRolCompanyCtrl = new UserRolCompanyController(userRolCompanyUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/user-roles-company/:filter?/:page?/:perPage?`, userRolCompanyCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/user-roles-company/:cmp_uuid/:filter?/:page?/:perPage?`, userRolCompanyCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/user-rol-company/:cmp_uuid/:usrrolcmp_uuid/:usr_uuid/:rol_uuid`, userRolCompanyCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/user-rol-company`, userRolCompanyCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/user-rol-company/:cmp_uuid/:usrrolcmp_uuid/:usr_uuid/:rol_uuid`, userRolCompanyCtrl.updateCtrl);
