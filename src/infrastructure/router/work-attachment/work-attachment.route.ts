@@ -23,7 +23,7 @@ function configureWorkAttachmentRoutes(app: Express, socketAdapter: SocketAdapte
     
     const workAttachmentCtrl = new WorkAttachmentController(workAttachmentUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/work-attachments/:filter?/:page?/:perPage?`, workAttachmentCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/work-attachments/:cmp_uuid/:filter?/:page?/:perPage?`, workAttachmentCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/work-attachment/:cmp_uuid/:wrk_uuid/:wrka_uuid`, workAttachmentCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/work-attachment`, workAttachmentCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/work-attachment/:cmp_uuid/:wrk_uuid/:wrka_uuid`, workAttachmentCtrl.updateCtrl);

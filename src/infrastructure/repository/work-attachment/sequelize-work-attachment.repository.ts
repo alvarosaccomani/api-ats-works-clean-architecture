@@ -3,9 +3,13 @@ import { WorkAttachmentRepository } from "../../../domain/work-attachment/work-a
 import { SequelizeWorkAttachment } from "../../model/work-attachment/work-attachment.model";
 
 export class SequelizeRepository implements WorkAttachmentRepository {
-    async getWorkAttachments(): Promise<WorkAttachmentEntity[] | null> {
+    async getWorkAttachments(cmp_uuid: string): Promise<WorkAttachmentEntity[] | null> {
         try {
-            const workAttachments = await SequelizeWorkAttachment.findAll();
+            const workAttachments = await SequelizeWorkAttachment.findAll({ 
+                where: { 
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            });
             if(!workAttachments) {
                 throw new Error(`No hay work attachments`)
             };

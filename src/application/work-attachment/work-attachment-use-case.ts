@@ -12,9 +12,9 @@ export class WorkAttachmentUseCase {
         this.deleteWorkAttachment = this.deleteWorkAttachment.bind(this);
     }
 
-    public async getWorkAttachments() {
+    public async getWorkAttachments(cmp_uuid: string) {
         try {
-            const workAttachments = this.workAttachmentRepository.getWorkAttachments();
+            const workAttachments = this.workAttachmentRepository.getWorkAttachments(cmp_uuid);
             if(!workAttachments) {
                 throw new Error('No hay work attachments.');
             }
