@@ -23,7 +23,7 @@ function configureWorkStateRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const workStateCtrl = new WorkStateController(workStateUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/work-states/:filter?/:page?/:perPage?`, workStateCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/work-states/:cmp_uuid/:filter?/:page?/:perPage?`, workStateCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/work-state/:cmp_uuid/:wrks_uuid`, workStateCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/work-state`, workStateCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/work-state/:cmp_uuid/:wrks_uuid`, workStateCtrl.updateCtrl);

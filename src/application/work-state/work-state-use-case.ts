@@ -13,9 +13,9 @@ export class WorkStateUseCase {
         this.findWorkStateByName = this.findWorkStateByName.bind(this);
     }
 
-    public async getWorkStates() {
+    public async getWorkStates(cmp_uuid: string) {
         try {
-            const typeWorkStates = this.workstateRepository.getWorkStates();
+            const typeWorkStates = this.workstateRepository.getWorkStates(cmp_uuid);
             if(!typeWorkStates) {
                 throw new Error('No hay work states.');
             }

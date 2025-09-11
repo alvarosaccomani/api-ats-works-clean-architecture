@@ -4,9 +4,13 @@ import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { Op } from "sequelize";
 
 export class SequelizeRepository implements WorkStateRepository {
-    async getWorkStates(): Promise<WorkStateEntity[] | null> {
+    async getWorkStates(cmp_uuid: string): Promise<WorkStateEntity[] | null> {
         try {
-            const workStates = await SequelizeWorkState.findAll();
+            const workStates = await SequelizeWorkState.findAll({ 
+                where: { 
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            });
             if(!workStates) {
                 throw new Error(`No hay work states`)
             };
