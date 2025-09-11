@@ -3,9 +3,13 @@ import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
 
 export class SequelizeRepository implements WorkRepository {
-    async getWorks(): Promise<WorkEntity[] | null> {
+    async getWorks(cmp_uuid: string): Promise<WorkEntity[] | null> {
         try {
-            const works = await SequelizeWork.findAll();
+            const works = await SequelizeWork.findAll({ 
+                where: { 
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            });
             if(!works) {
                 throw new Error(`No hay works`)
             };

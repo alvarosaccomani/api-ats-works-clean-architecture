@@ -12,9 +12,9 @@ export class WorkUseCase {
         this.deleteWork = this.deleteWork.bind(this);
     }
 
-    public async getWorks() {
+    public async getWorks(cmp_uuid: string) {
         try {
-            const works = this.workRepository.getWorks();
+            const works = this.workRepository.getWorks(cmp_uuid);
             if(!works) {
                 throw new Error('No hay works.');
             }
