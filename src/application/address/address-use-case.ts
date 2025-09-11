@@ -13,9 +13,9 @@ export class AddressUseCase {
         this.findAddressByName = this.findAddressByName.bind(this);
     }
 
-    public async getAddresses() {
+    public async getAddresses(cmp_uuid: string) {
         try {
-            const address = this.addressRepository.getAddresses();
+            const address = this.addressRepository.getAddresses(cmp_uuid);
             if(!address) {
                 throw new Error('No hay addresses.');
             }

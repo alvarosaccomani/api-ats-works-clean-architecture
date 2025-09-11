@@ -23,7 +23,7 @@ function configureAddressRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const addressCtrl = new AddressController(addressUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/addresses/:filter?/:page?/:perPage?`, addressCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/addresses/:cmp_uuid/:filter?/:page?/:perPage?`, addressCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/address/:cmp_uuid/:adr_uuid`, addressCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/address`, addressCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/address/:cmp_uuid/:adr_uuid`, addressCtrl.updateCtrl);

@@ -4,9 +4,14 @@ import { SequelizeAddress } from "../../model/address/address.model";
 import { Op } from "sequelize";
 
 export class SequelizeRepository implements AddressRepository {
-    async getAddresses(): Promise<AddressEntity[] | null> {
+    async getAddresses(cmp_uuid: string): Promise<AddressEntity[] | null> {
         try {
-            const addresses = await SequelizeAddress.findAll();
+            let config = {
+                where: {
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            }
+            const addresses = await SequelizeAddress.findAll(config);
             if(!addresses) {
                 throw new Error(`No hay addresses`)
             };
