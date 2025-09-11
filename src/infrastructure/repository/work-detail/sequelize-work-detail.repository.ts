@@ -3,9 +3,13 @@ import { WorkDetailRepository } from "../../../domain/work-detail/work-detail.re
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
 
 export class SequelizeRepository implements WorkDetailRepository {
-    async getWorkDetails(): Promise<WorkDetailEntity[] | null> {
+    async getWorkDetails(cmp_uuid: string): Promise<WorkDetailEntity[] | null> {
         try {
-            const workDetails = await SequelizeWorkDetail.findAll();
+            const workDetails = await SequelizeWorkDetail.findAll({ 
+                where: { 
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            });
             if(!workDetails) {
                 throw new Error(`No hay work details`)
             };

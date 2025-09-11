@@ -23,7 +23,7 @@ function configureWorkDetailRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const workDetailCtrl = new WorkDetailController(workdetailUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/work-details/:filter?/:page?/:perPage?`, workDetailCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/work-details/:cmp_uuid/:filter?/:page?/:perPage?`, workDetailCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/work-detail/:cmp_uuid/:wrk_uuid/:wrkd_uuid`, workDetailCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/work-detail`, workDetailCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/work-detail/:cmp_uuid/:wrk_uuid/:wrkd_uuid`, workDetailCtrl.updateCtrl);

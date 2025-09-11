@@ -12,9 +12,9 @@ export class WorkDetailUseCase {
         this.deleteWorkDetail = this.deleteWorkDetail.bind(this);
     }
 
-    public async getWorkDetails() {
+    public async getWorkDetails(cmp_uuid: string) {
         try {
-            const workDetails = this.workDetailRepository.getWorkDetails();
+            const workDetails = this.workDetailRepository.getWorkDetails(cmp_uuid);
             if(!workDetails) {
                 throw new Error('No hay work details.');
             }
