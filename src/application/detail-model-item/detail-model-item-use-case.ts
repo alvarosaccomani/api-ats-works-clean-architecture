@@ -12,9 +12,9 @@ export class DetailModelItemUseCase {
         this.deleteDetailModelItem = this.deleteDetailModelItem.bind(this);
     }
 
-    public async getDetailModelItems() {
+    public async getDetailModelItems(cmp_uuid: string) {
         try {
-            const detailModelItems = this.detailModelItemRepository.getDetailModelItems();
+            const detailModelItems = this.detailModelItemRepository.getDetailModelItems(cmp_uuid);
             if(!detailModelItems) {
                 throw new Error('No hay detail model items.');
             }

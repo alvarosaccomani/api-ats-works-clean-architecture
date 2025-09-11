@@ -3,9 +3,14 @@ import { DetailModelItemRepository } from "../../../domain/detail-model-item/det
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 
 export class SequelizeRepository implements DetailModelItemRepository {
-    async getDetailModelItems(): Promise<DetailModelItemEntity[] | null> {
+    async getDetailModelItems(cmp_uuid: string): Promise<DetailModelItemEntity[] | null> {
         try {
-            const detailModelItems = await SequelizeDetailModelItem.findAll();
+            let config = {
+                where: {
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            }
+            const detailModelItems = await SequelizeDetailModelItem.findAll(config);
             if(!detailModelItems) {
                 throw new Error(`No hay detail model items`)
             };

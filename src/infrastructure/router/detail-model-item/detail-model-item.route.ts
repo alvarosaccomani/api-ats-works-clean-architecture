@@ -23,7 +23,7 @@ function configureDetailModelItemRoutes(app: Express, socketAdapter: SocketAdapt
     
     const detailModelItemCtrl = new DetailModelItemController(detailModelItemUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/detail-model-items/:filter?/:page?/:perPage?`, detailModelItemCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/detail-model-items/:cmp_uuid/:filter?/:page?/:perPage?`, detailModelItemCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/detail-model-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid/:mitm_uuid/:dmitm_uuid`, detailModelItemCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/detail-model-item`, detailModelItemCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/detail-model-item/:cmp_uuid/:itm_uuid/:cmpitm_uuid/:mitm_uuid/:dmitm_uuid`, detailModelItemCtrl.updateCtrl);
