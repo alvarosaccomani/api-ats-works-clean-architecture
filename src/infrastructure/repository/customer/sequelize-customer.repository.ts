@@ -4,9 +4,14 @@ import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { Op } from "sequelize";
 
 export class SequelizeRepository implements CustomerRepository {
-    async getCustomers(): Promise<CustomerEntity[] | null> {
+    async getCustomers(cmp_uuid: string): Promise<CustomerEntity[] | null> {
         try {
-            const customers = await SequelizeCustomer.findAll();
+            let config = {
+                where: {
+                    cmp_uuid: cmp_uuid ?? null
+                }
+            }
+            const customers = await SequelizeCustomer.findAll(config);
             if(!customers) {
                 throw new Error(`No hay customers`)
             };

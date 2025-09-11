@@ -23,7 +23,7 @@ function configureCustomerRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const customerCtrl = new CustomerController(customerUseCase, socketAdapter);
     
-    app.get(`/${process.env.BASE_URL_API}/customers/:filter?/:page?/:perPage?`, customerCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/customers/:cmp_uuid/:filter?/:page?/:perPage?`, customerCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/customer/:cmp_uuid/:cus_uuid`, customerCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/customer`, customerCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/customer/:cmp_uuid/:cus_uuid`, customerCtrl.updateCtrl);

@@ -13,9 +13,9 @@ export class CustomerUseCase {
         this.findCustomerByName = this.findCustomerByName.bind(this);
     }
 
-    public async getCustomers() {
+    public async getCustomers(cmp_uuid: string) {
         try {
-            const typeCustomers = this.customerRepository.getCustomers();
+            const typeCustomers = this.customerRepository.getCustomers(cmp_uuid);
             if(!typeCustomers) {
                 throw new Error('No hay customers.');
             }
