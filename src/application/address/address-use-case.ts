@@ -13,9 +13,9 @@ export class AddressUseCase {
         this.findAddressByName = this.findAddressByName.bind(this);
     }
 
-    public async getAddresses(cmp_uuid: string) {
+    public async getAddresses(cmp_uuid: string, cus_uuid: string) {
         try {
-            const address = this.addressRepository.getAddresses(cmp_uuid);
+            const address = this.addressRepository.getAddresses(cmp_uuid, cus_uuid);
             if(!address) {
                 throw new Error('No hay addresses.');
             }
@@ -26,11 +26,11 @@ export class AddressUseCase {
         }
     }
 
-    public async getDetailAddress(cmp_uuid: string, adr_uuid: string) {
+    public async getDetailAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string) {
         try {
-            const address = this.addressRepository.findAddressById(cmp_uuid, adr_uuid);
+            const address = this.addressRepository.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
             if(!address) {
-                throw new Error(`No hay address con el Id: ${cmp_uuid}, ${adr_uuid}`);
+                throw new Error(`No hay address con el Id: ${cmp_uuid}, ${cus_uuid}, ${adr_uuid}`);
             }
             return address;
         } catch (error: any) {
@@ -53,9 +53,9 @@ export class AddressUseCase {
         }
     }
 
-    public async updateAddress(cmp_uuid: string, adr_uuid: string, { cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } : { cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_createdat: Date, adr_updatedat: Date }) {
+    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } : { cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_createdat: Date, adr_updatedat: Date }) {
         try {
-            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, adr_uuid, { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat });
+            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat });
             if(!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
@@ -66,9 +66,9 @@ export class AddressUseCase {
         }
     }
 
-    public async deleteAddress(cmp_uuid: string, adr_uuid: string) {
+    public async deleteAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string) {
         try {
-            const addressDeleted = await this.addressRepository.deleteAddress(cmp_uuid, adr_uuid);
+            const addressDeleted = await this.addressRepository.deleteAddress(cmp_uuid, cus_uuid, adr_uuid);
             if(!addressDeleted) {
                 throw new Error(`No se pudo eliminar el address.`);
             }
@@ -79,9 +79,9 @@ export class AddressUseCase {
         }
     }
 
-    public async findAddressByName(cmp_uuid: string, adr_address: string, excludeUuid?: string) {
+    public async findAddressByName(cmp_uuid: string, cus_uuid: string, adr_address: string, excludeUuid?: string) {
         try {
-            const address = await this.addressRepository.findAddressByName(cmp_uuid, adr_address, excludeUuid)
+            const address = await this.addressRepository.findAddressByName(cmp_uuid, cus_uuid, adr_address, excludeUuid)
             if(address) {
                 throw new Error(`Ya existe un address con el nombre ${adr_address}.`);
             }

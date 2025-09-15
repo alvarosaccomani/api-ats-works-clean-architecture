@@ -14,6 +14,7 @@ export class AddressController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const cus_uuid = req.params.cus_uuid; 
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,7 +22,14 @@ export class AddressController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            const address = await this.addressUseCase.getAddresses(cmp_uuid)
+            if(!cus_uuid || cus_uuid.toLowerCase() === 'null' || cus_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los addresses.',
+                    error: 'Debe proporcionar un Id de customer.'
+                });
+            }
+            const address = await this.addressUseCase.getAddresses(cmp_uuid, cus_uuid)
             return res.status(200).send({
                 success: true,
                 message: 'Addresses retornados.',
@@ -40,12 +48,20 @@ export class AddressController {
     public async getCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const cus_uuid = req.params.cus_uuid;
             const adr_uuid = req.params.adr_uuid;
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el address.',
                     error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if(!cus_uuid || cus_uuid.toLowerCase() === 'null' || cus_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar el address.',
+                    error: 'Debe proporcionar un Id de customer.'
                 });
             }
             if(!adr_uuid || adr_uuid.toLowerCase() === 'null' || adr_uuid.toLowerCase() === 'undefined') {
@@ -55,7 +71,7 @@ export class AddressController {
                     error: 'Debe proporcionar un Id de address.'
                 });
             }
-            const address = await this.addressUseCase.getDetailAddress(`${cmp_uuid}`,`${adr_uuid}`)
+            const address = await this.addressUseCase.getDetailAddress(`${cmp_uuid}`,`${cus_uuid}`,`${adr_uuid}`)
             return res.status(200).send({
                 success: true,
                 message: 'Address retornado.',
@@ -74,12 +90,20 @@ export class AddressController {
     public async insertCtrl({ body }: Request, res: Response) {
         try {
             const cmp_uuid = body.cmp_uuid;
+            const cus_uuid = body.cus_uuid;
             const adr_address = body.adr_address;
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el address.',
                     error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if(!cus_uuid || cus_uuid.toLowerCase() === 'null' || cus_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar el address.',
+                    error: 'Debe proporcionar un Id de customer.'
                 });
             }
             if(!adr_address) {
@@ -89,7 +113,7 @@ export class AddressController {
                     error: 'Debe proporcionar un Nombre para el address.'
                 })
             };
-            const addressByName = await this.addressUseCase.findAddressByName(cmp_uuid, adr_address);
+            const addressByName = await this.addressUseCase.findAddressByName(cmp_uuid, cus_uuid, adr_address);
             if(addressByName) {
                 return res.status(400).json({
                     success: false,
@@ -116,6 +140,7 @@ export class AddressController {
     public async updateCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const cus_uuid = req.params.cus_uuid;
             const adr_uuid = req.params.adr_uuid;
             const update = req.body;
             if(!update.adr_address) {
@@ -125,7 +150,7 @@ export class AddressController {
                     error: 'Debe proporcionar un Nombre para el address.'
                 })
             };
-            const addressByName = await this.addressUseCase.findAddressByName(update.cmp_uuid, update.adr_address);
+            const addressByName = await this.addressUseCase.findAddressByName(update.cmp_uuid, update.cus_uuid, update.adr_address);
             if(addressByName) {
                 return res.status(400).json({
                     success: false,
@@ -133,7 +158,7 @@ export class AddressController {
                     error: `El nombre ${update.adr_address} de address ya existe.`
                 });
             }
-            const address = await this.addressUseCase.updateAddress(cmp_uuid, adr_uuid, update)
+            const address = await this.addressUseCase.updateAddress(cmp_uuid, cus_uuid, adr_uuid, update)
             return res.status(200).json({
                 success: true,
                 message: 'Address actualizado.',
@@ -151,13 +176,21 @@ export class AddressController {
 
     public async deleteCtrl(req: Request, res: Response) {
         try {
-            const adr_uuid = req.params.adr_uuid;
             const cmp_uuid = req.params.cmp_uuid;
-            if(!adr_uuid) {
+            const cus_uuid = req.params.cus_uuid;
+            const adr_uuid = req.params.adr_uuid;
+            if(!cmp_uuid) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo eliminar el address.',
                     error: 'Debe proporcionar un Id de company.'
+                });
+            };
+            if(!cus_uuid) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo eliminar el address.',
+                    error: 'Debe proporcionar un Id de customer.'
                 });
             };
             if(!adr_uuid) {
@@ -167,7 +200,7 @@ export class AddressController {
                     error: 'Debe proporcionar un Id de address.'
                 });
             };
-            const address = await this.addressUseCase.deleteAddress(cmp_uuid, adr_uuid)
+            const address = await this.addressUseCase.deleteAddress(cmp_uuid, cus_uuid, adr_uuid)
             return res.status(200).json({
                 success: true,
                 message: 'Address eliminada.',

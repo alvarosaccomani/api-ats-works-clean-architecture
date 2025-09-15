@@ -4,11 +4,12 @@ import { SequelizeAddress } from "../../model/address/address.model";
 import { Op } from "sequelize";
 
 export class SequelizeRepository implements AddressRepository {
-    async getAddresses(cmp_uuid: string): Promise<AddressEntity[] | null> {
+    async getAddresses(cmp_uuid: string, cus_uuid: string): Promise<AddressEntity[] | null> {
         try {
             let config = {
                 where: {
-                    cmp_uuid: cmp_uuid ?? null
+                    cmp_uuid: cmp_uuid ?? null,
+                    cus_uuid: cus_uuid ?? null
                 }
             }
             const addresses = await SequelizeAddress.findAll(config);
@@ -21,11 +22,12 @@ export class SequelizeRepository implements AddressRepository {
             throw error;
         }
     }
-    async findAddressById(cmp_uuid: string, adr_uuid: string): Promise<AddressEntity | null> {
+    async findAddressById(cmp_uuid: string, cus_uuid: string, adr_uuid: string): Promise<AddressEntity | null> {
         try {
             const address = await SequelizeAddress.findOne({ 
                 where: { 
                     cmp_uuid: cmp_uuid ?? null,
+                    cus_uuid: cus_uuid ?? null,
                     adr_uuid: adr_uuid ?? null
                 } 
             });
@@ -52,10 +54,10 @@ export class SequelizeRepository implements AddressRepository {
             throw error;
         }
     }
-    async updateAddress(cmp_uuid: string, adr_uuid: string, address: AddressEntity): Promise<AddressEntity | null> {
+    async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, address: AddressEntity): Promise<AddressEntity | null> {
         try {
-            let { cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } = address
-            const result = await SequelizeAddress.update({ cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat }, { where: { cmp_uuid, adr_uuid } });
+            let { adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } = address
+            const result = await SequelizeAddress.update({ cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat }, { where: { cmp_uuid, cus_uuid, adr_uuid } });
             if(result[0] < 1) {
                 throw new Error(`No se ha actualizado el address`);
             };
@@ -65,10 +67,10 @@ export class SequelizeRepository implements AddressRepository {
             throw error;
         }
     }
-    async deleteAddress(cmp_uuid: string, cus_uuid: string): Promise<AddressEntity | null> {
+    async deleteAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string): Promise<AddressEntity | null> {
         try {
-            const address = await this.findAddressById(cmp_uuid, cus_uuid);
-            const result = await SequelizeAddress.destroy({ where: { cmp_uuid, cus_uuid } });
+            const address = await this.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
+            const result = await SequelizeAddress.destroy({ where: { cmp_uuid, cus_uuid, adr_uuid } });
             if(!result) {
                 throw new Error(`No se ha eliminado el address`);
             };
