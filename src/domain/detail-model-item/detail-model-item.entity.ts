@@ -8,6 +8,7 @@ export interface DetailModelItemEntity {
     dmitm_name: string,
     dmitm_description: string,
     dtp_uuid: string,
+    dmitm_arrayvalues: string,
     dmitm_defaultvalue: string,
     dmitm_active: boolean,
 	dmitm_createdat: Date,

@@ -42,8 +42,8 @@ export class SequelizeRepository implements DetailModelItemRepository {
     }
     async createDetailModelItem(detailModelItem: DetailModelItemEntity): Promise<DetailModelItemEntity | null> {
         try {
-            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
-            const result = await SequelizeDetailModelItem.create({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
+            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
+            const result = await SequelizeDetailModelItem.create({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el detail model item`);
             }
@@ -56,8 +56,8 @@ export class SequelizeRepository implements DetailModelItemRepository {
     }
     async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, detailModelItem: DetailModelItemEntity): Promise<DetailModelItemEntity | null> {
         try {
-            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
-            const result = await SequelizeDetailModelItem.update({ dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat }, { where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid } });
+            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
+            const result = await SequelizeDetailModelItem.update({ dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat }, { where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid } });
             if(result[0] < 1) {
                 throw new Error(`No se ha actualizado el detailmodelitem`);
             };

@@ -13,6 +13,7 @@ export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<
 	declare dmitm_name: string;
 	declare dmitm_description: string;
   declare dtp_uuid: string;
+  declare dmitm_arrayvalues: string;
   declare dmitm_defaultvalue: string;
 	declare dmitm_active: boolean;
   declare dmitm_createdat: Date;
@@ -53,6 +54,10 @@ SequelizeDetailModelItem.init({
     allowNull: true
   },
   dtp_uuid: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  dmitm_arrayvalues: {
     type: DataTypes.STRING,
     allowNull: true
   },

@@ -38,9 +38,9 @@ export class DetailModelItemUseCase {
         }
     }
     
-    public async createDetailModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_defaultvalue: string, dmitm_active: boolean, dmitm_createdat: Date, dmitm_updatedat: Date }) {
+    public async createDetailModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_active: boolean, dmitm_createdat: Date, dmitm_updatedat: Date }) {
         try {
-            const detailModelItemsValue = new DetailModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
+            const detailModelItemsValue = new DetailModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
             const detailModelItemsCreated = await this.detailModelItemRepository.createDetailModelItem(detailModelItemsValue);
             if(!detailModelItemsCreated) {
                 throw new Error(`No se pudo insertar el detail model item.`);
@@ -52,9 +52,9 @@ export class DetailModelItemUseCase {
         }
     }
 
-    public async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_defaultvalue: string, dmitm_active: boolean, dmitm_createdat: Date, dmitm_updatedat: Date }) {
+    public async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_active: boolean, dmitm_createdat: Date, dmitm_updatedat: Date }) {
         try {
-            const detailModelItemsUpdated = await this.detailModelItemRepository.updateDetailModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
+            const detailModelItemsUpdated = await this.detailModelItemRepository.updateDetailModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_active, dmitm_createdat, dmitm_updatedat });
             if(!detailModelItemsUpdated) {
                 throw new Error(`No se pudo actualizar el detail model item.`);
             }
