@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize';
 import { ModelItemEntity } from "../../../domain/model-item/model-item.entity";
 import { ModelItemRepository } from "../../../domain/model-item/model-item.repository";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
@@ -22,13 +23,14 @@ export class SequelizeRepository implements ModelItemRepository {
             throw error;
         }
     }
-    async findModelItemById(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string): Promise<ModelItemEntity | null> {
+    async findModelItemById(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string): Promise<ModelItemEntity | null> {
         try {
             const modelItem = await SequelizeModelItem.findOne({ 
                 where: { 
                     cmp_uuid: cmp_uuid ?? null,
                     itm_uuid: itm_uuid ?? null,
-                    cmpitm_uuid: cmpitm_uuid ?? null
+                    cmpitm_uuid: cmpitm_uuid ?? null,
+                    mitm_uuid: mitm_uuid ?? null
                 },
                 include: [
                     { 
@@ -39,9 +41,12 @@ export class SequelizeRepository implements ModelItemRepository {
                                 as: 'dtp', 
                                 model: SequelizeDataType
                             }
-                        ] 
+                        ]
                     }
-                ] 
+                ],
+                order: [
+                    [Sequelize.col('detailModelItems.dmitm_order'), 'ASC'], // Ordenar usando Sequelize.col
+                ]
             });
             if(!modelItem) {
                 throw new Error(`No hay model item con el Id: ${cmp_uuid}`);
@@ -79,10 +84,10 @@ export class SequelizeRepository implements ModelItemRepository {
             throw error;
         }
     }
-    async deleteModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string): Promise<ModelItemEntity | null> {
+    async deleteModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string): Promise<ModelItemEntity | null> {
         try {
-            const modelItem = await this.findModelItemById(cmp_uuid, itm_uuid, cmpitm_uuid);
-            const result = await SequelizeModelItem.destroy({ where: { cmp_uuid, itm_uuid, cmpitm_uuid } });
+            const modelItem = await this.findModelItemById(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid);
+            const result = await SequelizeModelItem.destroy({ where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid } });
             if(!result) {
                 throw new Error(`No se ha eliminado el modelitem`);
             };
