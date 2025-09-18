@@ -3,6 +3,7 @@ import { UserRolCompanyRepository } from "../../../domain/user-rol-company/user-
 import { SequelizeUserRolCompany } from "../../model/user-rol-company/user-rol-company.model";
 import { SequelizeCompany } from "../../model/company/company.model";
 import { SequelizeRol } from "../../model/rol/rol.model";
+import { SequelizeUser } from "../../model/user/user.model";
 
 export class SequelizeRepository implements UserRolCompanyRepository {
     async getUserRolesCompany(cmp_uuid: string): Promise<UserRolCompanyEntity[] | null> {
@@ -10,7 +11,10 @@ export class SequelizeRepository implements UserRolCompanyRepository {
             const userRolesCompany = await SequelizeUserRolCompany.findAll({ 
                 where: { 
                     cmp_uuid: cmp_uuid ?? null
-                }
+                },
+                include: [
+                    { as: 'usr', model: SequelizeUser }
+                ]
             });
             if(!userRolesCompany) {
                 throw new Error(`No hay user roles company`)
