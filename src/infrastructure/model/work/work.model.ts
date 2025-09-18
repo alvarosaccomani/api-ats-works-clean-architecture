@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { WorkEntity } from "../../../domain/work/work.entity";
+import { SequelizeWorkDetail } from "../work-detail/work-detail.model";
 
 export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -85,5 +86,10 @@ SequelizeWork.init({
   sequelize,
   timestamps: false,
   tableName: 'wrk_works'
+});
+SequelizeWork.hasMany(SequelizeWorkDetail, {
+    foreignKey: 'wrk_uuid',
+    sourceKey: 'wrk_uuid',
+    as: 'detailWorks'
 });
 SequelizeWork.sync();
