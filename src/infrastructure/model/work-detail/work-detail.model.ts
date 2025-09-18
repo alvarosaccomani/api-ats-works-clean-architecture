@@ -11,6 +11,7 @@ export class SequelizeWorkDetail extends Model<WorkDetailEntity, Omit<WorkDetail
 	declare wrkd_name: string;
   declare wrkd_description: string;
   declare dtp_uuid: string;
+  declare wrkd_order: string;
 	declare wrkd_value: string;
 	declare wrkd_createdat: Date;
   declare wrkd_updatedat: Date;
@@ -49,6 +50,10 @@ SequelizeWorkDetail.init({
     type: DataTypes.STRING,
     allowNull: true
   },
+  wrkd_order: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   wrkd_createdat: {
     type: DataTypes.DATE,
     allowNull: true
@@ -60,7 +65,7 @@ SequelizeWorkDetail.init({
 }, {
   sequelize,
   timestamps: false,
-  tableName: 'wrkd_workdetails'
+  tableName: 'wrkd_worksdetails'
 });
 SequelizeWorkDetail.belongsTo(SequelizeDataType, {
     foreignKey: 'dtp_uuid',

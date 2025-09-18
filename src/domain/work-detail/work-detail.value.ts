@@ -11,6 +11,7 @@ export class WorkDetailValue implements WorkDetailEntity {
     wrkd_description: string;
     dtp_uuid: string;
     wrkd_value: string;
+    wrkd_order: string;
     wrkd_createdat: Date;
     wrkd_updatedat: Date;
     
@@ -23,6 +24,7 @@ export class WorkDetailValue implements WorkDetailEntity {
             wrkd_description,
             dtp_uuid,
             wrkd_value,
+            wrkd_order,
             wrkd_createdat,
             wrkd_updatedat
         }:{ 
@@ -34,6 +36,7 @@ export class WorkDetailValue implements WorkDetailEntity {
             wrkd_description: string,
             dtp_uuid: string,
             wrkd_value: string,
+            wrkd_order: string,
             wrkd_createdat: Date,
             wrkd_updatedat: Date
         }) {
@@ -45,6 +48,7 @@ export class WorkDetailValue implements WorkDetailEntity {
         this.wrkd_description = wrkd_description;
         this.dtp_uuid = dtp_uuid;
         this.wrkd_value = wrkd_value;
+        this.wrkd_order = wrkd_order;
         this.wrkd_createdat = wrkd_createdat ?? moment().toDate();
         this.wrkd_updatedat = wrkd_updatedat ?? moment().toDate();
     }

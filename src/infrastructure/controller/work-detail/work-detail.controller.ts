@@ -67,17 +67,6 @@ export class WorkDetailController {
 
     public async insertCtrl({ body }: Request, res: Response) {
         try {
-            const cmp_uuid = body.cmp_uuid;
-            const wrk_uuid = body.wrk_uuid;
-            const wrkd_uuid = body.wrkd_uuid;
-            const workdetailExist = await this.workDetailUseCase.existWorkDetail(cmp_uuid, wrk_uuid, wrkd_uuid);
-            if(workdetailExist) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo insertar el work detail.',
-                    error: `El work detail ya existe.`
-                });
-            }
             const workdetail = await this.workDetailUseCase.createWorkDetail(body)
             return res.status(200).json({
                 success: true,

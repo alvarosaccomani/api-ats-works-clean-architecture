@@ -7,6 +7,7 @@ export interface WorkDetailEntity {
     wrkd_description: string,
     dtp_uuid: string,
 	wrkd_value: string,
+    wrkd_order: string,
 	wrkd_createdat: Date,
     wrkd_updatedat: Date
 }

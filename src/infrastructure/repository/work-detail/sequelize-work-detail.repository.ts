@@ -39,8 +39,8 @@ export class SequelizeRepository implements WorkDetailRepository {
     }
     async createWorkDetail(workDetail: WorkDetailEntity): Promise<WorkDetailEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_createdat, wrkd_updatedat } = workDetail
-            const result = await SequelizeWorkDetail.create({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_createdat, wrkd_updatedat });
+            let { cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat } = workDetail
+            const result = await SequelizeWorkDetail.create({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work detail`);
             }
@@ -53,8 +53,8 @@ export class SequelizeRepository implements WorkDetailRepository {
     }
     async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, workDetail: WorkDetailEntity): Promise<WorkDetailEntity | null> {
         try {
-            let { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_createdat, wrkd_updatedat } = workDetail
-            const result = await SequelizeWorkDetail.update({ wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_createdat, wrkd_updatedat }, { where: { cmp_uuid, wrk_uuid, wrkd_uuid } });
+            let { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat } = workDetail
+            const result = await SequelizeWorkDetail.update({ wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat }, { where: { cmp_uuid, wrk_uuid, wrkd_uuid } });
             if(result[0] < 1) {
                 throw new Error(`No se ha actualizado el work detail`);
             };
