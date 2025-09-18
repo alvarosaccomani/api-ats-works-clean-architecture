@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { WorkDetailEntity } from "../../../domain/work-detail/work-detail.entity";
+import { SequelizeDataType } from '../data-type/data-type.model';
 
 export class SequelizeWorkDetail extends Model<WorkDetailEntity, Omit<WorkDetailEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -60,5 +61,9 @@ SequelizeWorkDetail.init({
   sequelize,
   timestamps: false,
   tableName: 'wrkd_workdetails'
+});
+SequelizeWorkDetail.belongsTo(SequelizeDataType, {
+    foreignKey: 'dtp_uuid',
+    as: 'dtp'
 });
 SequelizeWorkDetail.sync();
