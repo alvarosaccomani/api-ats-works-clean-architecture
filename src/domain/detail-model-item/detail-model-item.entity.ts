@@ -10,6 +10,7 @@ export interface DetailModelItemEntity {
     dtp_uuid: string,
     dmitm_arrayvalues: string,
     dmitm_defaultvalue: string,
+    dmitm_order: number,
     dmitm_active: boolean,
 	dmitm_createdat: Date,
     dmitm_updatedat: Date

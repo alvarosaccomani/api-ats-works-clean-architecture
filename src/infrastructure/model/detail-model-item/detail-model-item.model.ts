@@ -16,6 +16,7 @@ export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<
   declare dmitm_arrayvalues: string;
   declare dmitm_defaultvalue: string;
 	declare dmitm_active: boolean;
+  declare dmitm_order: number;
   declare dmitm_createdat: Date;
   declare dmitm_updatedat: Date;
 }
@@ -67,6 +68,10 @@ SequelizeDetailModelItem.init({
   },
 	dmitm_active: {
     type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+  dmitm_order: {
+    type: DataTypes.INTEGER,
     allowNull: true
   },
   dmitm_createdat: {

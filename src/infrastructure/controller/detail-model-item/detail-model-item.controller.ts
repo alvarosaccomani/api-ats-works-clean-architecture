@@ -101,21 +101,6 @@ export class DetailModelItemController {
     public async updateCtrl(req: Request, res: Response) {
         try {
             const update = req.body;
-            if(!update.cmp_name) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el detail model item.',
-                    error: 'Debe proporcionar un Nombre para el detail model item.'
-                })
-            };
-            const detailModelItemByName = await this.detailModelItemUseCase.getDetailDetailModelItem(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update.mitm_uuid, update.dmitm_uuid);
-            if(detailModelItemByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el detail model item.',
-                    error: `El nombre ${update.cmp_name} de detail model item ya existe.`
-                });
-            }
             const detailModelItem = await this.detailModelItemUseCase.updateDetailModelItem(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update.mitm_uuid, update.dmitm_uuid, update)
             return res.status(200).json({
                 success: true,
