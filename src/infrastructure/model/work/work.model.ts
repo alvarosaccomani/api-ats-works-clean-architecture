@@ -90,6 +90,6 @@ SequelizeWork.init({
 SequelizeWork.hasMany(SequelizeWorkDetail, {
     foreignKey: 'wrk_uuid',
     sourceKey: 'wrk_uuid',
-    as: 'detailWorks'
+    as: 'workDetail'
 });
 SequelizeWork.sync();

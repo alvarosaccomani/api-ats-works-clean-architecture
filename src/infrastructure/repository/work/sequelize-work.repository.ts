@@ -30,7 +30,7 @@ export class SequelizeRepository implements WorkRepository {
                 },
                 include: [
                     { 
-                        as: 'detailWorks', 
+                        as: 'workDetail', 
                         model: SequelizeWorkDetail,
                         include: [
                             { 
