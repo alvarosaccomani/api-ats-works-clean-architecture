@@ -1,6 +1,8 @@
 import { WorkEntity } from "../../../domain/work/work.entity";
 import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
+import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
+import { SequelizeDataType } from "../../model/data-type/data-type.model";
 
 export class SequelizeRepository implements WorkRepository {
     async getWorks(cmp_uuid: string): Promise<WorkEntity[] | null> {
@@ -25,7 +27,19 @@ export class SequelizeRepository implements WorkRepository {
                 where: { 
                     cmp_uuid: cmp_uuid ?? null,
                     wrk_uuid: wrk_uuid ?? null
-                } 
+                },
+                include: [
+                    { 
+                        as: 'detailWorks', 
+                        model: SequelizeWorkDetail,
+                        include: [
+                            { 
+                                as: 'dtp', 
+                                model: SequelizeDataType
+                            }
+                        ] 
+                    }
+                ]
             });
             if(!work) {
                 throw new Error(`No hay work con el Id: ${cmp_uuid}`);
