@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { AddressEntity } from "../../../domain/address/address.entity";
+import { SequelizeCustomer } from '../customer/customer.model';
 
 export class SequelizeAddress extends Model<AddressEntity, Omit<AddressEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -59,4 +60,16 @@ SequelizeAddress.init({
   timestamps: false,
   tableName: 'adr_addresses'
 });
+
+//Sequelize Address Foreign Key
+SequelizeAddress.belongsTo(SequelizeCustomer, {
+    foreignKey: "cmp_uuid",
+    targetKey: "cmp_uuid"
+});
+SequelizeAddress.belongsTo(SequelizeCustomer, {
+    foreignKey: 'cus_uuid',
+    targetKey: "cus_uuid",
+    as: 'cus'
+});
+
 SequelizeAddress.sync();
