@@ -87,7 +87,7 @@ export class SequelizeRepository implements AddressRepository {
                 cus_uuid: cus_uuid ?? null
              };
             if (excludeUuid) {
-                whereCondition.itm_uuid = { [Op.ne]: excludeUuid };
+                whereCondition.adr_uuid = { [Op.ne]: excludeUuid };
             }
             const address = await SequelizeAddress.findOne({ 
                 where: whereCondition
