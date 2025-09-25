@@ -1,6 +1,13 @@
+import { Sequelize } from 'sequelize';
 import { WorkEntity } from "../../../domain/work/work.entity";
 import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
+import { SequelizeAddress } from "../../model/address/address.model";
+import { SequelizeCustomer } from '../../model/customer/customer.model';
+import { SequelizeWorkState } from "../../model/work-state/work-state.model";
+import { SequelizeUser } from "../../model/user/user.model";
+import { SequelizeModelItem } from "../../model/model-item/model-item.model";
+import { SequelizeDetailModelItem } from '../../model/detail-model-item/detail-model-item.model';
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 
@@ -29,8 +36,40 @@ export class SequelizeRepository implements WorkRepository {
                     wrk_uuid: wrk_uuid ?? null
                 },
                 include: [
+                    {
+                        as: 'adr',
+                        model: SequelizeAddress,
+                        include: [
+                            { 
+                                as: 'cus', 
+                                model: SequelizeCustomer
+                            }
+                        ]
+                    },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem,
+                        include: [
+                            { 
+                                as: 'detailModelItems', 
+                                model: SequelizeDetailModelItem
+                            }
+                        ] 
+                    },
                     { 
-                        as: 'workDetail', 
+                        as: "workDetails",
                         model: SequelizeWorkDetail,
                         include: [
                             { 
@@ -39,6 +78,9 @@ export class SequelizeRepository implements WorkRepository {
                             }
                         ] 
                     }
+                ],
+                order: [
+                    [Sequelize.col('workDetails.wrkd_order'), 'ASC'], // Ordenar usando Sequelize.col
                 ]
             });
             if(!work) {
