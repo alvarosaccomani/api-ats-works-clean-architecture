@@ -143,21 +143,6 @@ export class AddressController {
             const cus_uuid = req.params.cus_uuid;
             const adr_uuid = req.params.adr_uuid;
             const update = req.body;
-            if(!update.adr_address) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el address.',
-                    error: 'Debe proporcionar un Nombre para el address.'
-                })
-            };
-            const addressByName = await this.addressUseCase.findAddressByName(update.cmp_uuid, update.cus_uuid, update.adr_address);
-            if(addressByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el address.',
-                    error: `El nombre ${update.adr_address} de address ya existe.`
-                });
-            }
             const address = await this.addressUseCase.updateAddress(cmp_uuid, cus_uuid, adr_uuid, update)
             return res.status(200).json({
                 success: true,
