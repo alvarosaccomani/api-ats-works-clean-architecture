@@ -28,7 +28,7 @@ SequelizeWorkDetail.init({
   },
   wrkd_uuid: {
     type: DataTypes.STRING,
-    allowNull: true
+    primaryKey: true
   },
   wrkd_key: {
     type: DataTypes.STRING,
