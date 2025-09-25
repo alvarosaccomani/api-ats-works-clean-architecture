@@ -95,14 +95,6 @@ export class WorkController {
     public async updateCtrl(req: Request, res: Response) {
         try {
             const update = req.body;
-            const workByName = await this.workUseCase.getDetailWork(update.cmp_uuid, update.wrk_uuid);
-            if(workByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el work.',
-                    error: `El nombre ${update.cmp_name} de work ya existe.`
-                });
-            }
             const work = await this.workUseCase.updateWork(update.cmp_uuid, update.wrk_uuid, update)
             return res.status(200).json({
                 success: true,
