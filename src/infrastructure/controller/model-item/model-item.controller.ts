@@ -99,21 +99,6 @@ export class ModelItemController {
     public async updateCtrl(req: Request, res: Response) {
         try {
             const update = req.body;
-            if(!update.cmp_name) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el model item.',
-                    error: 'Debe proporcionar un Nombre para el model item.'
-                })
-            };
-            const modelItemByName = await this.modelItemUseCase.getDetailModelItem(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update.mitm_uuid);
-            if(modelItemByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el model item.',
-                    error: `El nombre ${update.cmp_name} de model item ya existe.`
-                });
-            }
             const modelItem = await this.modelItemUseCase.updateModelItem(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update.mitm_uuid, update)
             return res.status(200).json({
                 success: true,
