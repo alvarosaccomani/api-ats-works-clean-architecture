@@ -66,9 +66,9 @@ export class DataTypeUseCase {
         }
     }
 
-    public async deleteDataType(act_uuid: string) {
+    public async deleteDataType(dtp_uuid: string) {
         try {
-            const dataTypeDeleted = await this.dataTypeRepository.deleteDataType(act_uuid);
+            const dataTypeDeleted = await this.dataTypeRepository.deleteDataType(dtp_uuid);
             if(!dataTypeDeleted) {
                 throw new Error(`No se pudo eliminar el data type.`);
             }
