@@ -7,7 +7,8 @@ export class SequelizeCustomer extends Model<CustomerEntity, Omit<CustomerEntity
   declare cus_uuid: string;
   declare cus_fullname: string;
   declare cus_email: string;
-  declare cus_phone: string;   
+  declare cus_phone: string;
+  declare cus_dateofbirth: Date;
   declare cfrm_uuid: string; 
   declare usr_uuid: string;
   declare cus_createdat: Date;
@@ -35,6 +36,10 @@ SequelizeCustomer.init({
   },
   cus_phone: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  cus_dateofbirth: {
+    type: DataTypes.DATE,
     allowNull: true
   },
   cfrm_uuid: {
