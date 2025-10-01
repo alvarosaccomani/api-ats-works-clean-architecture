@@ -39,9 +39,9 @@ export class CustomerUseCase {
         }
     }
     
-    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, usr_uuid: string, cus_createdat: Date, cus_updatedat: Date }) {
+    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, cfrm_uuid: string, usr_uuid: string, cus_createdat: Date, cus_updatedat: Date }) {
         try {
-            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat });
+            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat });
             const customerCreated = await this.customerRepository.createCustomer(customerValue);
             if(!customerCreated) {
                 throw new Error(`No se pudo insertar el customer.`);
@@ -53,9 +53,9 @@ export class CustomerUseCase {
         }
     }
 
-    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat } : { cus_fullname: string, cus_email: string, cus_phone: string, usr_uuid: string, cus_createdat: Date, cus_updatedat: Date }) {
+    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat } : { cus_fullname: string, cus_email: string, cus_phone: string, cfrm_uuid: string, usr_uuid: string, cus_createdat: Date, cus_updatedat: Date }) {
         try {
-            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat });
+            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat });
             if(!customerUpdated) {
                 throw new Error(`No se pudo actualizar el customer.`);
             }

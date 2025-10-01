@@ -40,8 +40,8 @@ export class SequelizeRepository implements CustomerRepository {
     }
     async createCustomer(customer: CustomerEntity): Promise<CustomerEntity | null> {
         try {
-            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat } = customer
-            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat });
+            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat } = customer
+            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el customer`);
             }
@@ -54,8 +54,8 @@ export class SequelizeRepository implements CustomerRepository {
     }
     async updateCustomer(cmp_uuid: string, cus_uuid: string, customer: CustomerEntity): Promise<CustomerEntity | null> {
         try {
-            let { cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat } = customer
-            const result = await SequelizeCustomer.update({ cus_fullname, cus_email, cus_phone, usr_uuid, cus_createdat, cus_updatedat }, { where: { cmp_uuid, cus_uuid } });
+            let { cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat } = customer
+            const result = await SequelizeCustomer.update({ cus_fullname, cus_email, cus_phone, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat }, { where: { cmp_uuid, cus_uuid } });
             if(result[0] < 1) {
                 throw new Error(`No se ha actualizado el customer`);
             };

@@ -4,6 +4,7 @@ export interface CustomerEntity {
     cus_fullname: string,
     cus_email: string,
     cus_phone: string,    
+    cfrm_uuid: string,
     usr_uuid: string,
     cus_createdat: Date,
     cus_updatedat: Date
