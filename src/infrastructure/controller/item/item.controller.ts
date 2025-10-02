@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ItemUseCase } from "../../../application/item/item-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class ItemController {
     constructor(private itemUseCase: ItemUseCase, private socketAdapter: SocketAdapter) {
@@ -13,12 +14,23 @@ export class ItemController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const items = await this.itemUseCase.getItems()
-            return res.status(200).send({
-                success: true,
-                message: 'Items retornados.',
-                data: items
-            });
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            if (page && perPage) {
+                const items = await this.itemUseCase.getItems()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Items retornados.',
+                    ...paginator(items, page, perPage)
+                });
+            } else {
+                const items = await this.itemUseCase.getItems()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Items retornados.',
+                    data: items
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
