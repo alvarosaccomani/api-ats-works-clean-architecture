@@ -17,7 +17,35 @@ export class SequelizeRepository implements WorkRepository {
             const works = await SequelizeWork.findAll({ 
                 where: { 
                     cmp_uuid: cmp_uuid ?? null
-                }
+                },
+                include: [
+                    {
+                        as: 'adr',
+                        model: SequelizeAddress,
+                        include: [
+                            { 
+                                as: 'cus', 
+                                model: SequelizeCustomer
+                            }
+                        ]
+                    },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem
+                    }
+                ]
             });
             if(!works) {
                 throw new Error(`No hay works`)
