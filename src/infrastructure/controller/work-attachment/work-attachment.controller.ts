@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { WorkAttachmentUseCase } from "../../../application/work-attachment/work-attachment-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class WorkAttachmentController {
     constructor(private workAttachmentUseCase: WorkAttachmentUseCase, private socketAdapter: SocketAdapter) {
@@ -14,6 +15,8 @@ export class WorkAttachmentController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,12 +24,21 @@ export class WorkAttachmentController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            const workAttachments = await this.workAttachmentUseCase.getWorkAttachments(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Work attachments retornados.',
-                data: workAttachments
-            });
+            if (page && perPage) {
+                const workAttachments = await this.workAttachmentUseCase.getWorkAttachments(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Work attachments retornados.',
+                    ...paginator(workAttachments, page, perPage)
+                });
+            } else {
+                const workAttachments = await this.workAttachmentUseCase.getWorkAttachments(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Work attachments retornados.',
+                    data: workAttachments
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
