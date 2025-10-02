@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CompanyItemUseCase } from "../../../application/company-item/company-item-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class CompanyItemController {
     constructor(private companyItemUseCase: CompanyItemUseCase, private socketAdapter: SocketAdapter) {
@@ -14,6 +15,8 @@ export class CompanyItemController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,12 +24,21 @@ export class CompanyItemController {
                     error: 'Debe proporcionar un Id de company item.'
                 });
             }
-            const companies = await this.companyItemUseCase.getCompanyItems(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Companies items retornados.',
-                data: companies
-            });
+            if (page && perPage) {
+                const companies = await this.companyItemUseCase.getCompanyItems(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Companies items retornados.',
+                    ...paginator(companies, page, perPage)
+                });
+            } else {
+                const companies = await this.companyItemUseCase.getCompanyItems(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Companies items retornados.',
+                    data: companies
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
