@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AddressUseCase } from "../../../application/address/address-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class AddressController {
     constructor(private addressUseCase: AddressUseCase, private socketAdapter: SocketAdapter) {
@@ -15,6 +16,8 @@ export class AddressController {
         try {
             const cmp_uuid = req.params.cmp_uuid;
             const cus_uuid = req.params.cus_uuid; 
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -29,12 +32,21 @@ export class AddressController {
                     error: 'Debe proporcionar un Id de customer.'
                 });
             }
-            const address = await this.addressUseCase.getAddresses(cmp_uuid, cus_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Addresses retornados.',
-                data: address
-            });
+            if (page && perPage) {
+                const address = await this.addressUseCase.getAddresses(cmp_uuid, cus_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Addresses retornados.',
+                    ...paginator(address, page, perPage)
+                });
+            } else {
+                const address = await this.addressUseCase.getAddresses(cmp_uuid, cus_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Addresses retornados.',
+                    data: address
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
