@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserUseCase } from "../../../application/user/user-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class UserController {
     constructor(private userUseCase: UserUseCase, private socketAdapter: SocketAdapter) {
@@ -18,12 +19,23 @@ export class UserController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const users = await this.userUseCase.getUsers()
-            return res.status(200).send({
-                success: true,
-                message: 'Usuarios retornados.',
-                data: users
-            });
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            if (page && perPage) {
+                const users = await this.userUseCase.getUsers()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Usuarios retornados.',
+                    ...paginator(users, page, perPage)
+                });
+            } else {
+                const users = await this.userUseCase.getUsers()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Usuarios retornados.',
+                    data: users
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
