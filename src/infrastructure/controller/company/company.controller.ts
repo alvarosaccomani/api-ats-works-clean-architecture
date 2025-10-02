@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CompanyUseCase } from "../../../application/company/company-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class CompanyController {
     constructor(private companyUseCase: CompanyUseCase, private socketAdapter: SocketAdapter) {
@@ -13,12 +14,23 @@ export class CompanyController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const companies = await this.companyUseCase.getCompanies()
-            return res.status(200).send({
-                success: true,
-                message: 'Companies retornadas.',
-                data: companies
-            });
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            if (page && perPage) {
+                const companies = await this.companyUseCase.getCompanies()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Companies retornadas.',
+                    ...paginator(companies, page, perPage)
+                });
+            } else {
+                const companies = await this.companyUseCase.getCompanies()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Companies retornadas.',
+                    data: companies
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
