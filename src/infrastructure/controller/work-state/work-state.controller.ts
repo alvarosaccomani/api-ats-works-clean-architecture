@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { WorkStateUseCase } from "../../../application/work-state/work-state-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class WorkStateController {
     constructor(private workStateUseCase: WorkStateUseCase, private socketAdapter: SocketAdapter) {
@@ -14,6 +15,8 @@ export class WorkStateController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,12 +24,21 @@ export class WorkStateController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            const workStates = await this.workStateUseCase.getWorkStates(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Work states retornados.',
-                data: workStates
-            });
+            if (page && perPage) {
+                const workStates = await this.workStateUseCase.getWorkStates(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Work states retornados.',
+                    ...paginator(workStates, page, perPage)
+                });
+            } else {
+                const workStates = await this.workStateUseCase.getWorkStates(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Work states retornados.',
+                    data: workStates
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
