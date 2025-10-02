@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CustomerUseCase } from "../../../application/customer/customer-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class CustomerController {
     constructor(private customerUseCase: CustomerUseCase, private socketAdapter: SocketAdapter) {
@@ -14,6 +15,8 @@ export class CustomerController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,12 +24,21 @@ export class CustomerController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            const customers = await this.customerUseCase.getCustomers(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Customers retornados.',
-                data: customers
-            });
+            if (page && perPage) {
+                const customers = await this.customerUseCase.getCustomers(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Customers retornados.',
+                    ...paginator(customers, page, perPage)
+                });
+            } else {
+                const customers = await this.customerUseCase.getCustomers(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Customers retornados.',
+                    data: customers
+                });
+            }            
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
