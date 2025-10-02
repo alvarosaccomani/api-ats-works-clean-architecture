@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { RolUseCase } from "../../../application/rol/rol-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class RolController {
     constructor(private rolUseCase: RolUseCase, private socketAdapter: SocketAdapter) {
@@ -13,12 +14,23 @@ export class RolController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const roles = await this.rolUseCase.getRoles()
-            return res.status(200).send({
-                success: true,
-                message: 'Roles retornados.',
-                data: roles
-            });
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            if (page && perPage) {
+                const roles = await this.rolUseCase.getRoles()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Roles retornados.',
+                    ...paginator(roles, page, perPage)
+                });
+            } else {
+                const roles = await this.rolUseCase.getRoles()
+                return res.status(200).send({
+                    success: true,
+                    message: 'Roles retornados.',
+                    data: roles
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
