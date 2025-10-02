@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { DetailModelItemUseCase } from "../../../application/detail-model-item/detail-model-item-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class DetailModelItemController {
     constructor(private detailModelItemUseCase: DetailModelItemUseCase, private socketAdapter: SocketAdapter) {
@@ -14,6 +15,8 @@ export class DetailModelItemController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -21,12 +24,21 @@ export class DetailModelItemController {
                     error: 'Debe proporcionar un Id de company item.'
                 });
             }
-            const detailModelItems = await this.detailModelItemUseCase.getDetailModelItems(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'Detail model items items retornados.',
-                data: detailModelItems
-            });
+            if (page && perPage) {
+                const detailModelItems = await this.detailModelItemUseCase.getDetailModelItems(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Detail model items items retornados.',
+                    ...paginator(detailModelItems, page, perPage)
+                });
+            } else {
+                const detailModelItems = await this.detailModelItemUseCase.getDetailModelItems(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'Detail model items items retornados.',
+                    data: detailModelItems
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
