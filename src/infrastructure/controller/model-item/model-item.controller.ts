@@ -20,7 +20,7 @@ export class ModelItemController {
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
-                    message: 'No se pudo recuperar la model item.',
+                    message: 'No se pudo recuperar el model item.',
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
@@ -58,7 +58,7 @@ export class ModelItemController {
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined' || !itm_uuid || itm_uuid.toLowerCase() === 'null' || itm_uuid.toLowerCase() === 'undefined' || !cmpitm_uuid || cmpitm_uuid.toLowerCase() === 'null' || cmpitm_uuid.toLowerCase() === 'undefined' || !mitm_uuid || mitm_uuid.toLowerCase() === 'null' || mitm_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
-                    message: 'No se pudo recuperar la model item.',
+                    message: 'No se pudo recuperar el model item.',
                     error: 'Debe proporcionar un Id de model item.'
                 });
             }
@@ -72,7 +72,7 @@ export class ModelItemController {
             console.error('Error en getCtrl (controller):', error.message);
             return res.status(400).json({
                 success: false,
-                message: 'No se pudo recuperar la model item.',
+                message: 'No se pudo recuperar el model item.',
                 error: error.message, // Mensaje claro del error
             });
         }
@@ -88,7 +88,7 @@ export class ModelItemController {
             if(modelItemExist) {
                 return res.status(400).json({
                     success: false,
-                    message: 'No se pudo insertar la model item.',
+                    message: 'No se pudo insertar el model item.',
                     error: `El model item ya existe.`
                 });
             }
@@ -136,7 +136,7 @@ export class ModelItemController {
             if(!cmp_uuid) {
                 return res.status(400).json({
                     success: false,
-                    message: 'No se pudo eliminar la model item.',
+                    message: 'No se pudo eliminar el model item.',
                     error: 'Debe proporcionar un Id de model item.'
                 });
             };
