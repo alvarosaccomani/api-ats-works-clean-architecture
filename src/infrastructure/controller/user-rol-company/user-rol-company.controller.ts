@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserRolCompanyUseCase } from "../../../application/user-rol-company/user-rol-company-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { paginator } from "../../services/paginator.service";
 
 export class UserRolCompanyController {
     constructor(private userRolCompanyUseCase: UserRolCompanyUseCase, private socketAdapter: SocketAdapter) {
@@ -15,6 +16,8 @@ export class UserRolCompanyController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const page = (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -22,12 +25,21 @@ export class UserRolCompanyController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany(cmp_uuid)
-            return res.status(200).send({
-                success: true,
-                message: 'User roles company retornados.',
-                data: userRolesCompany
-            });
+            if (page && perPage) {
+                const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'User roles company retornados.',
+                    ...paginator(userRolesCompany, page, perPage)
+                });
+            } else {
+                const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany(cmp_uuid)
+                return res.status(200).send({
+                    success: true,
+                    message: 'User roles company retornados.',
+                    data: userRolesCompany
+                });
+            }
         } catch (error: any) {
             console.error('Error en getAllCtrl (controller):', error.message);
             return res.status(400).json({
