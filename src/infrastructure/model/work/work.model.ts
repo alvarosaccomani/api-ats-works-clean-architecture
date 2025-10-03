@@ -6,6 +6,7 @@ import { SequelizeWorkState } from '../work-state/work-state.model';
 import { SequelizeUser } from '../user/user.model';
 import { SequelizeModelItem } from '../model-item/model-item.model';
 import { SequelizeWorkDetail } from "../work-detail/work-detail.model";
+import { SequelizeWorkAttachment } from '../work-attachment/work-attachment.model';
 
 export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -156,5 +157,16 @@ SequelizeWork.hasMany(SequelizeWorkDetail, {
     foreignKey: 'wrk_uuid',
     sourceKey: 'wrk_uuid',
     as: 'workDetails'
+});
+
+//Sequelize Work Attachment Foreign Key
+SequelizeWork.hasMany(SequelizeWorkAttachment, {
+    foreignKey: 'cmp_uuid',
+    sourceKey: 'cmp_uuid'
+});
+SequelizeWork.hasMany(SequelizeWorkAttachment, {
+    foreignKey: 'wrk_uuid',
+    sourceKey: 'wrk_uuid',
+    as: 'workAttachments'
 });
 SequelizeWork.sync();
