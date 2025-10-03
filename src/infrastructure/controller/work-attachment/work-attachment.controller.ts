@@ -79,17 +79,6 @@ export class WorkAttachmentController {
 
     public async insertCtrl({ body }: Request, res: Response) {
         try {
-            const cmp_uuid = body.cmp_uuid;
-            const wrk_uuid = body.wrk_uuid;
-            const wrka_uuid = body.wrka_uuid;
-            const workAttachmentExist = await this.workAttachmentUseCase.existWorkAttachment(cmp_uuid, wrk_uuid, wrka_uuid);
-            if(workAttachmentExist) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo insertar el work attachment.',
-                    error: `El work attachment ya existe.`
-                });
-            }
             const workAttachment = await this.workAttachmentUseCase.createWorkAttachment(body)
             return res.status(200).json({
                 success: true,
