@@ -10,6 +10,7 @@ import { SequelizeModelItem } from "../../model/model-item/model-item.model";
 import { SequelizeDetailModelItem } from '../../model/detail-model-item/detail-model-item.model';
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
+import { SequelizeWorkAttachment } from '../../model/work-attachment/work-attachment.model';
 
 export class SequelizeRepository implements WorkRepository {
     async getWorks(cmp_uuid: string): Promise<WorkEntity[] | null> {
@@ -105,6 +106,10 @@ export class SequelizeRepository implements WorkRepository {
                                 model: SequelizeDataType
                             }
                         ] 
+                    },
+                    { 
+                        as: "workAttachments",
+                        model: SequelizeWorkAttachment
                     }
                 ],
                 order: [
