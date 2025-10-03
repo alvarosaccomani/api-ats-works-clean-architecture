@@ -23,7 +23,7 @@ SequelizeWorkAttachment.init({
   },
   wrka_uuid: {
     type: DataTypes.STRING,
-    allowNull: true
+    primaryKey: true
   },
   wrka_attachmenttype: {
     type: DataTypes.STRING,
