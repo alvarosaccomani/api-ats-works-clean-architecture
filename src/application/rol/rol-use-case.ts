@@ -1,5 +1,6 @@
 import { RolRepository } from "../../domain/rol/rol.repository";
 import { RolValue } from "../../domain/rol/rol.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class RolUseCase {
     constructor(
@@ -15,11 +16,16 @@ export class RolUseCase {
 
     public async getRoles() {
         try {
-            const typeRols = this.rolRepository.getRoles();
-            if(!typeRols) {
+            const roles = await this.rolRepository.getRoles();
+            if(!roles) {
                 throw new Error('No hay roles.');
             }
-            return typeRols;
+            return roles.map(rol => ({
+                rol_uuid: rol.rol_uuid,
+                rol_name: rol.rol_name,
+                rol_createdat: TimezoneConverter.toIsoStringInTimezone(rol.rol_createdat, 'America/Buenos_Aires'),
+                rol_updatedat: TimezoneConverter.toIsoStringInTimezone(rol.rol_updatedat, 'America/Buenos_Aires'),
+            }));
         } catch (error: any) {
             console.error('Error en getRoles (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +34,16 @@ export class RolUseCase {
 
     public async getDetailRol(rol_uuid: string) {
         try {
-            const rol = this.rolRepository.findRolById(rol_uuid);
+            const rol = await this.rolRepository.findRolById(rol_uuid);
             if(!rol) {
                 throw new Error(`No hay rol con el Id: ${rol_uuid}`);
             }
-            return rol;
+            return {
+                rol_uuid: rol.rol_uuid,
+                rol_name: rol.rol_name,
+                rol_createdat: TimezoneConverter.toIsoStringInTimezone(rol.rol_createdat, 'America/Buenos_Aires'),
+                rol_updatedat: TimezoneConverter.toIsoStringInTimezone(rol.rol_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en getDetailRol (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +57,12 @@ export class RolUseCase {
             if(!rolCreated) {
                 throw new Error(`No se pudo insertar el rol.`);
             }
-            return rolCreated;
+            return {
+                rol_uuid: rolCreated.rol_uuid,
+                rol_name: rolCreated.rol_name,
+                rol_createdat: TimezoneConverter.toIsoStringInTimezone(rolCreated.rol_createdat, 'America/Buenos_Aires'),
+                rol_updatedat: TimezoneConverter.toIsoStringInTimezone(rolCreated.rol_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en createRol (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +75,12 @@ export class RolUseCase {
             if(!rolUpdated) {
                 throw new Error(`No se pudo actualizar el rol.`);
             }
-            return rolUpdated;
+            return {
+                rol_uuid: rolUpdated.rol_uuid,
+                rol_name: rolUpdated.rol_name,
+                rol_createdat: TimezoneConverter.toIsoStringInTimezone(rolUpdated.rol_createdat, 'America/Buenos_Aires'),
+                rol_updatedat: TimezoneConverter.toIsoStringInTimezone(rolUpdated.rol_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en updateRol (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +93,12 @@ export class RolUseCase {
             if(!rolDeleted) {
                 throw new Error(`No se pudo eliminar el rol.`);
             }
-            return rolDeleted;
+            return {
+                rol_uuid: rolDeleted.rol_uuid,
+                rol_name: rolDeleted.rol_name,
+                rol_createdat: TimezoneConverter.toIsoStringInTimezone(rolDeleted.rol_createdat, 'America/Buenos_Aires'),
+                rol_updatedat: TimezoneConverter.toIsoStringInTimezone(rolDeleted.rol_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en deleteRol (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
