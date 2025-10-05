@@ -24,10 +24,10 @@ function configureRolRoutes(app: Express, socketAdapter: SocketAdapter) {
     const rolCtrl = new RolController(rolUseCase, socketAdapter);
     
     app.get(`/${process.env.BASE_URL_API}/roles/:filter?/:page?/:perPage?`, rolCtrl.getAllCtrl);
-    app.get(`/${process.env.BASE_URL_API}/rol/:itm_uuid`, rolCtrl.getCtrl);
+    app.get(`/${process.env.BASE_URL_API}/rol/:rol_uuid`, rolCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/rol`, rolCtrl.insertCtrl);
-    app.put(`/${process.env.BASE_URL_API}/rol/:itm_uuid`, rolCtrl.updateCtrl);
-    app.delete(`/${process.env.BASE_URL_API}/rol/:itm_uuid`, rolCtrl.deleteCtrl);
+    app.put(`/${process.env.BASE_URL_API}/rol/:rol_uuid`, rolCtrl.updateCtrl);
+    app.delete(`/${process.env.BASE_URL_API}/rol/:rol_uuid`, rolCtrl.deleteCtrl);
 }
 
 export default configureRolRoutes;
