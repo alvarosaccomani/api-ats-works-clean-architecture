@@ -1,4 +1,4 @@
-import { RolEntity } from "../../../domain/rol/rol.entity";
+import { RolEntity, RolUpdateData } from "../../../domain/rol/rol.entity";
 import { RolRepository } from "../../../domain/rol/rol.repository";
 import { SequelizeRol } from "../../model/rol/rol.model";
 import { Op } from "sequelize";
@@ -46,14 +46,21 @@ export class SequelizeRepository implements RolRepository {
             throw error;
         }
     }
-    async updateRol(rol_uuid: string, rol: RolEntity): Promise<RolEntity | null> {
+    async updateRol(rol_uuid: string, rol: RolUpdateData): Promise<RolEntity | null> {
         try {
-            let { rol_name, rol_updatedat } = rol
-            const result = await SequelizeRol.update({ rol_name, rol_updatedat }, { where: { rol_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedRol]] = await SequelizeRol.update(
+                {
+                    rol_name: rol.rol_name
+                },
+                {
+                    where: { rol_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el rol`);
-            };
-            return rol;
+            }
+            return updatedRol.get({ plain: true }) as RolEntity;
         } catch (error: any) {
             console.error('Error en updateRol:', error.message);
             throw error;
