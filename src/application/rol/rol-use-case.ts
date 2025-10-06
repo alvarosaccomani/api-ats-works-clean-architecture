@@ -50,9 +50,9 @@ export class RolUseCase {
         }
     }
     
-    public async createRol({ rol_uuid, rol_name, rol_createdat, rol_updatedat } : { rol_uuid: string, rol_name: string, rol_createdat: Date, rol_updatedat: Date }) {
+    public async createRol({ rol_uuid, rol_name } : { rol_uuid: string, rol_name: string }) {
         try {
-            const rolValue = new RolValue({ rol_uuid, rol_name, rol_createdat, rol_updatedat });
+            const rolValue = new RolValue({ rol_uuid, rol_name });
             const rolCreated = await this.rolRepository.createRol(rolValue);
             if(!rolCreated) {
                 throw new Error(`No se pudo insertar el rol.`);
@@ -69,9 +69,9 @@ export class RolUseCase {
         }
     }
 
-    public async updateRol(rol_uuid: string, { rol_name, rol_createdat, rol_updatedat } : { rol_name: string, rol_createdat: Date, rol_updatedat: Date }) {
+    public async updateRol(rol_uuid: string, { rol_name } : { rol_name: string }) {
         try {
-            const rolUpdated = await this.rolRepository.updateRol(rol_uuid, { rol_uuid, rol_name, rol_createdat, rol_updatedat });
+            const rolUpdated = await this.rolRepository.updateRol(rol_uuid, { rol_name });
             if(!rolUpdated) {
                 throw new Error(`No se pudo actualizar el rol.`);
             }
