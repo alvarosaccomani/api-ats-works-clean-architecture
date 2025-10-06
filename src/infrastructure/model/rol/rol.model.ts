@@ -25,11 +25,13 @@ SequelizeRol.init({
   },
   rol_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'rol_createdat',
+  updatedAt: 'rol_updatedat',
   tableName: 'rol_roles'
 });
 SequelizeRol.sync();
