@@ -16,8 +16,8 @@ export class RolValue implements RolEntity {
         }:{ 
             rol_uuid: string,
             rol_name: string,
-            rol_createdat: Date,
-            rol_updatedat: Date
+            rol_createdat?: Date,
+            rol_updatedat?: Date
         }) {
         this.rol_uuid = uuid();
         this.rol_name = rol_name;
