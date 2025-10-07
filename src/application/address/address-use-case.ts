@@ -1,5 +1,6 @@
 import { AddressRepository } from "../../domain/address/address.repository";
 import { AddressValue } from "../../domain/address/address.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class AddressUseCase {
     constructor(
@@ -15,11 +16,21 @@ export class AddressUseCase {
 
     public async getAddresses(cmp_uuid: string, cus_uuid: string) {
         try {
-            const address = this.addressRepository.getAddresses(cmp_uuid, cus_uuid);
+            const address = await this.addressRepository.getAddresses(cmp_uuid, cus_uuid);
             if(!address) {
                 throw new Error('No hay addresses.');
             }
-            return address;
+            return address.map(address => ({
+                cmp_uuid: address.cmp_uuid,
+                cus_uuid: address.cus_uuid,
+                adr_uuid: address.adr_uuid,
+                adr_address: address.adr_address,
+                adr_city: address.adr_city,
+                adr_province: address.adr_province,
+                adr_postalcode: address.adr_postalcode,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(address.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(address.adr_updatedat, 'America/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getAddresses (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +39,21 @@ export class AddressUseCase {
 
     public async getDetailAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string) {
         try {
-            const address = this.addressRepository.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
+            const address = await this.addressRepository.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
             if(!address) {
                 throw new Error(`No hay address con el Id: ${cmp_uuid}, ${cus_uuid}, ${adr_uuid}`);
             }
-            return address;
+            return {
+                cmp_uuid: address.cmp_uuid,
+                cus_uuid: address.cus_uuid,
+                adr_uuid: address.adr_uuid,
+                adr_address: address.adr_address,
+                adr_city: address.adr_city,
+                adr_province: address.adr_province,
+                adr_postalcode: address.adr_postalcode,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(address.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(address.adr_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailAddress (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +67,17 @@ export class AddressUseCase {
             if(!addressCreated) {
                 throw new Error(`No se pudo insertar el address.`);
             }
-            return addressCreated;
+            return {
+                cmp_uuid: addressCreated.cmp_uuid,
+                cus_uuid: addressCreated.cus_uuid,
+                adr_uuid: addressCreated.adr_uuid,
+                adr_address: addressCreated.adr_address,
+                adr_city: addressCreated.adr_city,
+                adr_province: addressCreated.adr_province,
+                adr_postalcode: addressCreated.adr_postalcode,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressCreated.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressCreated.adr_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createAddress (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +90,17 @@ export class AddressUseCase {
             if(!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
-            return addressUpdated;
+            return {
+                cmp_uuid: addressUpdated.cmp_uuid,
+                cus_uuid: addressUpdated.cus_uuid,
+                adr_uuid: addressUpdated.adr_uuid,
+                adr_address: addressUpdated.adr_address,
+                adr_city: addressUpdated.adr_city,
+                adr_province: addressUpdated.adr_province,
+                adr_postalcode: addressUpdated.adr_postalcode,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressUpdated.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressUpdated.adr_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateAddress (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +113,17 @@ export class AddressUseCase {
             if(!addressDeleted) {
                 throw new Error(`No se pudo eliminar el address.`);
             }
-            return addressDeleted;
+            return {
+                cmp_uuid: addressDeleted.cmp_uuid,
+                cus_uuid: addressDeleted.cus_uuid,
+                adr_uuid: addressDeleted.adr_uuid,
+                adr_address: addressDeleted.adr_address,
+                adr_city: addressDeleted.adr_city,
+                adr_province: addressDeleted.adr_province,
+                adr_postalcode: addressDeleted.adr_postalcode,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressDeleted.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressDeleted.adr_updatedat, 'America/Buenos_Aires')
+            };;
         } catch (error: any) {
             console.error('Error en deleteAddress (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
