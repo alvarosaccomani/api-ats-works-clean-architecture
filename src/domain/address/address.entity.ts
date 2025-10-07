@@ -9,3 +9,6 @@ export interface AddressEntity {
     adr_createdat: Date,
     adr_updatedat: Date
 }
+
+//Update
+export type AddressUpdateData = Pick<AddressEntity, 'adr_address' | 'adr_city' | 'adr_province' | 'adr_postalcode'>;
