@@ -31,8 +31,8 @@ export class AddressValue implements AddressEntity {
             adr_city: string,
             adr_province: string,    
             adr_postalcode: string,
-            adr_createdat: Date,
-            adr_updatedat: Date
+            adr_createdat?: Date,
+            adr_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.adr_uuid = uuid();
