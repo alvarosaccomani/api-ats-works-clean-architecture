@@ -53,11 +53,13 @@ SequelizeAddress.init({
   },
   adr_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'adr_createdat',
+  updatedAt: 'adr_updatedat',
   tableName: 'adr_addresses'
 });
 
