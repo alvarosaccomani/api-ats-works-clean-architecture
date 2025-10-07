@@ -1,4 +1,4 @@
-import { AddressEntity } from "../../../domain/address/address.entity";
+import { AddressEntity, AddressUpdateData } from "../../../domain/address/address.entity";
 import { AddressRepository } from "../../../domain/address/address.repository";
 import { SequelizeAddress } from "../../model/address/address.model";
 import { Op } from "sequelize";
@@ -54,14 +54,24 @@ export class SequelizeRepository implements AddressRepository {
             throw error;
         }
     }
-    async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, address: AddressEntity): Promise<AddressEntity | null> {
+    async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, address: AddressUpdateData): Promise<AddressEntity | null> {
         try {
-            let { adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } = address
-            const result = await SequelizeAddress.update({ cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat }, { where: { cmp_uuid, cus_uuid, adr_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedAddress]] = await SequelizeAddress.update(
+                { 
+                    adr_address: address.adr_address, 
+                    adr_city: address.adr_city, 
+                    adr_province: address.adr_province, 
+                    adr_postalcode: address.adr_postalcode
+                },
+                { 
+                    where: { cmp_uuid, cus_uuid, adr_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el address`);
             };
-            return address;
+            return updatedAddress.get({ plain: true }) as AddressEntity;
         } catch (error: any) {
             console.error('Error en updateAddress:', error.message);
             throw error;
