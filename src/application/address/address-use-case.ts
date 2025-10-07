@@ -60,9 +60,9 @@ export class AddressUseCase {
         }
     }
     
-    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } : { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_createdat: Date, adr_updatedat: Date }) {
+    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode } : { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string }) {
         try {
-            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat });
+            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode });
             const addressCreated = await this.addressRepository.createAddress(addressValue);
             if(!addressCreated) {
                 throw new Error(`No se pudo insertar el address.`);
@@ -84,9 +84,9 @@ export class AddressUseCase {
         }
     }
 
-    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat } : { cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_createdat: Date, adr_updatedat: Date }) {
+    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode } : { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string }) {
         try {
-            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_createdat, adr_updatedat });
+            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_city, adr_province, adr_postalcode });
             if(!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
