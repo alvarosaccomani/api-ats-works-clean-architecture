@@ -1,5 +1,6 @@
 import { ItemRepository } from "../../domain/item/item.repository";
 import { ItemValue } from "../../domain/item/item.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class ItemUseCase {
     constructor(
@@ -15,11 +16,17 @@ export class ItemUseCase {
 
     public async getItems() {
         try {
-            const typeItems = this.itemRepository.getItems();
+            const typeItems = await this.itemRepository.getItems();
             if(!typeItems) {
                 throw new Error('No hay items.');
             }
-            return typeItems;
+            return typeItems.map(item => ({
+                itm_uuid: item.itm_uuid,
+                itm_name: item.itm_name,
+                itm_description: item.itm_description,
+                itm_createdat: TimezoneConverter.toIsoStringInTimezone(item.itm_createdat, 'America/Argentina/Buenos_Aires'),
+                itm_updatedat: TimezoneConverter.toIsoStringInTimezone(item.itm_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getItems (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +35,17 @@ export class ItemUseCase {
 
     public async getDetailItem(itm_uuid: string) {
         try {
-            const item = this.itemRepository.findItemById(itm_uuid);
+            const item = await this.itemRepository.findItemById(itm_uuid);
             if(!item) {
                 throw new Error(`No hay item con el Id: ${itm_uuid}`);
             }
-            return item;
+            return {
+                itm_uuid: item.itm_uuid,
+                itm_name: item.itm_name,
+                itm_description: item.itm_description,
+                itm_createdat: TimezoneConverter.toIsoStringInTimezone(item.itm_createdat, 'America/Argentina/Buenos_Aires'),
+                itm_updatedat: TimezoneConverter.toIsoStringInTimezone(item.itm_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailItem (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +59,13 @@ export class ItemUseCase {
             if(!itemCreated) {
                 throw new Error(`No se pudo insertar el item.`);
             }
-            return itemCreated;
+            return {
+                itm_uuid: itemCreated.itm_uuid,
+                itm_name: itemCreated.itm_name,
+                itm_description: itemCreated.itm_description,
+                itm_createdat: TimezoneConverter.toIsoStringInTimezone(itemCreated.itm_createdat, 'America/Argentina/Buenos_Aires'),
+                itm_updatedat: TimezoneConverter.toIsoStringInTimezone(itemCreated.itm_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createItem (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +78,13 @@ export class ItemUseCase {
             if(!itemUpdated) {
                 throw new Error(`No se pudo actualizar el item.`);
             }
-            return itemUpdated;
+            return {
+                itm_uuid: itemUpdated.itm_uuid,
+                itm_name: itemUpdated.itm_name,
+                itm_description: itemUpdated.itm_description,
+                itm_createdat: TimezoneConverter.toIsoStringInTimezone(itemUpdated.itm_createdat, 'America/Argentina/Buenos_Aires'),
+                itm_updatedat: TimezoneConverter.toIsoStringInTimezone(itemUpdated.itm_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateItem (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +97,13 @@ export class ItemUseCase {
             if(!itemDeleted) {
                 throw new Error(`No se pudo eliminar el item.`);
             }
-            return itemDeleted;
+            return {
+                itm_uuid: itemDeleted.itm_uuid,
+                itm_name: itemDeleted.itm_name,
+                itm_description: itemDeleted.itm_description,
+                itm_createdat: TimezoneConverter.toIsoStringInTimezone(itemDeleted.itm_createdat, 'America/Argentina/Buenos_Aires'),
+                itm_updatedat: TimezoneConverter.toIsoStringInTimezone(itemDeleted.itm_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteItem (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
