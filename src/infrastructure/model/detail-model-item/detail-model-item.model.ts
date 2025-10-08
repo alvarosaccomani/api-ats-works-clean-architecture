@@ -80,11 +80,13 @@ SequelizeDetailModelItem.init({
   },
   dmitm_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'dmitm_createdat',
+  updatedAt: 'dmitm_updatedat',
   tableName: 'dmitm_detailsmodelsitems'
 });
 SequelizeDetailModelItem.belongsTo(SequelizeDataType, {
