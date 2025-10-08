@@ -9,3 +9,6 @@ export interface ModelItemEntity {
 	mitm_createdat: Date,
     mitm_updatedat: Date
 }
+
+//Update
+export type ModelItemUpdateData = Pick<ModelItemEntity, 'mitm_name' | 'mitm_description' | 'mitm_active'>
