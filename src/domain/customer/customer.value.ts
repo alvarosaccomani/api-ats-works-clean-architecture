@@ -34,8 +34,8 @@ export class CustomerValue implements CustomerEntity {
             cus_dateofbirth: Date,
             cfrm_uuid: string,
             usr_uuid: string,
-            cus_createdat: Date,
-            cus_updatedat: Date
+            cus_createdat?: Date,
+            cus_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.cus_uuid = uuid();
