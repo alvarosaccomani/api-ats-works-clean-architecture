@@ -47,15 +47,17 @@ SequelizeCollectionForm.init({
   },
   cfrm_createdat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
   cfrm_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'cfrm_createdat',
+  updatedAt: 'cfrm_updatedat',
   tableName: 'cfrm_collectionforms'
 });
 
