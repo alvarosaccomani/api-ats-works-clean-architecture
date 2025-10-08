@@ -40,11 +40,13 @@ SequelizeCompany.init({
   },
   cmp_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'cmp_createdat',
+  updatedAt: 'cmp_updatedat',
   tableName: 'cmp_companies'
 });
 SequelizeCompany.sync();
