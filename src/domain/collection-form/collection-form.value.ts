@@ -31,8 +31,8 @@ export class CollectionFormValue implements CollectionFormEntity {
             cfrm_bkcolor: string,    
             cfrm_frcolor: string,
             cfrm_active: boolean,
-            cfrm_createdat: Date,
-            cfrm_updatedat: Date
+            cfrm_createdat?: Date,
+            cfrm_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.cfrm_uuid = uuid();
