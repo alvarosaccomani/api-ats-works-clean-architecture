@@ -9,3 +9,6 @@ export interface CollectionFormEntity {
     cfrm_createdat: Date,
     cfrm_updatedat: Date
 }
+
+//Update
+export type CollectionFormUpdateData = Pick<CollectionFormEntity, 'cfrm_name' | 'cfrm_order' | 'cfrm_bkcolor' | 'cfrm_frcolor' | 'cfrm_active'>
