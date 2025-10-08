@@ -1,4 +1,4 @@
-import { DetailModelItemEntity } from "../../../domain/detail-model-item/detail-model-item.entity";
+import { DetailModelItemEntity, DetailModelItemUpdateData } from "../../../domain/detail-model-item/detail-model-item.entity";
 import { DetailModelItemRepository } from "../../../domain/detail-model-item/detail-model-item.repository";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 
@@ -54,14 +54,28 @@ export class SequelizeRepository implements DetailModelItemRepository {
             throw error;
         }
     }
-    async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, detailModelItem: DetailModelItemEntity): Promise<DetailModelItemEntity | null> {
+    async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, detailModelItem: DetailModelItemUpdateData): Promise<DetailModelItemEntity | null> {
         try {
-            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
-            const result = await SequelizeDetailModelItem.update({ dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, dmitm_active, dmitm_createdat, dmitm_updatedat }, { where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [UpdatedDetailModelItem]] = await SequelizeDetailModelItem.update(
+                { 
+                    dmitm_key: detailModelItem.dmitm_key,
+                    dmitm_name: detailModelItem.dmitm_name,
+                    dmitm_description: detailModelItem.dmitm_description,
+                    dtp_uuid: detailModelItem.dtp_uuid,
+                    dmitm_arrayvalues: detailModelItem.dmitm_arrayvalues,
+                    dmitm_defaultvalue: detailModelItem.dmitm_defaultvalue,
+                    dmitm_order: detailModelItem.dmitm_order,
+                    dmitm_active: detailModelItem.dmitm_active
+                }, 
+                { 
+                    where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el detailmodelitem`);
             };
-            return detailModelItem;
+            return UpdatedDetailModelItem.get({ plain: true }) as DetailModelItemEntity;
         } catch (error: any) {
             console.error('Error en updateDetailModelItem:', error.message);
             throw error;
