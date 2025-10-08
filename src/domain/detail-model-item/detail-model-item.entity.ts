@@ -15,3 +15,6 @@ export interface DetailModelItemEntity {
 	dmitm_createdat: Date,
     dmitm_updatedat: Date
 }
+
+//Update
+export type DetailModelItemUpdateData = Pick<DetailModelItemEntity, 'dmitm_key' | 'dmitm_name' | 'dmitm_description' | 'dtp_uuid' | 'dmitm_arrayvalues' | 'dmitm_defaultvalue' | 'dmitm_order' | 'dmitm_active'>
