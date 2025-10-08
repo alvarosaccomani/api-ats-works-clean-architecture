@@ -30,11 +30,13 @@ SequelizeCompanyItem.init({
   },
   cmpitm_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'cmpitm_createdat',
+  updatedAt: 'cmpitm_updatedat',
   tableName: 'cmpitm_companyitems'
 });
 SequelizeCompanyItem.belongsTo(SequelizeItem, {
