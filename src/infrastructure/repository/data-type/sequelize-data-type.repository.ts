@@ -1,4 +1,4 @@
-import { DataTypeEntity } from "../../../domain/data-type/data-type.entity";
+import { DataTypeEntity, DataTypeUpdateData } from "../../../domain/data-type/data-type.entity";
 import { DataTypeRepository } from "../../../domain/data-type/data-type.repository";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { Op } from "sequelize";
@@ -46,14 +46,24 @@ export class SequelizeRepository implements DataTypeRepository {
             throw error;
         }
     }
-    async updateDataType(dtp_uuid: string, dataType: DataTypeEntity): Promise<DataTypeEntity | null> {
+    async updateDataType(dtp_uuid: string, dataType: DataTypeUpdateData): Promise<DataTypeEntity | null> {
         try {
-            let { dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat } = dataType
-            const result = await SequelizeDataType.update({ dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat }, { where: { dtp_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [UpdatedDataType]] = await SequelizeDataType.update(
+                { 
+                    dtp_cod: dataType.dtp_cod, 
+                    dtp_name: dataType.dtp_name, 
+                    dtp_description: dataType.dtp_description, 
+                    dtp_active: dataType.dtp_active
+                }, 
+                { 
+                    where: { dtp_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+           if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el data type`);
             };
-            return dataType;
+            return UpdatedDataType.get({ plain: true }) as DataTypeEntity;
         } catch (error: any) {
             console.error('Error en updateDataType:', error.message);
             throw error;
