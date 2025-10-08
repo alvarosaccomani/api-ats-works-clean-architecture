@@ -1,4 +1,4 @@
-import { CompanyEntity } from "../../../domain/company/company.entity";
+import { CompanyEntity, CompanyUpdateData } from "../../../domain/company/company.entity";
 import { CompanyRepository } from "../../../domain/company/company.repository";
 import { SequelizeCompany } from "../../model/company/company.model";
 import { Op } from "sequelize";
@@ -46,14 +46,23 @@ export class SequelizeRepository implements CompanyRepository {
             throw error;
         }
     }
-    async updateCompany(cmp_uuid: string, company: CompanyEntity): Promise<CompanyEntity | null> {
+    async updateCompany(cmp_uuid: string, company: CompanyUpdateData): Promise<CompanyEntity | null> {
         try {
-            let { cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat } = company
-            const result = await SequelizeCompany.update({ cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat }, { where: { cmp_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedCompany]] = await SequelizeCompany.update(
+                { 
+                    cmp_address: company.cmp_address, 
+                    cmp_phone: company.cmp_phone, 
+                    cmp_email: company.cmp_email
+                },
+                { 
+                    where: { cmp_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el company`);
             };
-            return company;
+            return updatedCompany.get({ plain: true }) as CompanyEntity;
         } catch (error: any) {
             console.error('Error en updateCompany:', error.message);
             throw error;
