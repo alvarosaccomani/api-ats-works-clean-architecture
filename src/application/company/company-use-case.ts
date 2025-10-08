@@ -1,5 +1,6 @@
 import { CompanyRepository } from "../../domain/company/company.repository";
 import { CompanyValue } from "../../domain/company/company.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class CompanyUseCase {
     constructor(
@@ -15,11 +16,19 @@ export class CompanyUseCase {
 
     public async getCompanies() {
         try {
-            const typeCompanies = this.companyRepository.getCompanies();
+            const typeCompanies = await this.companyRepository.getCompanies();
             if(!typeCompanies) {
                 throw new Error('No hay companies.');
             }
-            return typeCompanies;
+            return typeCompanies.map((company) => ({ 
+                cmp_uuid: company.cmp_uuid,
+                cmp_name: company.cmp_name,
+                cmp_address: company.cmp_address,
+                cmp_phone: company.cmp_phone,
+                cmp_email: company.cmp_email,
+                cmp_createdat: TimezoneConverter.toIsoStringInTimezone(company.cmp_createdat, 'America/Buenos_Aires'),
+                cmp_updatedat: TimezoneConverter.toIsoStringInTimezone(company.cmp_updatedat, 'America/Buenos_Aires'),
+             }));
         } catch (error: any) {
             console.error('Error en getCompanies (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +37,19 @@ export class CompanyUseCase {
 
     public async getDetailCompany(cmp_uuid: string) {
         try {
-            const company = this.companyRepository.findCompanyById(cmp_uuid);
+            const company = await this.companyRepository.findCompanyById(cmp_uuid);
             if(!company) {
                 throw new Error(`No hay company con el Id: ${cmp_uuid}`);
             }
-            return company;
+            return {
+                cmp_uuid: company.cmp_uuid,
+                cmp_name: company.cmp_name,
+                cmp_address: company.cmp_address,
+                cmp_phone: company.cmp_phone,
+                cmp_email: company.cmp_email,
+                cmp_createdat: TimezoneConverter.toIsoStringInTimezone(company.cmp_createdat, 'America/Buenos_Aires'),
+                cmp_updatedat: TimezoneConverter.toIsoStringInTimezone(company.cmp_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en getDetailCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +63,15 @@ export class CompanyUseCase {
             if(!companyCreated) {
                 throw new Error(`No se pudo insertar el company.`);
             }
-            return companyCreated;
+            return {
+                cmp_uuid: companyCreated.cmp_uuid,
+                cmp_name: companyCreated.cmp_name,
+                cmp_address: companyCreated.cmp_address,
+                cmp_phone: companyCreated.cmp_phone,
+                cmp_email: companyCreated.cmp_email,
+                cmp_createdat: TimezoneConverter.toIsoStringInTimezone(companyCreated.cmp_createdat, 'America/Buenos_Aires'),
+                cmp_updatedat: TimezoneConverter.toIsoStringInTimezone(companyCreated.cmp_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en createCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +84,15 @@ export class CompanyUseCase {
             if(!companyUpdated) {
                 throw new Error(`No se pudo actualizar el company.`);
             }
-            return companyUpdated;
+            return {
+                cmp_uuid: companyUpdated.cmp_uuid,
+                cmp_name: companyUpdated.cmp_name,
+                cmp_address: companyUpdated.cmp_address,
+                cmp_phone: companyUpdated.cmp_phone,
+                cmp_email: companyUpdated.cmp_email,
+                cmp_createdat: TimezoneConverter.toIsoStringInTimezone(companyUpdated.cmp_createdat, 'America/Buenos_Aires'),
+                cmp_updatedat: TimezoneConverter.toIsoStringInTimezone(companyUpdated.cmp_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en updateCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +105,15 @@ export class CompanyUseCase {
             if(!companyDeleted) {
                 throw new Error(`No se pudo eliminar el company.`);
             }
-            return companyDeleted;
+            return {
+                cmp_uuid: companyDeleted.cmp_uuid,
+                cmp_name: companyDeleted.cmp_name,
+                cmp_address: companyDeleted.cmp_address,
+                cmp_phone: companyDeleted.cmp_phone,
+                cmp_email: companyDeleted.cmp_email,
+                cmp_createdat: TimezoneConverter.toIsoStringInTimezone(companyDeleted.cmp_createdat, 'America/Buenos_Aires'),
+                cmp_updatedat: TimezoneConverter.toIsoStringInTimezone(companyDeleted.cmp_updatedat, 'America/Buenos_Aires'),
+            };
         } catch (error: any) {
             console.error('Error en deleteCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
