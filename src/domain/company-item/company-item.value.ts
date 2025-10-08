@@ -19,8 +19,8 @@ export class CompanyItemValue implements CompanyItemEntity {
             cmp_uuid: string,
             itm_uuid: string,
             cmpitm_uuid: string,
-            cmpitm_createdat: Date,
-            cmpitm_updatedat: Date
+            cmpitm_createdat?: Date,
+            cmpitm_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.itm_uuid = itm_uuid;
