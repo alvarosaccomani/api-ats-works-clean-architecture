@@ -1,4 +1,4 @@
-import { CollectionFormEntity } from "../../../domain/collection-form/collection-form.entity";
+import { CollectionFormEntity, CollectionFormUpdateData } from "../../../domain/collection-form/collection-form.entity";
 import { CollectionFormRepository } from "../../../domain/collection-form/collection-form.repository";
 import { SequelizeCollectionForm } from "../../model/collection-form/collection-form.model";
 import { Op } from "sequelize";
@@ -47,14 +47,25 @@ export class SequelizeRepository implements CollectionFormRepository {
             throw error;
         }
     }
-    async updateCollectionForm(cmp_uuid: string, cfrm_uuid: string, collectionForm: CollectionFormEntity): Promise<CollectionFormEntity | null> {
+    async updateCollectionForm(cmp_uuid: string, cfrm_uuid: string, collectionForm: CollectionFormUpdateData): Promise<CollectionFormEntity | null> {
         try {
-            let { cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat } = collectionForm
-            const result = await SequelizeCollectionForm.update({ cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat }, { where: { cmp_uuid, cfrm_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedCollectionForm]] = await SequelizeCollectionForm.update(
+                { 
+                    cfrm_name: collectionForm.cfrm_name, 
+                    cfrm_order: collectionForm.cfrm_order,
+                    cfrm_bkcolor: collectionForm.cfrm_bkcolor,
+                    cfrm_frcolor: collectionForm.cfrm_frcolor,
+                    cfrm_active: collectionForm.cfrm_active
+                },
+                { 
+                    where: { cmp_uuid, cfrm_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el collection form`);
             };
-            return collectionForm;
+            return updatedCollectionForm.get({ plain: true }) as CollectionFormEntity;
         } catch (error: any) {
             console.error('Error en updateCollectionForm:', error.message);
             throw error;
