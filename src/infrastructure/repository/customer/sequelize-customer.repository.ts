@@ -1,4 +1,4 @@
-import { CustomerEntity } from "../../../domain/customer/customer.entity";
+import { CustomerEntity, CustomerUpdateData } from "../../../domain/customer/customer.entity";
 import { CustomerRepository } from "../../../domain/customer/customer.repository";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { Op } from "sequelize";
@@ -52,14 +52,26 @@ export class SequelizeRepository implements CustomerRepository {
             throw error;
         }
     }
-    async updateCustomer(cmp_uuid: string, cus_uuid: string, customer: CustomerEntity): Promise<CustomerEntity | null> {
+    async updateCustomer(cmp_uuid: string, cus_uuid: string, customer: CustomerUpdateData): Promise<CustomerEntity | null> {
         try {
-            let { cus_fullname, cus_email, cus_phone, cus_dateofbirth, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat } = customer
-            const result = await SequelizeCustomer.update({ cus_fullname, cus_email, cus_phone, cus_dateofbirth, cfrm_uuid, usr_uuid, cus_createdat, cus_updatedat }, { where: { cmp_uuid, cus_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [UpdatedCustomer]] = await SequelizeCustomer.update(
+                { 
+                    cus_fullname: customer.cus_fullname,
+                    cus_email: customer.cus_email,
+                    cus_phone: customer.cus_phone,
+                    cus_dateofbirth: customer.cus_dateofbirth,
+                    cfrm_uuid: customer.cfrm_uuid,
+                    usr_uuid: customer.usr_uuid
+                },
+                { 
+                    where: { cmp_uuid, cus_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el customer`);
             };
-            return customer;
+            return UpdatedCustomer.get({ plain: true }) as CustomerEntity;
         } catch (error: any) {
             console.error('Error en updateCustomer:', error.message);
             throw error;
