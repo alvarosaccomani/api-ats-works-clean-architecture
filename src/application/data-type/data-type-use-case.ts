@@ -56,9 +56,9 @@ export class DataTypeUseCase {
         }
     }
     
-    public async createDataType({ dtp_uuid, dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat } : { dtp_uuid: string, dtp_cod: string, dtp_name: string, dtp_description: string, dtp_active: boolean, dtp_createdat: Date, dtp_updatedat: Date }) {
+    public async createDataType({ dtp_uuid, dtp_cod, dtp_name, dtp_description, dtp_active } : { dtp_uuid: string, dtp_cod: string, dtp_name: string, dtp_description: string, dtp_active: boolean }) {
         try {
-            const dataTypeValue = new DataTypeValue({ dtp_uuid, dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat });
+            const dataTypeValue = new DataTypeValue({ dtp_uuid, dtp_cod, dtp_name, dtp_description, dtp_active });
             const dataTypeCreated = await this.dataTypeRepository.createDataType(dataTypeValue);
             if(!dataTypeCreated) {
                 throw new Error(`No se pudo insertar el data type.`);
@@ -78,9 +78,9 @@ export class DataTypeUseCase {
         }
     }
 
-    public async updateDataType(dtp_uuid: string, { dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat } : { dtp_cod: string, dtp_name: string, dtp_description: string, dtp_active: boolean, dtp_createdat: Date, dtp_updatedat: Date }) {
+    public async updateDataType(dtp_uuid: string, { dtp_cod, dtp_name, dtp_description, dtp_active } : { dtp_cod: string, dtp_name: string, dtp_description: string, dtp_active: boolean }) {
         try {
-            const dataTypeUpdated = await this.dataTypeRepository.updateDataType(dtp_uuid, { dtp_uuid, dtp_cod, dtp_name, dtp_description, dtp_active, dtp_createdat, dtp_updatedat });
+            const dataTypeUpdated = await this.dataTypeRepository.updateDataType(dtp_uuid, { dtp_cod, dtp_name, dtp_description, dtp_active });
             if(!dataTypeUpdated) {
                 throw new Error(`No se pudo actualizar el data type.`);
             }
