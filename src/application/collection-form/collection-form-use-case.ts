@@ -60,9 +60,9 @@ export class CollectionFormUseCase {
         }
     }
     
-    public async createCollectionForm({ cmp_uuid, cfrm_uuid, cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat } : { cmp_uuid: string, cfrm_uuid: string, cfrm_name: string, cfrm_order: number, cfrm_bkcolor: string, cfrm_frcolor: string, cfrm_active: boolean, cfrm_createdat: Date, cfrm_updatedat: Date }) {
+    public async createCollectionForm({ cmp_uuid, cfrm_uuid, cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active } : { cmp_uuid: string, cfrm_uuid: string, cfrm_name: string, cfrm_order: number, cfrm_bkcolor: string, cfrm_frcolor: string, cfrm_active: boolean }) {
         try {
-            const collectionFormValue = new CollectionFormValue({ cmp_uuid, cfrm_uuid, cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat });
+            const collectionFormValue = new CollectionFormValue({ cmp_uuid, cfrm_uuid, cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active });
             const collectionFormCreated = await this.collectionFormRepository.createCollectionForm(collectionFormValue);
             if(!collectionFormCreated) {
                 throw new Error(`No se pudo insertar el collection form.`);
@@ -84,9 +84,9 @@ export class CollectionFormUseCase {
         }
     }
 
-    public async updateCollectionForm(cmp_uuid: string, cfrm_uuid: string, { cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat } : { cfrm_uuid: string, cfrm_name: string, cfrm_order: number, cfrm_bkcolor: string, cfrm_frcolor: string, cfrm_active: boolean, cfrm_createdat: Date, cfrm_updatedat: Date }) {
+    public async updateCollectionForm(cmp_uuid: string, cfrm_uuid: string, { cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active } : { cfrm_uuid: string, cfrm_name: string, cfrm_order: number, cfrm_bkcolor: string, cfrm_frcolor: string, cfrm_active: boolean }) {
         try {
-            const collectionFormUpdated = await this.collectionFormRepository.updateCollectionForm(cmp_uuid, cfrm_uuid, { cmp_uuid, cfrm_uuid, cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active, cfrm_createdat, cfrm_updatedat });
+            const collectionFormUpdated = await this.collectionFormRepository.updateCollectionForm(cmp_uuid, cfrm_uuid, { cfrm_name, cfrm_order, cfrm_bkcolor, cfrm_frcolor, cfrm_active });
             if(!collectionFormUpdated) {
                 throw new Error(`No se pudo actualizar el collection form.`);
             }
