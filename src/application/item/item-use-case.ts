@@ -52,9 +52,9 @@ export class ItemUseCase {
         }
     }
     
-    public async createItem({ itm_uuid, itm_name, itm_description, itm_createdat, itm_updatedat } : { itm_uuid: string, itm_name: string, itm_description: string, itm_createdat: Date, itm_updatedat: Date }) {
+    public async createItem({ itm_uuid, itm_name, itm_description } : { itm_uuid: string, itm_name: string, itm_description: string }) {
         try {
-            const itemValue = new ItemValue({ itm_uuid, itm_name, itm_description, itm_createdat, itm_updatedat });
+            const itemValue = new ItemValue({ itm_uuid, itm_name, itm_description });
             const itemCreated = await this.itemRepository.createItem(itemValue);
             if(!itemCreated) {
                 throw new Error(`No se pudo insertar el item.`);
@@ -72,9 +72,9 @@ export class ItemUseCase {
         }
     }
 
-    public async updateItem(itm_uuid: string, { itm_name, itm_description, itm_createdat, itm_updatedat } : { itm_name: string, itm_description: string, itm_createdat: Date, itm_updatedat: Date }) {
+    public async updateItem(itm_uuid: string, { itm_name, itm_description } : { itm_name: string, itm_description: string }) {
         try {
-            const itemUpdated = await this.itemRepository.updateItem(itm_uuid, { itm_uuid, itm_name, itm_description, itm_createdat, itm_updatedat });
+            const itemUpdated = await this.itemRepository.updateItem(itm_uuid, { itm_name, itm_description });
             if(!itemUpdated) {
                 throw new Error(`No se pudo actualizar el item.`);
             }
