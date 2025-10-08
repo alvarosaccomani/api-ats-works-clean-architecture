@@ -1,4 +1,4 @@
-import { ItemEntity } from "../../../domain/item/item.entity";
+import { ItemEntity, ItemUpdateData } from "../../../domain/item/item.entity";
 import { ItemRepository } from "../../../domain/item/item.repository";
 import { SequelizeItem } from "../../model/item/item.model";
 import { Op } from "sequelize";
@@ -46,14 +46,22 @@ export class SequelizeRepository implements ItemRepository {
             throw error;
         }
     }
-    async updateItem(itm_uuid: string, item: ItemEntity): Promise<ItemEntity | null> {
+    async updateItem(itm_uuid: string, item: ItemUpdateData): Promise<ItemEntity | null> {
         try {
-            let { itm_description, itm_createdat, itm_updatedat } = item
-            const result = await SequelizeItem.update({ itm_description, itm_createdat, itm_updatedat }, { where: { itm_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedItem]] = await SequelizeItem.update(
+                { 
+                    itm_name: item.itm_name,
+                    itm_description: item.itm_description
+                }, 
+                { 
+                    where: { itm_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el item`);
             };
-            return item;
+            return updatedItem.get({ plain: true }) as ItemEntity;
         } catch (error: any) {
             console.error('Error en updateItem:', error.message);
             throw error;
