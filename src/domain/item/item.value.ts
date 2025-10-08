@@ -19,8 +19,8 @@ export class ItemValue implements ItemEntity {
             itm_uuid: string,
             itm_name: string,
             itm_description: string,
-            itm_createdat: Date,
-            itm_updatedat: Date
+            itm_createdat?: Date,
+            itm_updatedat?: Date
         }) {
         this.itm_uuid = uuid();
         this.itm_name = itm_name;
