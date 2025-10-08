@@ -31,8 +31,8 @@ export class ModelItemValue implements ModelItemEntity {
             mitm_name: string,
             mitm_description: string,
             mitm_active: boolean,
-            mitm_createdat: Date,
-            mitm_updatedat: Date
+            mitm_createdat?: Date,
+            mitm_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.itm_uuid = itm_uuid;
