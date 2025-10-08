@@ -36,15 +36,17 @@ SequelizeDataType.init({
   },
   dtp_createdat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
   dtp_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'dtp_createdat',
+  updatedAt: 'dtp_updatedat',
   tableName: 'dtp_datatypes'
 });
 
