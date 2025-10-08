@@ -30,11 +30,13 @@ SequelizeItem.init({
   },
   itm_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'itm_createdat',
+  updatedAt: 'itm_updatedat',
   tableName: 'itm_items'
 });
 SequelizeItem.sync();
