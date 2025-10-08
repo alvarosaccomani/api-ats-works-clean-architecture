@@ -50,8 +50,8 @@ export class DetailModelItemValue implements DetailModelItemEntity {
             dmitm_defaultvalue: string,
             dmitm_order: number,
             dmitm_active: boolean,
-            dmitm_createdat: Date,
-            dmitm_updatedat: Date
+            dmitm_createdat?: Date,
+            dmitm_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.itm_uuid = itm_uuid;
