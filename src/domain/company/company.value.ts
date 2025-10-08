@@ -25,8 +25,8 @@ export class CompanyValue implements CompanyEntity {
             cmp_address: string,
             cmp_phone: string,
             cmp_email: string,
-            cmp_createdat: Date,
-            cmp_updatedat: Date
+            cmp_createdat?: Date,
+            cmp_updatedat?: Date
         }) {
         this.cmp_uuid = uuid();
         this.cmp_name = cmp_name;
