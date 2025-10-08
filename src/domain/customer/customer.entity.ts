@@ -10,3 +10,6 @@ export interface CustomerEntity {
     cus_createdat: Date,
     cus_updatedat: Date
 }
+
+//Update
+export type CustomerUpdateData = Pick<CustomerEntity, 'cus_fullname' | 'cus_email' | 'cus_phone' | 'cus_dateofbirth' | 'cfrm_uuid' | 'usr_uuid'>
