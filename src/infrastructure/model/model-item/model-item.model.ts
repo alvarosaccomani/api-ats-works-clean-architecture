@@ -50,11 +50,13 @@ SequelizeModelItem.init({
   },
   mitm_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'mitm_createdat',
+  updatedAt: 'mitm_updatedat',
   tableName: 'mitm_modelsitems'
 });
 SequelizeModelItem.hasMany(SequelizeDetailModelItem, {
