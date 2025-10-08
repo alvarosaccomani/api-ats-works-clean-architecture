@@ -1,5 +1,6 @@
 import { DataTypeRepository } from "../../domain/data-type/data-type.repository";
 import { DataTypeValue } from "../../domain/data-type/data-type.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class DataTypeUseCase {
     constructor(
@@ -15,11 +16,19 @@ export class DataTypeUseCase {
 
     public async getDataTypes() {
         try {
-            const dataTypes = this.dataTypeRepository.getDataTypes();
+            const dataTypes = await this.dataTypeRepository.getDataTypes();
             if(!dataTypes) {
                 throw new Error('No hay data types.');
             }
-            return dataTypes;
+            return dataTypes.map((dataType) => ({
+                dtp_uuid: dataType.dtp_uuid,
+                dtp_cod: dataType.dtp_cod,
+                dtp_name: dataType.dtp_name,
+                dtp_description: dataType.dtp_description,
+                dtp_active: dataType.dtp_active,
+                dtp_createdat: TimezoneConverter.toIsoStringInTimezone(dataType.dtp_createdat, 'America/Argentina/Buenos_Aires'),
+                dtp_updatedat: TimezoneConverter.toIsoStringInTimezone(dataType.dtp_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getDataTypes (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +37,19 @@ export class DataTypeUseCase {
 
     public async getDetailDataType(dtp_uuid: string) {
         try {
-            const dataType = this.dataTypeRepository.findDataTypeById(dtp_uuid);
+            const dataType = await this.dataTypeRepository.findDataTypeById(dtp_uuid);
             if(!dataType) {
                 throw new Error(`No hay data type con el Id: ${dtp_uuid}`);
             }
-            return dataType;
+            return {
+                dtp_uuid: dataType.dtp_uuid,
+                dtp_cod: dataType.dtp_cod,
+                dtp_name: dataType.dtp_name,
+                dtp_description: dataType.dtp_description,
+                dtp_active: dataType.dtp_active,
+                dtp_createdat: TimezoneConverter.toIsoStringInTimezone(dataType.dtp_createdat, 'America/Argentina/Buenos_Aires'),
+                dtp_updatedat: TimezoneConverter.toIsoStringInTimezone(dataType.dtp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailDataType (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +63,15 @@ export class DataTypeUseCase {
             if(!dataTypeCreated) {
                 throw new Error(`No se pudo insertar el data type.`);
             }
-            return dataTypeCreated;
+            return {
+                dtp_uuid: dataTypeCreated.dtp_uuid,
+                dtp_cod: dataTypeCreated.dtp_cod,
+                dtp_name: dataTypeCreated.dtp_name,
+                dtp_description: dataTypeCreated.dtp_description,
+                dtp_active: dataTypeCreated.dtp_active,
+                dtp_createdat: TimezoneConverter.toIsoStringInTimezone(dataTypeCreated.dtp_createdat, 'America/Argentina/Buenos_Aires'),
+                dtp_updatedat: TimezoneConverter.toIsoStringInTimezone(dataTypeCreated.dtp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createDataType (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +84,15 @@ export class DataTypeUseCase {
             if(!dataTypeUpdated) {
                 throw new Error(`No se pudo actualizar el data type.`);
             }
-            return dataTypeUpdated;
+            return {
+                dtp_uuid: dataTypeUpdated.dtp_uuid,
+                dtp_cod: dataTypeUpdated.dtp_cod,
+                dtp_name: dataTypeUpdated.dtp_name,
+                dtp_description: dataTypeUpdated.dtp_description,
+                dtp_active: dataTypeUpdated.dtp_active,
+                dtp_createdat: TimezoneConverter.toIsoStringInTimezone(dataTypeUpdated.dtp_createdat, 'America/Argentina/Buenos_Aires'),
+                dtp_updatedat: TimezoneConverter.toIsoStringInTimezone(dataTypeUpdated.dtp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateDataType (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +105,15 @@ export class DataTypeUseCase {
             if(!dataTypeDeleted) {
                 throw new Error(`No se pudo eliminar el data type.`);
             }
-            return dataTypeDeleted;
+            return {
+                dtp_uuid: dataTypeDeleted.dtp_uuid,
+                dtp_cod: dataTypeDeleted.dtp_cod,
+                dtp_name: dataTypeDeleted.dtp_name,
+                dtp_description: dataTypeDeleted.dtp_description,
+                dtp_active: dataTypeDeleted.dtp_active,
+                dtp_createdat: TimezoneConverter.toIsoStringInTimezone(dataTypeDeleted.dtp_createdat, 'America/Argentina/Buenos_Aires'),
+                dtp_updatedat: TimezoneConverter.toIsoStringInTimezone(dataTypeDeleted.dtp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteDataType (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
