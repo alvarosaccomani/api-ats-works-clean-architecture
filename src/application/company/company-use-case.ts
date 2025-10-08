@@ -56,9 +56,9 @@ export class CompanyUseCase {
         }
     }
     
-    public async createCompany({ cmp_uuid, cmp_name, cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat } : { cmp_uuid: string, cmp_name: string, cmp_address: string, cmp_phone: string, cmp_email: string, cmp_createdat: Date, cmp_updatedat: Date }) {
+    public async createCompany({ cmp_uuid, cmp_name, cmp_address, cmp_phone, cmp_email } : { cmp_uuid: string, cmp_name: string, cmp_address: string, cmp_phone: string, cmp_email: string }) {
         try {
-            const companyValue = new CompanyValue({ cmp_uuid, cmp_name, cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat });
+            const companyValue = new CompanyValue({ cmp_uuid, cmp_name, cmp_address, cmp_phone, cmp_email });
             const companyCreated = await this.companyRepository.createCompany(companyValue);
             if(!companyCreated) {
                 throw new Error(`No se pudo insertar el company.`);
@@ -78,9 +78,9 @@ export class CompanyUseCase {
         }
     }
 
-    public async updateCompany(cmp_uuid: string, { cmp_name, cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat } : { cmp_name: string, cmp_address: string, cmp_phone: string, cmp_email: string, cmp_createdat: Date, cmp_updatedat: Date }) {
+    public async updateCompany(cmp_uuid: string, { cmp_address, cmp_phone, cmp_email } : { cmp_address: string, cmp_phone: string, cmp_email: string }) {
         try {
-            const companyUpdated = await this.companyRepository.updateCompany(cmp_uuid, { cmp_uuid, cmp_name, cmp_address, cmp_phone, cmp_email, cmp_createdat, cmp_updatedat });
+            const companyUpdated = await this.companyRepository.updateCompany(cmp_uuid, { cmp_address, cmp_phone, cmp_email });
             if(!companyUpdated) {
                 throw new Error(`No se pudo actualizar el company.`);
             }
