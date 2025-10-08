@@ -1,5 +1,6 @@
 import { CustomerRepository } from "../../domain/customer/customer.repository";
 import { CustomerValue } from "../../domain/customer/customer.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class CustomerUseCase {
     constructor(
@@ -15,11 +16,22 @@ export class CustomerUseCase {
 
     public async getCustomers(cmp_uuid: string) {
         try {
-            const typeCustomers = this.customerRepository.getCustomers(cmp_uuid);
+            const typeCustomers = await this.customerRepository.getCustomers(cmp_uuid);
             if(!typeCustomers) {
                 throw new Error('No hay customers.');
             }
-            return typeCustomers;
+            return typeCustomers.map((customer) => ({
+                cmp_uuid: customer.cmp_uuid,
+                cus_uuid: customer.cus_uuid,
+                cus_fullname: customer.cus_fullname,
+                cus_email: customer.cus_email,
+                cus_phone: customer.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
+                cfrm_uuid: customer.cfrm_uuid,
+                usr_uuid: customer.usr_uuid,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customer.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customer.cus_updatedat, 'America/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getCustomers (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +40,22 @@ export class CustomerUseCase {
 
     public async getDetailCustomer(cmp_uuid: string, cus_uuid: string) {
         try {
-            const customer = this.customerRepository.findCustomerById(cmp_uuid, cus_uuid);
+            const customer = await this.customerRepository.findCustomerById(cmp_uuid, cus_uuid);
             if(!customer) {
                 throw new Error(`No hay customer con el Id: ${cmp_uuid}, ${cus_uuid}`);
             }
-            return customer;
+            return {
+                cmp_uuid: customer.cmp_uuid,
+                cus_uuid: customer.cus_uuid,
+                cus_fullname: customer.cus_fullname,
+                cus_email: customer.cus_email,
+                cus_phone: customer.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
+                cfrm_uuid: customer.cfrm_uuid,
+                usr_uuid: customer.usr_uuid,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customer.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customer.cus_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailCustomer (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +69,18 @@ export class CustomerUseCase {
             if(!customerCreated) {
                 throw new Error(`No se pudo insertar el customer.`);
             }
-            return customerCreated;
+            return {
+                cmp_uuid: customerCreated.cmp_uuid,
+                cus_uuid: customerCreated.cus_uuid,
+                cus_fullname: customerCreated.cus_fullname,
+                cus_email: customerCreated.cus_email,
+                cus_phone: customerCreated.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_dateofbirth, 'America/Buenos_Aires'),
+                cfrm_uuid: customerCreated.cfrm_uuid,
+                usr_uuid: customerCreated.usr_uuid,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createCustomer (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +93,18 @@ export class CustomerUseCase {
             if(!customerUpdated) {
                 throw new Error(`No se pudo actualizar el customer.`);
             }
-            return customerUpdated;
+            return {
+                cmp_uuid: customerUpdated.cmp_uuid,
+                cus_uuid: customerUpdated.cus_uuid,
+                cus_fullname: customerUpdated.cus_fullname,
+                cus_email: customerUpdated.cus_email,
+                cus_phone: customerUpdated.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_dateofbirth, 'America/Buenos_Aires'),
+                cfrm_uuid: customerUpdated.cfrm_uuid,
+                usr_uuid: customerUpdated.usr_uuid,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateCustomer (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +117,18 @@ export class CustomerUseCase {
             if(!customerDeleted) {
                 throw new Error(`No se pudo eliminar el customer.`);
             }
-            return customerDeleted;
+            return {
+                cmp_uuid: customerDeleted.cmp_uuid,
+                cus_uuid: customerDeleted.cus_uuid,
+                cus_fullname: customerDeleted.cus_fullname,
+                cus_email: customerDeleted.cus_email,
+                cus_phone: customerDeleted.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_dateofbirth, 'America/Buenos_Aires'),
+                cfrm_uuid: customerDeleted.cfrm_uuid,
+                usr_uuid: customerDeleted.usr_uuid,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_updatedat, 'America/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteCustomer (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
