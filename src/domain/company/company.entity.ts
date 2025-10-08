@@ -7,3 +7,6 @@ export interface CompanyEntity {
     cmp_createdat: Date,
     cmp_updatedat: Date
 }
+
+//Update
+export type CompanyUpdateData = Pick<CompanyEntity, 'cmp_address' | 'cmp_phone' | 'cmp_email'>
