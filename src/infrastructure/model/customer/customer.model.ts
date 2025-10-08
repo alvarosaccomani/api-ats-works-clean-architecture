@@ -56,11 +56,13 @@ SequelizeCustomer.init({
   },
   cus_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'cus_createdat',
+  updatedAt: 'cus_updatedat',
   tableName: 'cus_customers'
 });
 SequelizeCustomer.sync();
