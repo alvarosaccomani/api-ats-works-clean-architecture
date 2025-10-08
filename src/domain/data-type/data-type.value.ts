@@ -25,8 +25,8 @@ export class DataTypeValue implements DataTypeEntity {
             dtp_name: string,
             dtp_description: string,
             dtp_active: boolean,
-            dtp_createdat: Date,
-            dtp_updatedat: Date
+            dtp_createdat?: Date,
+            dtp_updatedat?: Date
         }) {
         this.dtp_uuid = uuid();
         this.dtp_cod = dtp_cod;
