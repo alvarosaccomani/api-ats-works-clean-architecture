@@ -1,5 +1,5 @@
 import * as bcrypt from "bcryptjs";
-import { UserEntity } from "../../../domain/user/user.entity";
+import { UserEntity, UserUpdateData } from "../../../domain/user/user.entity";
 import { UserRepository } from "../../../domain/user/user.repository";
 import { SequelizeUser } from "../../model/user/user.model";
 import { createToken } from "../../services/jwt.service";
@@ -56,14 +56,30 @@ export class SequelizeRepository implements UserRepository {
     async registerUser(user: UserEntity): Promise<UserEntity | null> {
         throw new Error("Method not implemented.");
     }
-    async updateUser(usr_uuid: string, user: UserEntity): Promise<UserEntity | null> {
+    async updateUser(usr_uuid: string, user: UserUpdateData): Promise<UserEntity | null> {
         try {
-            let { usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online } = user
-            const result = await SequelizeUser.update({ usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online }, { where: { usr_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedUser]] = await SequelizeUser.update(
+                { 
+                    usr_name: user.usr_name,
+                    usr_surname: user.usr_surname,
+                    usr_password: user.usr_password,
+                    usr_image: user.usr_image,
+                    usr_email: user.usr_email,
+                    usr_nick: user.usr_nick,
+                    usr_bio: user.usr_bio,
+                    usr_registered: user.usr_registered,
+                    usr_socket: user.usr_socket,
+                    usr_online: user.usr_online
+                }, 
+                { 
+                    where: { usr_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el usuario`);
             };
-            return user;
+            return updatedUser.get({ plain: true }) as UserEntity;
         } catch (error: any) {
             console.error('Error en updateUser:', error.message);
             throw error;
