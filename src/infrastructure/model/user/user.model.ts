@@ -94,7 +94,9 @@ SequelizeUser.init({
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'usr_createdat',
+  updatedAt: 'usr_updatedat',
   tableName: 'usr_users'
 });
 
