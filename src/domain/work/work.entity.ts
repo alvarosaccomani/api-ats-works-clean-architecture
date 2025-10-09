@@ -29,3 +29,6 @@ export interface WorkEntity {
 	wrk_createdat: Date,
     wrk_updatedat: Date
 }
+
+//Update
+export type WorkUpdateData = Pick<WorkEntity, 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid'>
