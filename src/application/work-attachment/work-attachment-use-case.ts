@@ -55,9 +55,9 @@ export class WorkAttachmentUseCase {
         }
     }
     
-    public async createWorkAttachment({ cmp_uuid, wrk_uuid, wrka_uuid, wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat } : { cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, wrka_attachmenttype: string, wrka_filepath: string, wrka_createdat: Date, wrka_updatedat: Date }) {
+    public async createWorkAttachment({ cmp_uuid, wrk_uuid, wrka_uuid, wrka_attachmenttype, wrka_filepath } : { cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, wrka_attachmenttype: string, wrka_filepath: string }) {
         try {
-            const workAttachmentsValue = new WorkAttachmentValue({ cmp_uuid, wrk_uuid, wrka_uuid, wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat });
+            const workAttachmentsValue = new WorkAttachmentValue({ cmp_uuid, wrk_uuid, wrka_uuid, wrka_attachmenttype, wrka_filepath });
             const workAttachmentsCreated = await this.workAttachmentRepository.createWorkAttachment(workAttachmentsValue);
             if(!workAttachmentsCreated) {
                 throw new Error(`No se pudo insertar el work attachment.`);
@@ -77,9 +77,9 @@ export class WorkAttachmentUseCase {
         }
     }
 
-    public async updateWorkAttachment(cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, { wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat } : { wrka_attachmenttype: string, wrka_filepath: string, wrka_createdat: Date, wrka_updatedat: Date }) {
+    public async updateWorkAttachment(cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, { wrka_attachmenttype, wrka_filepath } : { wrka_attachmenttype: string, wrka_filepath: string }) {
         try {
-            const workAttachmentsUpdated = await this.workAttachmentRepository.updateWorkAttachment(cmp_uuid, wrk_uuid, wrka_uuid, { cmp_uuid, wrk_uuid, wrka_uuid, wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat });
+            const workAttachmentsUpdated = await this.workAttachmentRepository.updateWorkAttachment(cmp_uuid, wrk_uuid, wrka_uuid, { wrka_attachmenttype, wrka_filepath });
             if(!workAttachmentsUpdated) {
                 throw new Error(`No se pudo actualizar el workd etail.`);
             }
