@@ -25,8 +25,8 @@ export class WorkAttachmentValue implements WorkAttachmentEntity {
             wrka_uuid: string,
             wrka_attachmenttype: string,	
             wrka_filepath: string,
-            wrka_createdat: Date,
-            wrka_updatedat: Date
+            wrka_createdat?: Date,
+            wrka_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.wrk_uuid = wrk_uuid;
