@@ -1,5 +1,6 @@
 import { WorkAttachmentRepository } from "../../domain/work-attachment/work-attachment.repository";
 import { WorkAttachmentValue } from "../../domain/work-attachment/work-attachment.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class WorkAttachmentUseCase {
     constructor(
@@ -14,11 +15,19 @@ export class WorkAttachmentUseCase {
 
     public async getWorkAttachments(cmp_uuid: string) {
         try {
-            const workAttachments = this.workAttachmentRepository.getWorkAttachments(cmp_uuid);
+            const workAttachments = await this.workAttachmentRepository.getWorkAttachments(cmp_uuid);
             if(!workAttachments) {
                 throw new Error('No hay work attachments.');
             }
-            return workAttachments;
+            return workAttachments.map((workAttachment) => ({
+                cmp_uuid: workAttachment.cmp_uuid,
+                wrk_uuid: workAttachment.wrk_uuid,
+                wrka_uuid: workAttachment.wrka_uuid,
+                wrka_attachmenttype: workAttachment.wrka_attachmenttype,
+                wrka_filepath: workAttachment.wrka_filepath,
+                wrka_createdat: TimezoneConverter.toIsoStringInTimezone(workAttachment.wrka_createdat, 'America/Argentina/Buenos_Aires'),
+                wrka_updatedat: TimezoneConverter.toIsoStringInTimezone(workAttachment.wrka_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getWorkAttachments (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -27,11 +36,19 @@ export class WorkAttachmentUseCase {
 
     public async getAttachmentWorkAttachment(cmp_uuid: string, wrk_uuid: string, wrka_uuid: string) {
         try {
-            const workAttachments = this.workAttachmentRepository.findWorkAttachmentById(cmp_uuid, wrk_uuid, wrka_uuid);
+            const workAttachments = await this.workAttachmentRepository.findWorkAttachmentById(cmp_uuid, wrk_uuid, wrka_uuid);
             if(!workAttachments) {
                 throw new Error(`No hay work attachments con el Id: ${cmp_uuid}, ${wrk_uuid}, ${wrka_uuid}`);
             }
-            return workAttachments;
+            return {
+                cmp_uuid: workAttachments.cmp_uuid,
+                wrk_uuid: workAttachments.wrk_uuid,
+                wrka_uuid: workAttachments.wrka_uuid,
+                wrka_attachmenttype: workAttachments.wrka_attachmenttype,
+                wrka_filepath: workAttachments.wrka_filepath,
+                wrka_createdat: TimezoneConverter.toIsoStringInTimezone(workAttachments.wrka_createdat, 'America/Argentina/Buenos_Aires'),
+                wrka_updatedat: TimezoneConverter.toIsoStringInTimezone(workAttachments.wrka_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getAttachmentWorkAttachments (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -45,7 +62,15 @@ export class WorkAttachmentUseCase {
             if(!workAttachmentsCreated) {
                 throw new Error(`No se pudo insertar el work attachment.`);
             }
-            return workAttachmentsCreated;
+            return {
+                cmp_uuid: workAttachmentsCreated.cmp_uuid,
+                wrk_uuid: workAttachmentsCreated.wrk_uuid,
+                wrka_uuid: workAttachmentsCreated.wrka_uuid,
+                wrka_attachmenttype: workAttachmentsCreated.wrka_attachmenttype,
+                wrka_filepath: workAttachmentsCreated.wrka_filepath,
+                wrka_createdat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsCreated.wrka_createdat, 'America/Argentina/Buenos_Aires'),
+                wrka_updatedat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsCreated.wrka_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createWorkAttachments (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -58,7 +83,15 @@ export class WorkAttachmentUseCase {
             if(!workAttachmentsUpdated) {
                 throw new Error(`No se pudo actualizar el workd etail.`);
             }
-            return workAttachmentsUpdated;
+            return {
+                cmp_uuid: workAttachmentsUpdated.cmp_uuid,
+                wrk_uuid: workAttachmentsUpdated.wrk_uuid,
+                wrka_uuid: workAttachmentsUpdated.wrka_uuid,
+                wrka_attachmenttype: workAttachmentsUpdated.wrka_attachmenttype,
+                wrka_filepath: workAttachmentsUpdated.wrka_filepath,
+                wrka_createdat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsUpdated.wrka_createdat, 'America/Argentina/Buenos_Aires'),
+                wrka_updatedat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsUpdated.wrka_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateWorkAttachments (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -71,7 +104,15 @@ export class WorkAttachmentUseCase {
             if(!workAttachmentsDeleted) {
                 throw new Error(`No se pudo eliminar el work attachment.`);
             }
-            return workAttachmentsDeleted;
+            return {
+                cmp_uuid: workAttachmentsDeleted.cmp_uuid,
+                wrk_uuid: workAttachmentsDeleted.wrk_uuid,
+                wrka_uuid: workAttachmentsDeleted.wrka_uuid,
+                wrka_attachmenttype: workAttachmentsDeleted.wrka_attachmenttype,
+                wrka_filepath: workAttachmentsDeleted.wrka_filepath,
+                wrka_createdat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsDeleted.wrka_createdat, 'America/Argentina/Buenos_Aires'),
+                wrka_updatedat: TimezoneConverter.toIsoStringInTimezone(workAttachmentsDeleted.wrka_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteWorkAttachments (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
