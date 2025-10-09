@@ -46,11 +46,13 @@ SequelizeWorkState.init({
   },
   wrks_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'wrks_createdat',
+  updatedAt: 'wrks_updatedat',
   tableName: 'wrks_workstates'
 });
 SequelizeWorkState.sync();
