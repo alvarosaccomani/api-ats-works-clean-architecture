@@ -11,3 +11,6 @@ export interface WorkDetailEntity {
 	wrkd_createdat: Date,
     wrkd_updatedat: Date
 }
+
+//Update
+export type WorkDetailUpdateData = Pick<WorkDetailEntity, 'wrkd_key' | 'wrkd_name' | 'wrkd_description' | 'dtp_uuid' | 'wrkd_value' | 'wrkd_order'>
