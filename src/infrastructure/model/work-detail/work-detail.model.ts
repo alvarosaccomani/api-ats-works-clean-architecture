@@ -60,11 +60,13 @@ SequelizeWorkDetail.init({
   },
   wrkd_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'wrkd_createdat',
+  updatedAt: 'wrkd_updatedat',
   tableName: 'wrkd_worksdetails'
 });
 SequelizeWorkDetail.belongsTo(SequelizeDataType, {
