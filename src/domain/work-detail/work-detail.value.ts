@@ -37,8 +37,8 @@ export class WorkDetailValue implements WorkDetailEntity {
             dtp_uuid: string,
             wrkd_value: string,
             wrkd_order: string,
-            wrkd_createdat: Date,
-            wrkd_updatedat: Date
+            wrkd_createdat?: Date,
+            wrkd_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.wrk_uuid = wrk_uuid;
