@@ -1,5 +1,6 @@
 import { WorkStateRepository } from "../../domain/work-state/work-state.repository";
 import { WorkStateValue } from "../../domain/work-state/work-state.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class WorkStateUseCase {
     constructor(
@@ -15,11 +16,20 @@ export class WorkStateUseCase {
 
     public async getWorkStates(cmp_uuid: string) {
         try {
-            const typeWorkStates = this.workstateRepository.getWorkStates(cmp_uuid);
+            const typeWorkStates = await this.workstateRepository.getWorkStates(cmp_uuid);
             if(!typeWorkStates) {
                 throw new Error('No hay work states.');
             }
-            return typeWorkStates;
+            return typeWorkStates.map((workState) => ({
+                cmp_uuid: workState.cmp_uuid,
+                wrks_uuid: workState.wrks_uuid,
+                wrks_name: workState.wrks_name,
+                wrks_description: workState.wrks_description,
+                wrks_bkcolor: workState.wrks_bkcolor,
+                wrks_frcolor: workState.wrks_frcolor,
+                wrks_createdat: TimezoneConverter.toIsoStringInTimezone(workState.wrks_createdat, 'America/Argentina/Buenos_Aires'),
+                wrks_updatedat: TimezoneConverter.toIsoStringInTimezone(workState.wrks_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getWorkStates (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +38,20 @@ export class WorkStateUseCase {
 
     public async getDetailWorkState(cmp_uuid: string, wrks_uuid: string) {
         try {
-            const workState = this.workstateRepository.findWorkStateById(cmp_uuid, wrks_uuid);
+            const workState = await this.workstateRepository.findWorkStateById(cmp_uuid, wrks_uuid);
             if(!workState) {
                 throw new Error(`No hay work state con el Id: ${cmp_uuid}, ${wrks_uuid}`);
             }
-            return workState;
+            return {
+                cmp_uuid: workState.cmp_uuid,
+                wrks_uuid: workState.wrks_uuid,
+                wrks_name: workState.wrks_name,
+                wrks_description: workState.wrks_description,
+                wrks_bkcolor: workState.wrks_bkcolor,
+                wrks_frcolor: workState.wrks_frcolor,
+                wrks_createdat: TimezoneConverter.toIsoStringInTimezone(workState.wrks_createdat, 'America/Argentina/Buenos_Aires'),
+                wrks_updatedat: TimezoneConverter.toIsoStringInTimezone(workState.wrks_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailWorkState (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +65,16 @@ export class WorkStateUseCase {
             if(!workStateCreated) {
                 throw new Error(`No se pudo insertar el work state.`);
             }
-            return workStateCreated;
+            return {
+                cmp_uuid: workStateCreated.cmp_uuid,
+                wrks_uuid: workStateCreated.wrks_uuid,
+                wrks_name: workStateCreated.wrks_name,
+                wrks_description: workStateCreated.wrks_description,
+                wrks_bkcolor: workStateCreated.wrks_bkcolor,
+                wrks_frcolor: workStateCreated.wrks_frcolor,
+                wrks_createdat: TimezoneConverter.toIsoStringInTimezone(workStateCreated.wrks_createdat, 'America/Argentina/Buenos_Aires'),
+                wrks_updatedat: TimezoneConverter.toIsoStringInTimezone(workStateCreated.wrks_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createWorkState (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +87,16 @@ export class WorkStateUseCase {
             if(!workStateUpdated) {
                 throw new Error(`No se pudo actualizar el work state.`);
             }
-            return workStateUpdated;
+            return {
+                cmp_uuid: workStateUpdated.cmp_uuid,
+                wrks_uuid: workStateUpdated.wrks_uuid,
+                wrks_name: workStateUpdated.wrks_name,
+                wrks_description: workStateUpdated.wrks_description,
+                wrks_bkcolor: workStateUpdated.wrks_bkcolor,
+                wrks_frcolor: workStateUpdated.wrks_frcolor,
+                wrks_createdat: TimezoneConverter.toIsoStringInTimezone(workStateUpdated.wrks_createdat, 'America/Argentina/Buenos_Aires'),
+                wrks_updatedat: TimezoneConverter.toIsoStringInTimezone(workStateUpdated.wrks_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateWorkState (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +109,16 @@ export class WorkStateUseCase {
             if(!workStateDeleted) {
                 throw new Error(`No se pudo eliminar el work state.`);
             }
-            return workStateDeleted;
+            return {
+                cmp_uuid: workStateDeleted.cmp_uuid,
+                wrks_uuid: workStateDeleted.wrks_uuid,
+                wrks_name: workStateDeleted.wrks_name,
+                wrks_description: workStateDeleted.wrks_description,
+                wrks_bkcolor: workStateDeleted.wrks_bkcolor,
+                wrks_frcolor: workStateDeleted.wrks_frcolor,
+                wrks_createdat: TimezoneConverter.toIsoStringInTimezone(workStateDeleted.wrks_createdat, 'America/Argentina/Buenos_Aires'),
+                wrks_updatedat: TimezoneConverter.toIsoStringInTimezone(workStateDeleted.wrks_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteWorkState (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
