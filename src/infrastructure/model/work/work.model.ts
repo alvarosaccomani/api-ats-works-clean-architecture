@@ -85,11 +85,13 @@ SequelizeWork.init({
   },
   wrk_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'wrk_createdat',
+  updatedAt: 'wrk_updatedat',
   tableName: 'wrk_works'
 });
 
