@@ -1,4 +1,4 @@
-import { WorkStateEntity } from "../../../domain/work-state/work-state.entity";
+import { WorkStateEntity, WorkStateUpdateData } from "../../../domain/work-state/work-state.entity";
 import { WorkStateRepository } from "../../../domain/work-state/work-state.repository";
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { Op } from "sequelize";
@@ -51,14 +51,24 @@ export class SequelizeRepository implements WorkStateRepository {
             throw error;
         }
     }
-    async updateWorkState(cmp_uuid: string, wrks_uuid: string, workState: WorkStateEntity): Promise<WorkStateEntity | null> {
+    async updateWorkState(cmp_uuid: string, wrks_uuid: string, workState: WorkStateUpdateData): Promise<WorkStateEntity | null> {
         try {
-            let { wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat } = workState
-            const result = await SequelizeWorkState.update({ wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat }, { where: { cmp_uuid, wrks_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedWorkState]] = await SequelizeWorkState.update(
+                { 
+                    wrks_name: workState.wrks_name,
+                    wrks_description: workState.wrks_description,
+                    wrks_bkcolor: workState.wrks_bkcolor,
+                    wrks_frcolor: workState.wrks_frcolor
+                }, 
+                { 
+                    where: { cmp_uuid, wrks_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el work state`);
             };
-            return workState;
+            return updatedWorkState.get({ plain: true }) as WorkStateEntity;
         } catch (error: any) {
             console.error('Error en updateWorkState:', error.message);
             throw error;
