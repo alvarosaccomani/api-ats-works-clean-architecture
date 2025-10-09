@@ -1,4 +1,4 @@
-import { WorkDetailEntity } from "../../../domain/work-detail/work-detail.entity";
+import { WorkDetailEntity, WorkDetailUpdateData } from "../../../domain/work-detail/work-detail.entity";
 import { WorkDetailRepository } from "../../../domain/work-detail/work-detail.repository";
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
 
@@ -51,14 +51,26 @@ export class SequelizeRepository implements WorkDetailRepository {
             throw error;
         }
     }
-    async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, workDetail: WorkDetailEntity): Promise<WorkDetailEntity | null> {
+    async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, workDetail: WorkDetailUpdateData): Promise<WorkDetailEntity | null> {
         try {
-            let { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat } = workDetail
-            const result = await SequelizeWorkDetail.update({ wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat }, { where: { cmp_uuid, wrk_uuid, wrkd_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedWorkDetail]] = await SequelizeWorkDetail.update(
+                { 
+                    wrkd_key: workDetail.wrkd_key,
+                    wrkd_name: workDetail.wrkd_name,
+                    wrkd_description: workDetail.wrkd_description,
+                    dtp_uuid: workDetail.dtp_uuid,
+                    wrkd_value: workDetail.wrkd_value,
+                    wrkd_order: workDetail.wrkd_order
+                }, 
+                { 
+                    where: { cmp_uuid, wrk_uuid, wrkd_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el work detail`);
             };
-            return workDetail;
+            return updatedWorkDetail.get({ plain: true }) as WorkDetailEntity;
         } catch (error: any) {
             console.error('Error en updateWorkDetail:', error.message);
             throw error;
