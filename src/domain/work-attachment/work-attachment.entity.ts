@@ -7,3 +7,6 @@ export interface WorkAttachmentEntity {
     wrka_createdat: Date,
     wrka_updatedat: Date
 }
+
+//Update
+export type WorkAttachmentUpdateData = Pick<WorkAttachmentEntity, 'wrka_attachmenttype' | 'wrka_filepath'>
