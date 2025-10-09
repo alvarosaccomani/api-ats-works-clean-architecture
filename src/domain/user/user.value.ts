@@ -55,25 +55,25 @@ export class UserValue implements UserEntity {
             usr_confirmationtoken: string
             usr_resetpasswordtoken: string,
             usr_resetpasswordexpires: Date,
-            usr_createdat: Date,
-            usr_updatedat: Date,
+            usr_createdat?: Date,
+            usr_updatedat?: Date,
         }) {
         this.usr_uuid = uuid();
         this.usr_name = usr_name;
         this.usr_surname = usr_surname;
-        this.usr_password = usr_password,
-        this.usr_image = usr_image,
-        this.usr_email = usr_email,
-        this.usr_nick = usr_nick,
+        this.usr_password = usr_password;
+        this.usr_image = usr_image;
+        this.usr_email = usr_email;
+        this.usr_nick = usr_nick;
         this.usr_bio = usr_bio ?? null;
-        this.usr_registered = usr_registered ?? moment().toDate(),
-        this.usr_socket = usr_socket,
-        this.usr_online = usr_online ?? false,
-        this.usr_confirmed = usr_confirmed ?? false,
-        this.usr_confirmationtoken = usr_confirmationtoken ?? '',
-        this.usr_resetpasswordtoken = usr_resetpasswordtoken,
-        this.usr_resetpasswordexpires = usr_resetpasswordexpires,
-        this.usr_createdat = usr_createdat,
-        this.usr_updatedat = usr_updatedat
+        this.usr_registered = usr_registered ?? moment().toDate();
+        this.usr_socket = usr_socket;
+        this.usr_online = usr_online ?? false;
+        this.usr_confirmed = usr_confirmed ?? false;
+        this.usr_confirmationtoken = usr_confirmationtoken ?? '';
+        this.usr_resetpasswordtoken = usr_resetpasswordtoken;
+        this.usr_resetpasswordexpires = usr_resetpasswordexpires;
+        this.usr_createdat = usr_createdat ?? moment().toDate();
+        this.usr_updatedat = usr_updatedat ?? moment().toDate();
     }
 }
