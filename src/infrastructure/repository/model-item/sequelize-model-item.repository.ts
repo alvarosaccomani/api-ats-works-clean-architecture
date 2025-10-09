@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { ModelItemEntity } from "../../../domain/model-item/model-item.entity";
+import { ModelItemEntity, ModelItemUpdateData } from "../../../domain/model-item/model-item.entity";
 import { ModelItemRepository } from "../../../domain/model-item/model-item.repository";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
@@ -71,14 +71,23 @@ export class SequelizeRepository implements ModelItemRepository {
             throw error;
         }
     }
-    async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, modelItem: ModelItemEntity): Promise<ModelItemEntity | null> {
+    async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, modelItem: ModelItemUpdateData): Promise<ModelItemEntity | null> {
         try {
-            let { mitm_name, mitm_description, mitm_active, mitm_createdat, mitm_updatedat } = modelItem
-            const result = await SequelizeModelItem.update({ mitm_name, mitm_description, mitm_active, mitm_createdat, mitm_updatedat }, { where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedModelItem]] = await SequelizeModelItem.update(
+                { 
+                    mitm_name: modelItem.mitm_name,
+                    mitm_description: modelItem.mitm_description,
+                    mitm_active: modelItem.mitm_active
+                }, 
+                { 
+                    where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el modelitem`);
             };
-            return modelItem;
+            return updatedModelItem.get({ plain: true }) as ModelItemEntity;
         } catch (error: any) {
             console.error('Error en updateModelItem:', error.message);
             throw error;
