@@ -22,8 +22,8 @@ export class UserRolCompanyValue implements UserRolCompanyEntity {
             usrrolcmp_uuid: string,
             usr_uuid: string,
             rol_uuid: string,
-            usrrolcmp_createdat: Date,
-            usrrolcmp_updatedat: Date
+            usrrolcmp_createdat?: Date,
+            usrrolcmp_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.usrrolcmp_uuid = uuid();
