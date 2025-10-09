@@ -63,9 +63,9 @@ export class WorkDetailUseCase {
         }
     }
     
-    public async createWorkDetail({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat } : { cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string, wrkd_createdat: Date, wrkd_updatedat: Date }) {
+    public async createWorkDetail({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order } : { cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string }) {
         try {
-            const workDetailsValue = new WorkDetailValue({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat });
+            const workDetailsValue = new WorkDetailValue({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order });
             const workDetailsCreated = await this.workDetailRepository.createWorkDetail(workDetailsValue);
             if(!workDetailsCreated) {
                 throw new Error(`No se pudo insertar el work detail.`);
@@ -89,9 +89,9 @@ export class WorkDetailUseCase {
         }
     }
 
-    public async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat } : { wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string, wrkd_createdat: Date, wrkd_updatedat: Date }) {
+    public async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order } : { wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string }) {
         try {
-            const workDetailsUpdated = await this.workDetailRepository.updateWorkDetail(cmp_uuid, wrk_uuid, wrkd_uuid, { cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_createdat, wrkd_updatedat });
+            const workDetailsUpdated = await this.workDetailRepository.updateWorkDetail(cmp_uuid, wrk_uuid, wrkd_uuid, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order });
             if(!workDetailsUpdated) {
                 throw new Error(`No se pudo actualizar el workd etail.`);
             }
