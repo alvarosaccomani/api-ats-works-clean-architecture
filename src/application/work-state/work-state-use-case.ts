@@ -58,9 +58,9 @@ export class WorkStateUseCase {
         }
     }
     
-    public async createWorkState({ cmp_uuid, wrks_uuid, wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat } : { cmp_uuid: string, wrks_uuid: string, wrks_name: string, wrks_description: string, wrks_bkcolor: string, wrks_frcolor: string, wrks_createdat: Date, wrks_updatedat: Date }) {
+    public async createWorkState({ cmp_uuid, wrks_uuid, wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor } : { cmp_uuid: string, wrks_uuid: string, wrks_name: string, wrks_description: string, wrks_bkcolor: string, wrks_frcolor: string }) {
         try {
-            const workStateValue = new WorkStateValue({ cmp_uuid, wrks_uuid, wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat });
+            const workStateValue = new WorkStateValue({ cmp_uuid, wrks_uuid, wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor });
             const workStateCreated = await this.workstateRepository.createWorkState(workStateValue);
             if(!workStateCreated) {
                 throw new Error(`No se pudo insertar el work state.`);
@@ -81,9 +81,9 @@ export class WorkStateUseCase {
         }
     }
 
-    public async updateWorkState(cmp_uuid: string, wrks_uuid: string, { wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat } : { wrks_name: string, wrks_description: string, wrks_bkcolor: string, wrks_frcolor: string, wrks_createdat: Date, wrks_updatedat: Date }) {
+    public async updateWorkState(cmp_uuid: string, wrks_uuid: string, { wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor } : { wrks_name: string, wrks_description: string, wrks_bkcolor: string, wrks_frcolor: string }) {
         try {
-            const workStateUpdated = await this.workstateRepository.updateWorkState(cmp_uuid, wrks_uuid, { cmp_uuid, wrks_uuid, wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor, wrks_createdat, wrks_updatedat });
+            const workStateUpdated = await this.workstateRepository.updateWorkState(cmp_uuid, wrks_uuid, { wrks_name, wrks_description, wrks_bkcolor, wrks_frcolor });
             if(!workStateUpdated) {
                 throw new Error(`No se pudo actualizar el work state.`);
             }
