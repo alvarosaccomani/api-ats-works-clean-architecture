@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { WorkEntity } from "../../../domain/work/work.entity";
+import { WorkEntity, WorkUpdateData } from "../../../domain/work/work.entity";
 import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
 import { SequelizeAddress } from "../../model/address/address.model";
@@ -139,14 +139,30 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
-    async updateWork(cmp_uuid: string, wrk_uuid: string, work: WorkEntity): Promise<WorkEntity | null> {
+    async updateWork(cmp_uuid: string, wrk_uuid: string, work: WorkUpdateData): Promise<WorkEntity | null> {
         try {
-            let { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
-            const result = await SequelizeWork.update({ adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat }, { where: { cmp_uuid, wrk_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedWork]] = await SequelizeWork.update(
+                { 
+                    wrk_description: work.wrk_description,
+                    wrk_workdate: work.wrk_workdate,
+                    wrk_workdateinit: work.wrk_workdateinit,
+                    wrk_workdatefinish: work.wrk_workdatefinish,
+                    wrks_uuid: work.wrks_uuid,
+                    wrk_user_uuid: work.wrk_user_uuid,
+                    wrk_operator_uuid: work.wrk_operator_uuid,
+                    itm_uuid: work.itm_uuid,
+                    cmpitm_uuid: work.cmpitm_uuid,
+                    mitm_uuid: work.mitm_uuid, 
+                }, 
+                { 
+                    where: { cmp_uuid, wrk_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el work`);
             };
-            return work;
+            return updatedWork.get({ plain: true }) as WorkEntity;
         } catch (error: any) {
             console.error('Error en updateWork:', error.message);
             throw error;
