@@ -19,4 +19,4 @@ export interface UserEntity {
 }
 
 //Update
-export type UserUpdateData = Pick<UserEntity, 'usr_name' | 'usr_surname' | 'usr_password' | 'usr_image' | 'usr_email' | 'usr_nick' | 'usr_bio' | 'usr_registered' | 'usr_socket' | 'usr_online' | 'usr_confirmed' | 'usr_confirmationtoken' | 'usr_resetpasswordtoken' | 'usr_resetpasswordexpires'>
+export type UserUpdateData = Pick<UserEntity, 'usr_name' | 'usr_surname' | 'usr_password' | 'usr_image' | 'usr_email' | 'usr_nick' | 'usr_bio' | 'usr_registered' | 'usr_socket' | 'usr_online'>
