@@ -1,4 +1,4 @@
-import { WorkAttachmentEntity } from "../../../domain/work-attachment/work-attachment.entity";
+import { WorkAttachmentEntity, WorkAttachmentUpdateData } from "../../../domain/work-attachment/work-attachment.entity";
 import { WorkAttachmentRepository } from "../../../domain/work-attachment/work-attachment.repository";
 import { SequelizeWorkAttachment } from "../../model/work-attachment/work-attachment.model";
 
@@ -51,14 +51,22 @@ export class SequelizeRepository implements WorkAttachmentRepository {
             throw error;
         }
     }
-    async updateWorkAttachment(cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, workAttachment: WorkAttachmentEntity): Promise<WorkAttachmentEntity | null> {
+    async updateWorkAttachment(cmp_uuid: string, wrk_uuid: string, wrka_uuid: string, workAttachment: WorkAttachmentUpdateData): Promise<WorkAttachmentEntity | null> {
         try {
-            let { wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat } = workAttachment
-            const result = await SequelizeWorkAttachment.update({ wrka_attachmenttype, wrka_filepath, wrka_createdat, wrka_updatedat }, { where: { cmp_uuid, wrk_uuid, wrka_uuid } });
-            if(result[0] < 1) {
+            const [updatedCount, [updatedWorkAttachment]] = await SequelizeWorkAttachment.update(
+                { 
+                    wrka_attachmenttype: workAttachment.wrka_attachmenttype,
+                    wrka_filepath: workAttachment.wrka_filepath
+                }, 
+                { 
+                    where: { cmp_uuid, wrk_uuid, wrka_uuid },
+                    returning: true, // necesario en PostgreSQL
+                }
+            );
+            if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el work attachment`);
             };
-            return workAttachment;
+            return updatedWorkAttachment.get({ plain: true }) as WorkAttachmentEntity;
         } catch (error: any) {
             console.error('Error en updateWorkAttachment:', error.message);
             throw error;
