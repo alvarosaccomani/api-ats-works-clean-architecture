@@ -39,11 +39,13 @@ SequelizeWorkAttachment.init({
   },
   wrka_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'wrka_createdat',
+  updatedAt: 'wrka_updatedat',
   tableName: 'wrka_workattachments'
 });
 SequelizeWorkAttachment.sync();
