@@ -49,8 +49,8 @@ export class WorkValue implements WorkEntity {
             itm_uuid: string,
             cmpitm_uuid: string,
             mitm_uuid: string,
-            wrk_createdat: Date,
-            wrk_updatedat: Date
+            wrk_createdat?: Date,
+            wrk_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.wrk_uuid = uuid();
