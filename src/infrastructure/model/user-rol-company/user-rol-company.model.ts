@@ -33,15 +33,17 @@ SequelizeUserRolCompany.init({
   },
   usrrolcmp_createdat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
   usrrolcmp_updatedat: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   }
 }, {
   sequelize,
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'usrrolcmp_createdat',
+  updatedAt: 'usrrolcmp_updatedat',
   tableName: 'usrrolcmp_usersrolescompanies'
 });
 SequelizeUserRolCompany.belongsTo(SequelizeCompany, {
