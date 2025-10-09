@@ -59,9 +59,9 @@ export class ModelItemUseCase {
         }
     }
     
-    public async createModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active, mitm_createdat, mitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, mitm_name: string, mitm_description: string, mitm_active: boolean, mitm_createdat: Date, mitm_updatedat: Date }) {
+    public async createModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, mitm_name: string, mitm_description: string, mitm_active: boolean }) {
         try {
-            const modelItemsValue = new ModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active, mitm_createdat, mitm_updatedat });
+            const modelItemsValue = new ModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active });
             const modelItemsCreated = await this.modelItemRepository.createModelItem(modelItemsValue);
             if(!modelItemsCreated) {
                 throw new Error(`No se pudo insertar el model item.`);
@@ -83,9 +83,9 @@ export class ModelItemUseCase {
         }
     }
 
-    public async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, { mitm_name, mitm_description,	mitm_active, mitm_createdat, mitm_updatedat } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, mitm_name: string, mitm_description: string,	mitm_active: boolean, mitm_createdat: Date, mitm_updatedat: Date }) {
+    public async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, { mitm_name, mitm_description,	mitm_active } : { mitm_name: string, mitm_description: string,	mitm_active: boolean }) {
         try {
-            const modelItemsUpdated = await this.modelItemRepository.updateModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active, mitm_createdat, mitm_updatedat });
+            const modelItemsUpdated = await this.modelItemRepository.updateModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, { mitm_name, mitm_description,	mitm_active });
             if(!modelItemsUpdated) {
                 throw new Error(`No se pudo actualizar el model item.`);
             }
