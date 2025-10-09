@@ -1,5 +1,6 @@
 import { UserRolCompanyRepository } from "../../domain/user-rol-company/user-rol-company.repository";
 import { UserRolCompanyValue } from "../../domain/user-rol-company/user-rol-company.value";
+import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
 
 export class UserRolCompanyUseCase {
     constructor(
@@ -15,11 +16,19 @@ export class UserRolCompanyUseCase {
 
     public async getUserRolesCompany(cmp_uuid: string) {
         try {
-            const userRolesCompany = this.userRolCompanyRepository.getUserRolesCompany(cmp_uuid);
+            const userRolesCompany = await this.userRolCompanyRepository.getUserRolesCompany(cmp_uuid);
             if(!userRolesCompany) {
                 throw new Error('No hay users roles companies.');
             }
-            return userRolesCompany;
+            return userRolesCompany.map((userRolCompany) => ({
+                cmp_uuid: userRolCompany.cmp_uuid,
+                usrrolcmp_uuid: userRolCompany.usrrolcmp_uuid,
+                usr_uuid: userRolCompany.usr_uuid,
+                usr: userRolCompany.usr,
+                rol_uuid: userRolCompany.rol_uuid,
+                usrrolcmp_createdat: TimezoneConverter.toIsoStringInTimezone(userRolCompany.usrrolcmp_createdat, 'America/Argentina/Buenos_Aires'),
+                usrrolcmp_updatedat: TimezoneConverter.toIsoStringInTimezone(userRolCompany.usrrolcmp_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
         } catch (error: any) {
             console.error('Error en getUserRoleCompanies (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -28,11 +37,19 @@ export class UserRolCompanyUseCase {
 
     public async getDetailUserRolCompany(cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string) {
         try {
-            const userRolCompany = this.userRolCompanyRepository.findUserRolCompanyById(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid);
+            const userRolCompany = await this.userRolCompanyRepository.findUserRolCompanyById(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid);
             if(!userRolCompany) {
                 throw new Error(`No hay user rol company con el Id: ${cmp_uuid}, ${usrrolcmp_uuid}, ${usr_uuid}, ${rol_uuid}`);
             }
-            return userRolCompany;
+            return {
+                cmp_uuid: userRolCompany.cmp_uuid,
+                usrrolcmp_uuid: userRolCompany.usrrolcmp_uuid,
+                usr_uuid: userRolCompany.usr_uuid,
+                usr: userRolCompany.usr,
+                rol_uuid: userRolCompany.rol_uuid,
+                usrrolcmp_createdat: TimezoneConverter.toIsoStringInTimezone(userRolCompany.usrrolcmp_createdat, 'America/Argentina/Buenos_Aires'),
+                usrrolcmp_updatedat: TimezoneConverter.toIsoStringInTimezone(userRolCompany.usrrolcmp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en getDetailUserRolCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -46,7 +63,15 @@ export class UserRolCompanyUseCase {
             if(!userRolCompanyCreated) {
                 throw new Error(`No se pudo insertar el user rol company.`);
             }
-            return userRolCompanyCreated;
+            return {
+                cmp_uuid: userRolCompanyCreated.cmp_uuid,
+                usrrolcmp_uuid: userRolCompanyCreated.usrrolcmp_uuid,
+                usr_uuid: userRolCompanyCreated.usr_uuid,
+                usr: userRolCompanyCreated.usr,
+                rol_uuid: userRolCompanyCreated.rol_uuid,
+                usrrolcmp_createdat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyCreated.usrrolcmp_createdat, 'America/Argentina/Buenos_Aires'),
+                usrrolcmp_updatedat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyCreated.usrrolcmp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en createUserRolCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -59,7 +84,15 @@ export class UserRolCompanyUseCase {
             if(!userRolCompanyUpdated) {
                 throw new Error(`No se pudo actualizar el user rol company.`);
             }
-            return userRolCompanyUpdated;
+            return {
+                cmp_uuid: userRolCompanyUpdated.cmp_uuid,
+                usrrolcmp_uuid: userRolCompanyUpdated.usrrolcmp_uuid,
+                usr_uuid: userRolCompanyUpdated.usr_uuid,
+                usr: userRolCompanyUpdated.usr,
+                rol_uuid: userRolCompanyUpdated.rol_uuid,
+                usrrolcmp_createdat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyUpdated.usrrolcmp_createdat, 'America/Argentina/Buenos_Aires'),
+                usrrolcmp_updatedat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyUpdated.usrrolcmp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en updateUserRolCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
@@ -72,7 +105,15 @@ export class UserRolCompanyUseCase {
             if(!userRolCompanyDeleted) {
                 throw new Error(`No se pudo eliminar el user rol company.`);
             }
-            return userRolCompanyDeleted;
+            return {
+                cmp_uuid: userRolCompanyDeleted.cmp_uuid,
+                usrrolcmp_uuid: userRolCompanyDeleted.usrrolcmp_uuid,
+                usr_uuid: userRolCompanyDeleted.usr_uuid,
+                usr: userRolCompanyDeleted.usr,
+                rol_uuid: userRolCompanyDeleted.rol_uuid,
+                usrrolcmp_createdat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyDeleted.usrrolcmp_createdat, 'America/Argentina/Buenos_Aires'),
+                usrrolcmp_updatedat: TimezoneConverter.toIsoStringInTimezone(userRolCompanyDeleted.usrrolcmp_updatedat, 'America/Argentina/Buenos_Aires')
+            };
         } catch (error: any) {
             console.error('Error en deleteUserRolCompany (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
