@@ -28,8 +28,8 @@ export class WorkStateValue implements WorkStateEntity {
             wrks_description: string,
             wrks_bkcolor: string,
             wrks_frcolor: string,
-            wrks_createdat: Date,
-            wrks_updatedat: Date
+            wrks_createdat?: Date,
+            wrks_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
         this.wrks_uuid = uuid();
