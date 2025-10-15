@@ -51,7 +51,8 @@ export class ModelItemUseCase {
                 mitm_description: modelItems.mitm_description,
                 mitm_active: modelItems.mitm_active,
                 mitm_createdat: TimezoneConverter.toIsoStringInTimezone(modelItems.mitm_createdat, 'America/Argentina/Buenos_Aires'),
-                mitm_updatedat: TimezoneConverter.toIsoStringInTimezone(modelItems.mitm_updatedat, 'America/Argentina/Buenos_Aires')
+                mitm_updatedat: TimezoneConverter.toIsoStringInTimezone(modelItems.mitm_updatedat, 'America/Argentina/Buenos_Aires'),
+                detailModelItems: modelItems.detailModelItems,
             };
         } catch (error: any) {
             console.error('Error en getDetailModelItems (use case):', error.message);
