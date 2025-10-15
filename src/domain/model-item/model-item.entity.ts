@@ -1,3 +1,5 @@
+import { DetailModelItemEntity } from "../detail-model-item/detail-model-item.entity"
+
 export interface ModelItemEntity {
     cmp_uuid: string,
     itm_uuid: string,
@@ -7,7 +9,8 @@ export interface ModelItemEntity {
 	mitm_description: string,
 	mitm_active: boolean,
 	mitm_createdat: Date,
-    mitm_updatedat: Date
+    mitm_updatedat: Date,
+    detailModelItems?: DetailModelItemEntity[]
 }
 
 //Update
