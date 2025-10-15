@@ -1,0 +1,7 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  api-ats-works-clean-architecture:
+    build: .
+    ports:
+      - "3001:3001"
