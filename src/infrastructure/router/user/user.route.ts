@@ -23,6 +23,34 @@ function configureUserRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const userCtrl = new UserController(userUseCase, socketAdapter);
     
+    /**
+     * @swagger
+     * /api/user:
+     *   get:
+     *     summary: Obtiene la lista de usuarios registrados.
+     *     description: Retorna una lista de todos los usuarios registrados en el sistema.
+     *     responses:
+     *       200:
+     *         description: Operación exitosa. Retorna un objeto con los datos de los usuarios.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   description: Indica si la operación fue exitosa.
+     *                   example: true
+     *                 message:
+     *                   type: string
+     *                   description: Mensaje descriptivo de la operación.
+     *                   example: Usuarios retornados.
+     *                 data:
+     *                   type: array
+     *                   description: Lista de usuarios registrados.
+     *                   items:
+     *                     $ref: '#/components/schemas/UserEntity'
+     */
     app.get(`/${process.env.BASE_URL_API}/user/:filter?/:page?/:perPage?`, userCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/user/:usr_uuid`, userCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/user`, userCtrl.insertCtrl);
