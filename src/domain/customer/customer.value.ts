@@ -9,7 +9,7 @@ export class CustomerValue implements CustomerEntity {
     cus_email: string;
     cus_phone: string;
     cus_dateofbirth: Date;
-    cfrm_uuid: string;
+    pmt_uuid: string;
     usr_uuid: string;
     cus_createdat: Date;
     cus_updatedat: Date;
@@ -21,7 +21,7 @@ export class CustomerValue implements CustomerEntity {
             cus_email,
             cus_phone,
             cus_dateofbirth,
-            cfrm_uuid,
+            pmt_uuid,
             usr_uuid,
             cus_createdat,
             cus_updatedat
@@ -32,7 +32,7 @@ export class CustomerValue implements CustomerEntity {
             cus_email: string,
             cus_phone: string,
             cus_dateofbirth: Date,
-            cfrm_uuid: string,
+            pmt_uuid: string,
             usr_uuid: string,
             cus_createdat?: Date,
             cus_updatedat?: Date
@@ -43,7 +43,7 @@ export class CustomerValue implements CustomerEntity {
         this.cus_email = cus_email;
         this.cus_phone = cus_phone;
         this.cus_dateofbirth = cus_dateofbirth;
-        this.cfrm_uuid = cfrm_uuid;
+        this.pmt_uuid = pmt_uuid;
         this.usr_uuid = usr_uuid;
         this.cus_createdat = cus_createdat ?? moment().toDate();
         this.cus_updatedat = cus_updatedat ?? moment().toDate();
