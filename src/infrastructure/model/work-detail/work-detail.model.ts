@@ -73,4 +73,8 @@ SequelizeWorkDetail.belongsTo(SequelizeDataType, {
     foreignKey: 'dtp_uuid',
     as: 'dtp'
 });
-SequelizeWorkDetail.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeWorkDetail.sync();
+}

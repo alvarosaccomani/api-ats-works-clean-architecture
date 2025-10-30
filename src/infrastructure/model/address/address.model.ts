@@ -74,4 +74,7 @@ SequelizeAddress.belongsTo(SequelizeCustomer, {
     as: 'cus'
 });
 
-SequelizeAddress.sync();
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeAddress.sync();
+}

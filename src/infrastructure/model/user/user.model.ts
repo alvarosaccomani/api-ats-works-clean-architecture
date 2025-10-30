@@ -100,4 +100,7 @@ SequelizeUser.init({
   tableName: 'usr_users'
 });
 
-SequelizeUser.sync();
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeUser.sync();
+}

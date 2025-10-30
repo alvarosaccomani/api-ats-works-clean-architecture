@@ -50,4 +50,7 @@ SequelizeDataType.init({
   tableName: 'dtp_datatypes'
 });
 
-SequelizeDataType.sync();
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeDataType.sync();
+}

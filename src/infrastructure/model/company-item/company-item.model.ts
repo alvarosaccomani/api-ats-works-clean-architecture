@@ -43,4 +43,8 @@ SequelizeCompanyItem.belongsTo(SequelizeItem, {
   as: 'itm',
   foreignKey: 'itm_uuid'
 });
-SequelizeCompanyItem.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeCompanyItem.sync();
+}

@@ -58,4 +58,8 @@ SequelizeUserRolCompany.belongsTo(SequelizeRol, {
   as: 'rol',
   foreignKey: 'rol_uuid'
 });
-SequelizeUserRolCompany.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeUserRolCompany.sync();
+}

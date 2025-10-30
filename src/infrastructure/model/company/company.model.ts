@@ -49,4 +49,8 @@ SequelizeCompany.init({
   updatedAt: 'cmp_updatedat',
   tableName: 'cmp_companies'
 });
-SequelizeCompany.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeCompany.sync();
+}

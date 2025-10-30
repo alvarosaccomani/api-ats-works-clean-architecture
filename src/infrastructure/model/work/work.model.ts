@@ -171,4 +171,8 @@ SequelizeWork.hasMany(SequelizeWorkAttachment, {
     sourceKey: 'wrk_uuid',
     as: 'workAttachments'
 });
-SequelizeWork.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeWork.sync();
+}

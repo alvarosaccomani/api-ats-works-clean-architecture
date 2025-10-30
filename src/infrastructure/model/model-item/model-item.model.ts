@@ -64,4 +64,8 @@ SequelizeModelItem.hasMany(SequelizeDetailModelItem, {
     sourceKey: 'mitm_uuid',
     as: 'detailModelItems'
 });
-SequelizeModelItem.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeModelItem.sync();
+}

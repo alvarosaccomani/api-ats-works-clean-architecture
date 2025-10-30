@@ -39,4 +39,8 @@ SequelizeItem.init({
   updatedAt: 'itm_updatedat',
   tableName: 'itm_items'
 });
-SequelizeItem.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeItem.sync();
+}

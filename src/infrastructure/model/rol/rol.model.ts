@@ -34,4 +34,8 @@ SequelizeRol.init({
   updatedAt: 'rol_updatedat',
   tableName: 'rol_roles'
 });
-SequelizeRol.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeRol.sync();
+}

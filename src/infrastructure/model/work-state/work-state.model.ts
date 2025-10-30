@@ -55,4 +55,8 @@ SequelizeWorkState.init({
   updatedAt: 'wrks_updatedat',
   tableName: 'wrks_workstates'
 });
-SequelizeWorkState.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeWorkState.sync();
+}

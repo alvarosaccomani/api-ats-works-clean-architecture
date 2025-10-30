@@ -93,4 +93,8 @@ SequelizeDetailModelItem.belongsTo(SequelizeDataType, {
     foreignKey: 'dtp_uuid',
     as: 'dtp'
 });
-SequelizeDetailModelItem.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeDetailModelItem.sync();
+}

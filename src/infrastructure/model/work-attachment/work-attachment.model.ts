@@ -48,4 +48,8 @@ SequelizeWorkAttachment.init({
   updatedAt: 'wrka_updatedat',
   tableName: 'wrka_workattachments'
 });
-SequelizeWorkAttachment.sync();
+
+// Sincronizar (solo en desarrollo)
+if (process.env.NODE_ENV !== "production") {
+    SequelizeWorkAttachment.sync();
+}
