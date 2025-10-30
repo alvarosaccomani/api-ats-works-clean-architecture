@@ -54,6 +54,7 @@ export class WorkDetailUseCase {
                 dtp_uuid: workDetails.dtp_uuid,
                 wrkd_value: workDetails.wrkd_value,
                 wrkd_order: workDetails.wrkd_order,
+                wrkd_groupname: workDetails.wrkd_groupname,
                 wrkd_createdat: TimezoneConverter.toIsoStringInTimezone(workDetails.wrkd_createdat, 'America/Argentina/Buenos_Aires'),
                 wrkd_updatedat: TimezoneConverter.toIsoStringInTimezone(workDetails.wrkd_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -63,9 +64,9 @@ export class WorkDetailUseCase {
         }
     }
     
-    public async createWorkDetail({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order } : { cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string }) {
+    public async createWorkDetail({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupname } : { cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string, wrkd_groupname: string }) {
         try {
-            const workDetailsValue = new WorkDetailValue({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order });
+            const workDetailsValue = new WorkDetailValue({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupname });
             const workDetailsCreated = await this.workDetailRepository.createWorkDetail(workDetailsValue);
             if(!workDetailsCreated) {
                 throw new Error(`No se pudo insertar el work detail.`);
@@ -80,6 +81,7 @@ export class WorkDetailUseCase {
                 dtp_uuid: workDetailsCreated.dtp_uuid,
                 wrkd_value: workDetailsCreated.wrkd_value,
                 wrkd_order: workDetailsCreated.wrkd_order,
+                wrkd_groupname: workDetailsCreated.wrkd_groupname,
                 wrkd_createdat: TimezoneConverter.toIsoStringInTimezone(workDetailsCreated.wrkd_createdat, 'America/Argentina/Buenos_Aires'),
                 wrkd_updatedat: TimezoneConverter.toIsoStringInTimezone(workDetailsCreated.wrkd_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -89,9 +91,9 @@ export class WorkDetailUseCase {
         }
     }
 
-    public async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order } : { wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string }) {
+    public async updateWorkDetail(cmp_uuid: string, wrk_uuid: string, wrkd_uuid: string, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupname } : { wrkd_key: string, wrkd_name: string, wrkd_description: string, dtp_uuid: string, wrkd_value: string, wrkd_order: string, wrkd_groupname: string }) {
         try {
-            const workDetailsUpdated = await this.workDetailRepository.updateWorkDetail(cmp_uuid, wrk_uuid, wrkd_uuid, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order });
+            const workDetailsUpdated = await this.workDetailRepository.updateWorkDetail(cmp_uuid, wrk_uuid, wrkd_uuid, { wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupname });
             if(!workDetailsUpdated) {
                 throw new Error(`No se pudo actualizar el workd etail.`);
             }
@@ -105,6 +107,7 @@ export class WorkDetailUseCase {
                 dtp_uuid: workDetailsUpdated.dtp_uuid,
                 wrkd_value: workDetailsUpdated.wrkd_value,
                 wrkd_order: workDetailsUpdated.wrkd_order,
+                wrkd_groupname: workDetailsUpdated.wrkd_groupname,
                 wrkd_createdat: TimezoneConverter.toIsoStringInTimezone(workDetailsUpdated.wrkd_createdat, 'America/Argentina/Buenos_Aires'),
                 wrkd_updatedat: TimezoneConverter.toIsoStringInTimezone(workDetailsUpdated.wrkd_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -130,6 +133,7 @@ export class WorkDetailUseCase {
                 dtp_uuid: workDetailsDeleted.dtp_uuid,
                 wrkd_value: workDetailsDeleted.wrkd_value,
                 wrkd_order: workDetailsDeleted.wrkd_order,
+                wrkd_groupname: workDetailsDeleted.wrkd_groupname,
                 wrkd_createdat: TimezoneConverter.toIsoStringInTimezone(workDetailsDeleted.wrkd_createdat, 'America/Argentina/Buenos_Aires'),
                 wrkd_updatedat: TimezoneConverter.toIsoStringInTimezone(workDetailsDeleted.wrkd_updatedat, 'America/Argentina/Buenos_Aires')
             };
