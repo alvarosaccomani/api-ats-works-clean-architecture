@@ -8,10 +8,10 @@ export interface WorkDetailEntity {
     dtp_uuid: string,
 	wrkd_value: string,
     wrkd_order: string,
-    wrkd_groupname: string,
+    wrkd_groupkey: string,
 	wrkd_createdat: Date,
     wrkd_updatedat: Date
 }
 
 //Update
-export type WorkDetailUpdateData = Pick<WorkDetailEntity, 'wrkd_key' | 'wrkd_name' | 'wrkd_description' | 'dtp_uuid' | 'wrkd_value' | 'wrkd_order' | 'wrkd_groupname'>
+export type WorkDetailUpdateData = Pick<WorkDetailEntity, 'wrkd_key' | 'wrkd_name' | 'wrkd_description' | 'dtp_uuid' | 'wrkd_value' | 'wrkd_order' | 'wrkd_groupkey'>
