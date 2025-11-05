@@ -51,7 +51,7 @@ function configureUserRoutes(app: Express, socketAdapter: SocketAdapter) {
      *                   items:
      *                     $ref: '#/components/schemas/UserEntity'
      */
-    app.get(`/${process.env.BASE_URL_API}/user/:filter?/:page?/:perPage?`, userCtrl.getAllCtrl);
+    app.get(`/${process.env.BASE_URL_API}/users/:filter?/:page?/:perPage?`, userCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/user/:usr_uuid`, userCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/user`, userCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/user/:usr_uuid`, userCtrl.updateCtrl);
