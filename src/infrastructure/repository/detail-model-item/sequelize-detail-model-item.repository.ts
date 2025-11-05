@@ -1,6 +1,8 @@
 import { DetailModelItemEntity, DetailModelItemUpdateData } from "../../../domain/detail-model-item/detail-model-item.entity";
 import { DetailModelItemRepository } from "../../../domain/detail-model-item/detail-model-item.repository";
+import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
+import { SequelizeGroupDetailModelItem } from "../../model/group-detail-model-item/group-detail-model-item.model";
 
 export class SequelizeRepository implements DetailModelItemRepository {
     async getDetailModelItems(cmp_uuid: string): Promise<DetailModelItemEntity[] | null> {
@@ -29,7 +31,17 @@ export class SequelizeRepository implements DetailModelItemRepository {
                     cmpitm_uuid: cmpitm_uuid ?? null,
                     mitm_uuid: mitm_uuid ?? null,
                     dmitm_uuid: dmitm_uuid ?? null
-                } 
+                },
+                include: [
+                    {
+                        as: 'dtp',
+                        model: SequelizeDataType
+                    },
+                    {
+                        as: 'gdmitm',
+                        model: SequelizeGroupDetailModelItem
+                    },
+                ]
             });
             if(!detailModelItem) {
                 throw new Error(`No hay detail model item con el Id: ${cmp_uuid}`);
