@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { DetailModelItemEntity } from "../../../domain/detail-model-item/detail-model-item.entity";
 import { SequelizeDataType } from '../data-type/data-type.model';
+import { SequelizeGroupDetailModelItem } from '../group-detail-model-item/group-detail-model-item.model';
+
 
 export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<DetailModelItemEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -92,6 +94,10 @@ SequelizeDetailModelItem.init({
 SequelizeDetailModelItem.belongsTo(SequelizeDataType, {
     foreignKey: 'dtp_uuid',
     as: 'dtp'
+});
+SequelizeDetailModelItem.belongsTo(SequelizeGroupDetailModelItem, {
+    foreignKey: 'gdmitm_uuid',
+    as: 'gdmitm'
 });
 
 // Sincronizar (solo en desarrollo)
