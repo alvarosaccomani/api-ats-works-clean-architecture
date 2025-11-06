@@ -53,17 +53,16 @@ export class UserRolCompanyController {
     public async getCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const itm_uuid = req.params.itm_uuid;
-            const cmpitm_uuid = req.params.cmpitm_uuid;
+            const usr_uuid = req.params.usr_uuid;
             const rol_uuid = req.params.rol_uuid;
-            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined' || !itm_uuid || itm_uuid.toLowerCase() === 'null' || itm_uuid.toLowerCase() === 'undefined' || !cmpitm_uuid || cmpitm_uuid.toLowerCase() === 'null' || cmpitm_uuid.toLowerCase() === 'undefined'|| !rol_uuid || rol_uuid.toLowerCase() === 'null' || rol_uuid.toLowerCase() === 'undefined') {
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined' || !usr_uuid || usr_uuid.toLowerCase() === 'null' || usr_uuid.toLowerCase() === 'undefined'|| !rol_uuid || rol_uuid.toLowerCase() === 'null' || rol_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el user rol company.',
                     error: 'Debe proporcionar un Id de user rol company.'
                 });
             }
-            const userRolCompany = await this.userRolCompanyUseCase.getDetailUserRolCompany(`${cmp_uuid}`, `${itm_uuid}`, `${cmpitm_uuid}`, `${rol_uuid}`)
+            const userRolCompany = await this.userRolCompanyUseCase.getDetailUserRolCompany(`${cmp_uuid}`, `${usr_uuid}`, `${rol_uuid}`)
             return res.status(200).send({
                 success: true,
                 message: 'User rol company retornada.',
@@ -82,10 +81,9 @@ export class UserRolCompanyController {
     public async insertCtrl({ body }: Request, res: Response) {
         try {
             const cmp_uuid = body.cmp_uuid;
-            const itm_uuid = body.itm_uuid;
-            const cmpitm_uuid = body.cmpitm_uuid;
+            const usr_uuid = body.usr_uuid;
             const rol_uuid = body.rol_uuid;
-            const userRolCompanyExist = await this.userRolCompanyUseCase.existUserRolCompany(cmp_uuid, itm_uuid, cmpitm_uuid, rol_uuid);
+            const userRolCompanyExist = await this.userRolCompanyUseCase.existUserRolCompany(cmp_uuid, usr_uuid, rol_uuid);
             if(userRolCompanyExist) {
                 return res.status(400).json({
                     success: false,
@@ -119,7 +117,7 @@ export class UserRolCompanyController {
                     error: 'Debe proporcionar un Nombre para el user rol company.'
                 })
             };
-            const userRolCompanyByName = await this.userRolCompanyUseCase.getDetailUserRolCompany(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update.rol_uuid);
+            const userRolCompanyByName = await this.userRolCompanyUseCase.getDetailUserRolCompany(update.cmp_uuid, update.usr_uuid, update.rol_uuid);
             if(userRolCompanyByName) {
                 return res.status(400).json({
                     success: false,
@@ -127,7 +125,7 @@ export class UserRolCompanyController {
                     error: `El nombre ${update.cmpitm_name} de user rol company ya existe.`
                 });
             }
-            const userRolCompany = await this.userRolCompanyUseCase.updateUserRolCompany(update.cmp_uuid, update.itm_uuid, update.cmpitm_uuid, update)
+            const userRolCompany = await this.userRolCompanyUseCase.updateUserRolCompany(update.cmp_uuid, update.usr_uuid, update.rol_uuid, update)
             return res.status(200).json({
                 success: true,
                 message: 'User rol company actualizado.',
@@ -146,17 +144,16 @@ export class UserRolCompanyController {
     public async deleteCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const itm_uuid = req.params.itm_uuid;
-            const cmpitm_uuid = req.params.cmpitm_uuid;
+            const usr_uuid = req.params.usr_uuid;
             const rol_uuid = req.params.rol_uuid;
-            if(!cmpitm_uuid) {
+            if(!cmp_uuid) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo eliminar el user rol company.',
-                    error: 'Debe proporcionar un Id de user rol company.'
+                    error: 'Debe proporcionar un Id de company.'
                 });
             };
-            const userRolCompany = await this.userRolCompanyUseCase.deleteUserRolCompany(cmp_uuid, itm_uuid, cmpitm_uuid, rol_uuid)
+            const userRolCompany = await this.userRolCompanyUseCase.deleteUserRolCompany(cmp_uuid, usr_uuid, rol_uuid)
             return res.status(200).json({
                 success: true,
                 message: 'User rol company eliminado.',

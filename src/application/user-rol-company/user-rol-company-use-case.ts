@@ -22,7 +22,6 @@ export class UserRolCompanyUseCase {
             }
             return userRolesCompany.map((userRolCompany) => ({
                 cmp_uuid: userRolCompany.cmp_uuid,
-                usrrolcmp_uuid: userRolCompany.usrrolcmp_uuid,
                 usr_uuid: userRolCompany.usr_uuid,
                 usr: userRolCompany.usr,
                 rol_uuid: userRolCompany.rol_uuid,
@@ -35,15 +34,14 @@ export class UserRolCompanyUseCase {
         }
     }
 
-    public async getDetailUserRolCompany(cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string) {
+    public async getDetailUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string) {
         try {
-            const userRolCompany = await this.userRolCompanyRepository.findUserRolCompanyById(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid);
+            const userRolCompany = await this.userRolCompanyRepository.findUserRolCompanyById(cmp_uuid, usr_uuid, rol_uuid);
             if(!userRolCompany) {
-                throw new Error(`No hay user rol company con el Id: ${cmp_uuid}, ${usrrolcmp_uuid}, ${usr_uuid}, ${rol_uuid}`);
+                throw new Error(`No hay user rol company con el Id: ${cmp_uuid}, ${usr_uuid}, ${rol_uuid}`);
             }
             return {
                 cmp_uuid: userRolCompany.cmp_uuid,
-                usrrolcmp_uuid: userRolCompany.usrrolcmp_uuid,
                 usr_uuid: userRolCompany.usr_uuid,
                 usr: userRolCompany.usr,
                 rol_uuid: userRolCompany.rol_uuid,
@@ -56,16 +54,15 @@ export class UserRolCompanyUseCase {
         }
     }
     
-    public async createUserRolCompany({ cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat } : { cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string, usrrolcmp_createdat: Date, usrrolcmp_updatedat: Date }) {
+    public async createUserRolCompany({ cmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat } : { cmp_uuid: string, usr_uuid: string, rol_uuid: string, usrrolcmp_createdat: Date, usrrolcmp_updatedat: Date }) {
         try {
-            const userRolCompanyValue = new UserRolCompanyValue({ cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat });
+            const userRolCompanyValue = new UserRolCompanyValue({ cmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat });
             const userRolCompanyCreated = await this.userRolCompanyRepository.createUserRolCompany(userRolCompanyValue);
             if(!userRolCompanyCreated) {
                 throw new Error(`No se pudo insertar el user rol company.`);
             }
             return {
                 cmp_uuid: userRolCompanyCreated.cmp_uuid,
-                usrrolcmp_uuid: userRolCompanyCreated.usrrolcmp_uuid,
                 usr_uuid: userRolCompanyCreated.usr_uuid,
                 usr: userRolCompanyCreated.usr,
                 rol_uuid: userRolCompanyCreated.rol_uuid,
@@ -78,15 +75,14 @@ export class UserRolCompanyUseCase {
         }
     }
 
-    public async updateUserRolCompany(cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, { rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat } : { cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string, usrrolcmp_createdat: Date, usrrolcmp_updatedat: Date }) {
+    public async updateUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string,{ usrrolcmp_createdat, usrrolcmp_updatedat } : { cmp_uuid: string, usr_uuid: string, rol_uuid: string, usrrolcmp_createdat: Date, usrrolcmp_updatedat: Date }) {
         try {
-            const userRolCompanyUpdated = await this.userRolCompanyRepository.updateUserRolCompany(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid, { cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat });
+            const userRolCompanyUpdated = await this.userRolCompanyRepository.updateUserRolCompany(cmp_uuid, usr_uuid, rol_uuid, { cmp_uuid, usr_uuid, rol_uuid, usrrolcmp_createdat, usrrolcmp_updatedat });
             if(!userRolCompanyUpdated) {
                 throw new Error(`No se pudo actualizar el user rol company.`);
             }
             return {
                 cmp_uuid: userRolCompanyUpdated.cmp_uuid,
-                usrrolcmp_uuid: userRolCompanyUpdated.usrrolcmp_uuid,
                 usr_uuid: userRolCompanyUpdated.usr_uuid,
                 usr: userRolCompanyUpdated.usr,
                 rol_uuid: userRolCompanyUpdated.rol_uuid,
@@ -99,15 +95,14 @@ export class UserRolCompanyUseCase {
         }
     }
 
-    public async deleteUserRolCompany(cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string) {
+    public async deleteUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string) {
         try {
-            const userRolCompanyDeleted = await this.userRolCompanyRepository.deleteUserRolCompany(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid);
+            const userRolCompanyDeleted = await this.userRolCompanyRepository.deleteUserRolCompany(cmp_uuid, usr_uuid, rol_uuid);
             if(!userRolCompanyDeleted) {
                 throw new Error(`No se pudo eliminar el user rol company.`);
             }
             return {
                 cmp_uuid: userRolCompanyDeleted.cmp_uuid,
-                usrrolcmp_uuid: userRolCompanyDeleted.usrrolcmp_uuid,
                 usr_uuid: userRolCompanyDeleted.usr_uuid,
                 usr: userRolCompanyDeleted.usr,
                 rol_uuid: userRolCompanyDeleted.rol_uuid,
@@ -120,9 +115,9 @@ export class UserRolCompanyUseCase {
         }
     }
 
-    public async existUserRolCompany(cmp_uuid: string, usrrolcmp_uuid: string, usr_uuid: string, rol_uuid: string) {
+    public async existUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string) {
         try {
-            const userRolCompany = this.userRolCompanyRepository.existUserRolCompany(cmp_uuid, usrrolcmp_uuid, usr_uuid, rol_uuid);
+            const userRolCompany = this.userRolCompanyRepository.existUserRolCompany(cmp_uuid, usr_uuid, rol_uuid);
             return userRolCompany;
         } catch (error: any) {
             console.error('Error en existUserRolCompany (use case):', error.message);

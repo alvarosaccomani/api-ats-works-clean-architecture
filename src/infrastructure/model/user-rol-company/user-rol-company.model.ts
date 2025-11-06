@@ -7,7 +7,6 @@ import { SequelizeRol } from '../rol/rol.model';
 
 export class SequelizeUserRolCompany extends Model<UserRolCompanyEntity, Omit<UserRolCompanyEntity, 'id'>> {
   declare cmp_uuid: string;
-  declare usrrolcmp_uuid: string;
   declare usr_uuid: string;
   declare rol_uuid: string;
   declare usrrolcmp_createdat: Date;
@@ -17,10 +16,6 @@ export class SequelizeUserRolCompany extends Model<UserRolCompanyEntity, Omit<Us
 SequelizeUserRolCompany.init({
   cmp_uuid: {
     type: DataTypes.STRING, 
-    primaryKey: true
-  },
-  usrrolcmp_uuid: {
-    type: DataTypes.STRING,
     primaryKey: true
   },
   usr_uuid: {
