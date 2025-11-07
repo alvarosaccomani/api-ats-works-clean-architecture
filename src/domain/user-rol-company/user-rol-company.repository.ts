@@ -8,4 +8,5 @@ export interface UserRolCompanyRepository {
     deleteUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string): Promise<UserRolCompanyEntity | null>;
     existUserRolCompany(cmp_uuid: string, usr_uuid: string, rol_uuid: string): Promise<UserRolCompanyEntity | null>;
     getUserRolesCompanyByUser(usr_uuid: string): Promise<UserRolCompanyEntity[] | null>;
+    getUserRolesCompanyByCompanyUser(cmp_uuid: string, usr_uuid: string): Promise<UserRolCompanyEntity[] | null>;
 }

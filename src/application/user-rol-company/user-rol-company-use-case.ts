@@ -135,4 +135,14 @@ export class UserRolCompanyUseCase {
         }
     }
 
+    public async getUserRolesCompanyByCompanyUser(cmp_uuid: string, usr_uuid: string) {
+        try {
+            const userRolesCompany = this.userRolCompanyRepository.getUserRolesCompanyByCompanyUser(cmp_uuid, usr_uuid);
+            return userRolesCompany;
+        } catch (error: any) {
+            console.error('Error en getUserRolesCompanyByCompanyUser (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
 }

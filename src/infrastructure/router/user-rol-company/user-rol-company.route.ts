@@ -29,6 +29,7 @@ function configureUserRolCompanyRoutes(app: Express, socketAdapter: SocketAdapte
     app.put(`/${process.env.BASE_URL_API}/user-rol-company/:cmp_uuid/:usr_uuid/:rol_uuid`, userRolCompanyCtrl.updateCtrl);
     app.delete(`/${process.env.BASE_URL_API}/user-rol-company/:cmp_uuid/:usr_uuid/:rol_uuid`, userRolCompanyCtrl.deleteCtrl);
     app.get(`/${process.env.BASE_URL_API}/user-roles-company-by-user/:usr_uuid`, userRolCompanyCtrl.getUserRolesCompanyByUserCtrl);
+    app.get(`/${process.env.BASE_URL_API}/user-roles-company-by-company-user/:cmp_uuid/:usr_uuid`, userRolCompanyCtrl.getUserRolesCompanyByCompanyUserCtrl);
 }
 
 export default configureUserRolCompanyRoutes;

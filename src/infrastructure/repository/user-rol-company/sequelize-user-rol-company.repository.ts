@@ -122,5 +122,29 @@ export class SequelizeRepository implements UserRolCompanyRepository {
             throw error;
         }
     }
+
+    async getUserRolesCompanyByCompanyUser(cmp_uuid: string, usr_uuid: string): Promise<UserRolCompanyEntity[] | null> {
+        try {
+            let config = {
+                where: {
+                    cmp_uuid: cmp_uuid,
+                    usr_uuid: usr_uuid
+                },
+                include: [
+                    { as: 'cmp', model: SequelizeCompany },
+                    { as: 'rol', model: SequelizeRol }
+                ]
+            }
+
+            const userRolesCompany = await SequelizeUserRolCompany.findAll(config);
+            if(!userRolesCompany) {
+                throw new Error(`No hay user rol company para el usuario con el Id: ${usr_uuid}`);
+            }
+            return userRolesCompany;
+        } catch (error: any) {
+            console.error('Error en getUserRolesCompanyByCompanyUser:', error.message);
+            throw error;
+        }        
+    }
     
 }
