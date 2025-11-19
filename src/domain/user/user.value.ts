@@ -18,6 +18,7 @@ export class UserValue implements UserEntity {
     usr_confirmationtoken: string;
     usr_resetpasswordtoken: string;
     usr_resetpasswordexpires: Date;
+    usr_sysadmin: boolean;
     usr_createdat: Date;
     usr_updatedat: Date;
     
@@ -37,6 +38,7 @@ export class UserValue implements UserEntity {
             usr_confirmationtoken,
             usr_resetpasswordtoken,
             usr_resetpasswordexpires,
+            usr_sysadmin,
             usr_createdat,
             usr_updatedat
         }:{ 
@@ -55,6 +57,7 @@ export class UserValue implements UserEntity {
             usr_confirmationtoken: string
             usr_resetpasswordtoken: string,
             usr_resetpasswordexpires: Date,
+            usr_sysadmin: boolean,
             usr_createdat?: Date,
             usr_updatedat?: Date,
         }) {
@@ -73,6 +76,7 @@ export class UserValue implements UserEntity {
         this.usr_confirmationtoken = usr_confirmationtoken ?? '';
         this.usr_resetpasswordtoken = usr_resetpasswordtoken;
         this.usr_resetpasswordexpires = usr_resetpasswordexpires;
+        this.usr_sysadmin = usr_sysadmin ?? false;
         this.usr_createdat = usr_createdat ?? moment().toDate();
         this.usr_updatedat = usr_updatedat ?? moment().toDate();
     }

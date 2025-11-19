@@ -44,6 +44,7 @@ export class UserUseCase {
                 usr_confirmationtoken: user.usr_confirmationtoken,
                 usr_resetpasswordtoken: user.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(user.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+                usr_sysadmin: user.usr_sysadmin,
                 usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires'),
                 usr_updatedat: TimezoneConverter.toIsoStringInTimezone(user.usr_updatedat, 'America/Buenos_Aires')
 
@@ -75,8 +76,8 @@ export class UserUseCase {
                 usr_confirmationtoken: user.usr_confirmationtoken,
                 usr_resetpasswordtoken: user.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(user.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
-                usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires'),
-                
+                usr_sysadmin: user.usr_sysadmin,
+                usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires')
             };
         } catch (error: any) {
             console.error('Error en getDetailUser (use case):', error.message);
@@ -104,14 +105,15 @@ export class UserUseCase {
             usr_confirmationtoken: user.usr_confirmationtoken,
             usr_resetpasswordtoken: user.usr_resetpasswordtoken,
             usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(user.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+            usr_sysadmin: user.usr_sysadmin,
             usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires'),
             usr_updatedat: TimezoneConverter.toIsoStringInTimezone(user.usr_updatedat, 'America/Buenos_Aires')
         };
     }
 
-    public async registerUser({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires } : { usr_uuid: string, usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean, usr_confirmed: boolean, usr_confirmationtoken: string, usr_resetpasswordtoken: string, usr_resetpasswordexpires: Date }) {
+    public async registerUser({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin } : { usr_uuid: string, usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean, usr_confirmed: boolean, usr_confirmationtoken: string, usr_resetpasswordtoken: string, usr_resetpasswordexpires: Date, usr_sysadmin: boolean }) {
         try {
-            const userValue = new UserValue({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires });
+            const userValue = new UserValue({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin });
             const userCreated = await this.userRepository.registerUser(userValue);
             if(!userCreated) {
                 throw new Error(`No se pudo insertar el usuario.`);
@@ -131,6 +133,7 @@ export class UserUseCase {
                 usr_confirmationtoken: userCreated.usr_confirmationtoken,
                 usr_resetpasswordtoken: userCreated.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(userCreated.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+                usr_sysadmin: userCreated.usr_sysadmin,
                 usr_createdat: TimezoneConverter.toIsoStringInTimezone(userCreated.usr_createdat, 'America/Buenos_Aires'),
                 usr_updatedat: TimezoneConverter.toIsoStringInTimezone(userCreated.usr_updatedat, 'America/Buenos_Aires')
             };
@@ -140,9 +143,9 @@ export class UserUseCase {
         }
     }
 
-    public async updateUser(usr_uuid: string, { usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online } : { usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean }) {
+    public async updateUser(usr_uuid: string, { usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_sysadmin } : { usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean, usr_sysadmin: boolean }) {
         try {
-            const userUpdated = await this.userRepository.updateUser(usr_uuid, { usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online });
+            const userUpdated = await this.userRepository.updateUser(usr_uuid, { usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_sysadmin });
             if(!userUpdated) {
                 throw new Error(`No se pudo actualizar el usuario.`);
             }
@@ -161,6 +164,7 @@ export class UserUseCase {
                 usr_confirmationtoken: userUpdated.usr_confirmationtoken,
                 usr_resetpasswordtoken: userUpdated.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(userUpdated.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+                usr_sysadmin: userUpdated.usr_sysadmin,
                 usr_createdat: TimezoneConverter.toIsoStringInTimezone(userUpdated.usr_createdat, 'America/Buenos_Aires'),
                 usr_updatedat: TimezoneConverter.toIsoStringInTimezone(userUpdated.usr_updatedat, 'America/Buenos_Aires')
             };
@@ -191,6 +195,7 @@ export class UserUseCase {
                 usr_confirmationtoken: userDeleted.usr_confirmationtoken,
                 usr_resetpasswordtoken: userDeleted.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(userDeleted.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+                usr_sysadmin: userDeleted.usr_sysadmin,
                 usr_createdat: TimezoneConverter.toIsoStringInTimezone(userDeleted.usr_createdat, 'America/Buenos_Aires'),
                 usr_updatedat: TimezoneConverter.toIsoStringInTimezone(userDeleted.usr_updatedat, 'America/Buenos_Aires')
             };
@@ -226,9 +231,9 @@ export class UserUseCase {
         }
     }
 
-    public async saveUser({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires } : { usr_uuid: string, usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean, usr_confirmed: boolean, usr_confirmationtoken: string, usr_resetpasswordtoken: string, usr_resetpasswordexpires: Date }) {
+    public async saveUser({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin } : { usr_uuid: string, usr_name: string, usr_surname: string, usr_password: string, usr_image: string, usr_email: string, usr_nick: string, usr_bio: string, usr_registered: Date, usr_socket: string, usr_online: boolean, usr_confirmed: boolean, usr_confirmationtoken: string, usr_resetpasswordtoken: string, usr_resetpasswordexpires: Date, usr_sysadmin: boolean }) {
         try {
-            const userValue = new UserValue({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires });
+            const userValue = new UserValue({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin });
             const userSaved = await this.userRepository.saveUser(userValue);
             if(!userSaved) {
                 throw new Error(`No se pudo guardar el usuario.`);
@@ -248,6 +253,7 @@ export class UserUseCase {
                 usr_confirmationtoken: userSaved.usr_confirmationtoken,
                 usr_resetpasswordtoken: userSaved.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(userSaved.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
+                usr_sysadmin: userSaved.usr_sysadmin,
                 usr_createdat: TimezoneConverter.toIsoStringInTimezone(userSaved.usr_createdat, 'America/Buenos_Aires'),
                 usr_updatedat: TimezoneConverter.toIsoStringInTimezone(userSaved.usr_updatedat, 'America/Buenos_Aires')
             }

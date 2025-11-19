@@ -69,7 +69,8 @@ export class SequelizeRepository implements UserRepository {
                     usr_bio: user.usr_bio,
                     usr_registered: user.usr_registered,
                     usr_socket: user.usr_socket,
-                    usr_online: user.usr_online
+                    usr_online: user.usr_online,
+                    usr_sysadmin: user.usr_sysadmin
                 }, 
                 { 
                     where: { usr_uuid },
@@ -154,7 +155,7 @@ export class SequelizeRepository implements UserRepository {
             const authService = new AuthService(process.env.JWT_SECRET || 'default_secret');
             const emailService = new EmailService();
 
-            let { usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_createdat, usr_updatedat } = user;
+            let { usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin, usr_createdat, usr_updatedat } = user;
 
             const userExist = await SequelizeUser.findOne({ 
                 where: {
@@ -177,7 +178,7 @@ export class SequelizeRepository implements UserRepository {
             const salt = await bcrypt.genSalt(10);
             usr_password = await bcrypt.hash(usr_password, salt);
 
-            const result = await SequelizeUser.create({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_createdat, usr_updatedat });
+            const result = await SequelizeUser.create({ usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin, usr_createdat, usr_updatedat });
             
             if (!result) {
                 throw new Error('No se ha registrado el usuario');

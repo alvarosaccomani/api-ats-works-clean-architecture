@@ -18,6 +18,7 @@ export class SequelizeUser extends Model<UserEntity/*, Omit<UserEntity, 'id'>*/>
   declare usr_confirmationtoken: string;
   declare usr_resetpasswordtoken: string;
   declare usr_resetpasswordexpires: Date;
+  declare usr_sysadmin: boolean;
   declare usr_createdat: Date;
   declare usr_updatedat: Date;
 }
@@ -83,6 +84,10 @@ SequelizeUser.init({
   usr_resetpasswordexpires: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  usr_sysadmin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
   },
   usr_createdat: {
     type: DataTypes.DATE,
