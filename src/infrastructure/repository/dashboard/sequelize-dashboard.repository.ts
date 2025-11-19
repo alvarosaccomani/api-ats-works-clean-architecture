@@ -16,7 +16,11 @@ export class SequelizeRepository implements DashboardRepository {
                 dashboard = {
                     cmp_uuid: cmp_uuid,
                     companiesCount: (await SequelizeCompany.count()).toString(),
-                    usersCount: (await SequelizeUser.count()).toString(),
+                    usersCount: (await SequelizeUser.count({
+                                        where: {
+                                            usr_sysadmin: false
+                                        }
+                                    })).toString(),
                     itemsCount: (await SequelizeItem.count()).toString(),
                     modelsItemsCount: (await SequelizeModelItem.count()).toString(),
                     worksCount: (await SequelizeWork.count()).toString(),
@@ -30,7 +34,11 @@ export class SequelizeRepository implements DashboardRepository {
                                             cmp_uuid: cmp_uuid
                                         }
                                     })).toString(),
-                    usersCount: (await SequelizeUser.count()).toString(),
+                    usersCount: (await SequelizeUser.count({
+                                        where: {
+                                            usr_sysadmin: false
+                                        }
+                                    })).toString(),
                     itemsCount: (await SequelizeItem.count()).toString(),
                     modelsItemsCount: (await SequelizeModelItem.count({
                                         where: {
