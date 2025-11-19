@@ -77,7 +77,8 @@ export class UserUseCase {
                 usr_resetpasswordtoken: user.usr_resetpasswordtoken,
                 usr_resetpasswordexpires: TimezoneConverter.toIsoStringInTimezone(user.usr_resetpasswordexpires!, 'America/Buenos_Aires'),
                 usr_sysadmin: user.usr_sysadmin,
-                usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires')
+                usr_createdat: TimezoneConverter.toIsoStringInTimezone(user.usr_createdat, 'America/Buenos_Aires'),
+                usr_updatedat: TimezoneConverter.toIsoStringInTimezone(user.usr_updatedat, 'America/Buenos_Aires')
             };
         } catch (error: any) {
             console.error('Error en getDetailUser (use case):', error.message);
