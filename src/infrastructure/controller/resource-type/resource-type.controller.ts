@@ -43,15 +43,15 @@ export class ResourceTypeController {
 
     public async getCtrl(req: Request, res: Response) {
         try {
-            const res_type_uuid = req.params.res_type_uuid;
-            if(!res_type_uuid || res_type_uuid.toLowerCase() === 'null' || res_type_uuid.toLowerCase() === 'undefined') {
+            const rety_uuid = req.params.rety_uuid;
+            if(!rety_uuid || rety_uuid.toLowerCase() === 'null' || rety_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el tipo de recurso.',
                     error: 'Debe proporcionar un Id de tipo de recurso.'
                 });
             }
-            const resourceType = await this.resourceTypeUseCase.getDetailResourceType(`${res_type_uuid}`)
+            const resourceType = await this.resourceTypeUseCase.getDetailResourceType(`${rety_uuid}`)
             return res.status(200).send({
                 success: true,
                 message: 'Tipo de recurso retornado.',
