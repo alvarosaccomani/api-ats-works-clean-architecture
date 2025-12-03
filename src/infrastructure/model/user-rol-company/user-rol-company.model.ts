@@ -4,6 +4,7 @@ import { UserRolCompanyEntity } from "../../../domain/user-rol-company/user-rol-
 import { SequelizeCompany } from '../company/company.model';
 import { SequelizeUser } from '../user/user.model';
 import { SequelizeRol } from '../rol/rol.model';
+import { SequelizeRolPermission } from '../rol-permission/rol-permission.model';
 
 export class SequelizeUserRolCompany extends Model<UserRolCompanyEntity, Omit<UserRolCompanyEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -52,6 +53,13 @@ SequelizeUserRolCompany.belongsTo(SequelizeUser, {
 SequelizeUserRolCompany.belongsTo(SequelizeRol, {
   as: 'rol',
   foreignKey: 'rol_uuid'
+});
+
+//Sequelize Rol Permission Foreign Key
+SequelizeUserRolCompany.hasMany(SequelizeRolPermission, {
+  foreignKey: 'rol_uuid',
+  sourceKey: 'rol_uuid',
+  as: 'rolpers'
 });
 
 // Sincronizar (solo en desarrollo)
