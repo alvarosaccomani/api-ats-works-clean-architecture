@@ -4,6 +4,10 @@ import { SequelizeUserRolCompany } from "../../model/user-rol-company/user-rol-c
 import { SequelizeCompany } from "../../model/company/company.model";
 import { SequelizeRol } from "../../model/rol/rol.model";
 import { SequelizeUser } from "../../model/user/user.model";
+import { SequelizeRolPermission } from "../../model/rol-permission/rol-permission.model";
+import { SequelizePermission } from "../../model/permission/permission.model";
+import { SequelizeResourceType } from "../../model/resource-type/resource-type.model";
+import { SequelizeResourceModule } from "../../model/resource-module/resource-module.model";
 
 export class SequelizeRepository implements UserRolCompanyRepository {
     async getUserRolesCompany(cmp_uuid: string): Promise<UserRolCompanyEntity[] | null> {
@@ -104,7 +108,21 @@ export class SequelizeRepository implements UserRolCompanyRepository {
                 where: {},
                 include: [
                     { as: 'cmp', model: SequelizeCompany },
-                    { as: 'rol', model: SequelizeRol }
+                    { as: 'rol', model: SequelizeRol },
+                    { 
+                        as: 'rolpers', 
+                        model: SequelizeRolPermission,
+                        include: [
+                            { 
+                                as: 'per', 
+                                model: SequelizePermission,
+                                include: [
+                                    { as: 'rety', model: SequelizeResourceType },
+                                    { as: 'remo', model: SequelizeResourceModule }
+                                ]
+                            }
+                        ]
+                    }
                 ]
             }
             if (usr_uuid && usr_uuid !== 'null') {
