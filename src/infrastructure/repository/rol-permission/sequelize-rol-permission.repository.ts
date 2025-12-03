@@ -3,7 +3,6 @@ import { RolPermissionRepository } from "../../../domain/rol-permission/rol-perm
 import { SequelizeRolPermission } from "../../model/rol-permission/rol-permission.model";
 import { SequelizePermission } from "../../model/permission/permission.model";
 import { SequelizeRol } from "../../model/rol/rol.model";
-import { SequelizeCompany } from "../../model/index copy";
 
 export class SequelizeRepository implements RolPermissionRepository {
     async getRolPermissions(): Promise<RolPermissionEntity[] | null> {
