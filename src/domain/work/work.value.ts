@@ -12,7 +12,10 @@ export class WorkValue implements WorkEntity {
     wrk_workdatefinish: Date;
 	wrks_uuid: string;
     wrk_user_uuid: string;
-    wrk_operator_uuid: string;
+    wrk_operator_uuid1: string;
+    wrk_operator_uuid2: string;
+    wrk_operator_uuid3: string;
+    wrk_operator_uuid4: string;
     itm_uuid: string;
     cmpitm_uuid: string;
     mitm_uuid: string;
@@ -29,7 +32,10 @@ export class WorkValue implements WorkEntity {
             wrk_workdatefinish,
             wrks_uuid,
             wrk_user_uuid,
-            wrk_operator_uuid,
+            wrk_operator_uuid1,
+            wrk_operator_uuid2,
+            wrk_operator_uuid3,
+            wrk_operator_uuid4,
             itm_uuid,
             cmpitm_uuid,
             mitm_uuid,
@@ -45,7 +51,10 @@ export class WorkValue implements WorkEntity {
             wrk_workdatefinish: Date,
             wrks_uuid: string,
             wrk_user_uuid: string,
-            wrk_operator_uuid: string,
+            wrk_operator_uuid1: string,
+            wrk_operator_uuid2: string,
+            wrk_operator_uuid3: string,
+            wrk_operator_uuid4: string,
             itm_uuid: string,
             cmpitm_uuid: string,
             mitm_uuid: string,
@@ -61,7 +70,10 @@ export class WorkValue implements WorkEntity {
         this.wrk_workdatefinish = wrk_workdatefinish;
         this.wrks_uuid = wrks_uuid;
         this.wrk_user_uuid = wrk_user_uuid;
-        this.wrk_operator_uuid = wrk_operator_uuid;
+        this.wrk_operator_uuid1 = wrk_operator_uuid1;
+        this.wrk_operator_uuid2 = wrk_operator_uuid2;
+        this.wrk_operator_uuid3 = wrk_operator_uuid3;
+        this.wrk_operator_uuid4 = wrk_operator_uuid4;
         this.itm_uuid = itm_uuid;
         this.cmpitm_uuid = cmpitm_uuid;
         this.mitm_uuid = mitm_uuid;

@@ -32,8 +32,14 @@ export class WorkUseCase {
                 wrks: work.wrks,
                 wrk_user_uuid: work.wrk_user_uuid,
                 wrk_user: work.wrk_user,
-                wrk_operator_uuid: work.wrk_operator_uuid,
-                wrk_operator: work.wrk_operator,
+                wrk_operator_uuid1: work.wrk_operator_uuid1,
+                wrk_operator1: work.wrk_operator1,
+                wrk_operator_uuid2: work.wrk_operator_uuid2,
+                wrk_user2: work.wrk_operator2,
+                wrk_operator_uuid3: work.wrk_operator_uuid3,
+                wrk_operator3: work.wrk_operator3,
+                wrk_operator_uuid4: work.wrk_operator_uuid4,
+                wrk_operator4: work.wrk_operator4,
                 itm_uuid: work.itm_uuid,
                 cmpitm_uuid: work.cmpitm_uuid,
                 mitm_uuid: work.mitm_uuid,
@@ -66,8 +72,14 @@ export class WorkUseCase {
                 wrks: works.wrks,
                 wrk_user_uuid: works.wrk_user_uuid,
                 wrk_user: works.wrk_user,
-                wrk_operator_uuid: works.wrk_operator_uuid,
-                wrk_operator: works.wrk_operator,
+                wrk_operator_uuid1: works.wrk_operator_uuid1,
+                wrk_operator1: works.wrk_operator1,
+                wrk_operator_uuid2: works.wrk_operator_uuid2,
+                wrk_user2: works.wrk_operator2,
+                wrk_operator_uuid3: works.wrk_operator_uuid3,
+                wrk_operator3: works.wrk_operator3,
+                wrk_operator_uuid4: works.wrk_operator_uuid4,
+                wrk_operator4: works.wrk_operator4,
                 itm_uuid: works.itm_uuid,
                 cmpitm_uuid: works.cmpitm_uuid,
                 mitm_uuid: works.mitm_uuid,
@@ -83,9 +95,9 @@ export class WorkUseCase {
         }
     }
     
-    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
+    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
         try {
-            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid });
+            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid });
             const worksCreated = await this.workRepository.createWork(worksValue);
             if(!worksCreated) {
                 throw new Error(`No se pudo insertar el work.`);
@@ -100,7 +112,10 @@ export class WorkUseCase {
                 wrk_workdatefinish: TimezoneConverter.toIsoStringInTimezone(worksCreated.wrk_workdatefinish, 'America/Argentina/Buenos_Aires'),
                 wrks_uuid: worksCreated.wrks_uuid,
                 wrk_user_uuid: worksCreated.wrk_user_uuid,
-                wrk_operator_uuid: worksCreated.wrk_operator_uuid,
+                wrk_operator_uuid1: worksCreated.wrk_operator_uuid1,
+                wrk_operator_uuid2: worksCreated.wrk_operator_uuid2,
+                wrk_operator_uuid3: worksCreated.wrk_operator_uuid3,
+                wrk_operator_uuid4: worksCreated.wrk_operator_uuid4,
                 itm_uuid: worksCreated.itm_uuid,
                 cmpitm_uuid: worksCreated.cmpitm_uuid,
                 mitm_uuid: worksCreated.mitm_uuid,
@@ -113,9 +128,9 @@ export class WorkUseCase {
         }
     }
 
-    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
+    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
         try {
-            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid });
+            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid });
             if(!worksUpdated) {
                 throw new Error(`No se pudo actualizar el work.`);
             }
@@ -129,7 +144,10 @@ export class WorkUseCase {
                 wrk_workdatefinish: TimezoneConverter.toIsoStringInTimezone(worksUpdated.wrk_workdatefinish, 'America/Argentina/Buenos_Aires'),
                 wrks_uuid: worksUpdated.wrks_uuid,
                 wrk_user_uuid: worksUpdated.wrk_user_uuid,
-                wrk_operator_uuid: worksUpdated.wrk_operator_uuid,
+                wrk_operator_uuid1: worksUpdated.wrk_operator_uuid1,
+                wrk_operator_uuid2: worksUpdated.wrk_operator_uuid2,
+                wrk_operator_uuid3: worksUpdated.wrk_operator_uuid3,
+                wrk_operator_uuid4: worksUpdated.wrk_operator_uuid4,
                 itm_uuid: worksUpdated.itm_uuid,
                 cmpitm_uuid: worksUpdated.cmpitm_uuid,
                 mitm_uuid: worksUpdated.mitm_uuid,
@@ -158,7 +176,10 @@ export class WorkUseCase {
                 wrk_workdatefinish: TimezoneConverter.toIsoStringInTimezone(worksDeleted.wrk_workdatefinish, 'America/Argentina/Buenos_Aires'),
                 wrks_uuid: worksDeleted.wrks_uuid,
                 wrk_user_uuid: worksDeleted.wrk_user_uuid,
-                wrk_operator_uuid: worksDeleted.wrk_operator_uuid,
+                wrk_operator_uuid1: worksDeleted.wrk_operator_uuid1,
+                wrk_operator_uuid2: worksDeleted.wrk_operator_uuid2,
+                wrk_operator_uuid3: worksDeleted.wrk_operator_uuid3,
+                wrk_operator_uuid4: worksDeleted.wrk_operator_uuid4,
                 itm_uuid: worksDeleted.itm_uuid,
                 cmpitm_uuid: worksDeleted.cmpitm_uuid,
                 mitm_uuid: worksDeleted.mitm_uuid,

@@ -18,8 +18,14 @@ export interface WorkEntity {
     wrks?: WorkStateEntity,
     wrk_user_uuid: string,
     wrk_user?: UserEntity,
-    wrk_operator_uuid: string,
-    wrk_operator?: UserEntity,
+    wrk_operator_uuid1: string,
+    wrk_operator1?: UserEntity,
+    wrk_operator_uuid2: string,
+    wrk_operator2?: UserEntity,
+    wrk_operator_uuid3: string,
+    wrk_operator3?: UserEntity,
+    wrk_operator_uuid4: string,
+    wrk_operator4?: UserEntity,
     itm_uuid: string,
     cmpitm_uuid: string,
     mitm_uuid: string,
@@ -31,4 +37,4 @@ export interface WorkEntity {
 }
 
 //Update
-export type WorkUpdateData = Pick<WorkEntity, 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid'>
+export type WorkUpdateData = Pick<WorkEntity, 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid1' | 'wrk_operator_uuid2' | 'wrk_operator_uuid3' | 'wrk_operator_uuid4' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid'>

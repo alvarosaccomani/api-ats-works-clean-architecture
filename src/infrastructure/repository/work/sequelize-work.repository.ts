@@ -39,7 +39,19 @@ export class SequelizeRepository implements WorkRepository {
                         model: SequelizeUser
                     },
                     {
-                        as: 'wrk_operator',
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
                         model: SequelizeUser
                     },
                     {
@@ -84,7 +96,19 @@ export class SequelizeRepository implements WorkRepository {
                         model: SequelizeUser
                     },
                     {
-                        as: 'wrk_operator',
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
                         model: SequelizeUser
                     },
                     {
@@ -127,8 +151,8 @@ export class SequelizeRepository implements WorkRepository {
     }
     async createWork(work: WorkEntity): Promise<WorkEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
-            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
+            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
+            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work`);
             }
@@ -149,7 +173,10 @@ export class SequelizeRepository implements WorkRepository {
                     wrk_workdatefinish: work.wrk_workdatefinish,
                     wrks_uuid: work.wrks_uuid,
                     wrk_user_uuid: work.wrk_user_uuid,
-                    wrk_operator_uuid: work.wrk_operator_uuid,
+                    wrk_operator_uuid1: work.wrk_operator_uuid1,
+                    wrk_operator_uuid2: work.wrk_operator_uuid2,
+                    wrk_operator_uuid3: work.wrk_operator_uuid3,
+                    wrk_operator_uuid4: work.wrk_operator_uuid4,
                     itm_uuid: work.itm_uuid,
                     cmpitm_uuid: work.cmpitm_uuid,
                     mitm_uuid: work.mitm_uuid, 

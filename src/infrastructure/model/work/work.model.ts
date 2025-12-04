@@ -18,7 +18,10 @@ export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare wrk_workdatefinish: Date;
 	declare wrks_uuid: string;
   declare wrk_user_uuid: string;
-  declare wrk_operator_uuid: string;
+  declare wrk_operator_uuid1: string;
+  declare wrk_operator_uuid2: string;
+  declare wrk_operator_uuid3: string;
+  declare wrk_operator_uuid4: string;
   declare itm_uuid: string;
   declare cmpitm_uuid: string;
   declare mitm_uuid: string;
@@ -63,7 +66,19 @@ SequelizeWork.init({
     type: DataTypes.STRING,
     allowNull: true
   },
-  wrk_operator_uuid: {
+  wrk_operator_uuid1: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_operator_uuid2: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_operator_uuid3: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_operator_uuid4: {
     type: DataTypes.STRING,
     allowNull: true
   },
@@ -126,9 +141,27 @@ SequelizeWork.belongsTo(SequelizeUser, {
 
 //Sequelize Operator Work Foreign Key
 SequelizeWork.belongsTo(SequelizeUser, {
-    foreignKey: 'wrk_operator_uuid',
+    foreignKey: 'wrk_operator_uuid1',
     targetKey: "usr_uuid",
-    as: 'wrk_operator'
+    as: 'wrk_operator1'
+});
+
+SequelizeWork.belongsTo(SequelizeUser, {
+    foreignKey: 'wrk_operator_uuid2',
+    targetKey: "usr_uuid",
+    as: 'wrk_operator2'
+});
+
+SequelizeWork.belongsTo(SequelizeUser, {
+    foreignKey: 'wrk_operator_uuid3',
+    targetKey: "usr_uuid",
+    as: 'wrk_operator3'
+});
+
+SequelizeWork.belongsTo(SequelizeUser, {
+    foreignKey: 'wrk_operator_uuid4',
+    targetKey: "usr_uuid",
+    as: 'wrk_operator4'
 });
 
 //Sequelize Model Item Foreign Key
