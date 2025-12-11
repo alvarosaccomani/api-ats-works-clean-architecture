@@ -11,6 +11,7 @@ export class SequelizeAddress extends Model<AddressEntity, Omit<AddressEntity, '
   declare adr_city: string;
   declare adr_province: string;    
   declare adr_postalcode: string;
+  declare adr_dimensions: string;
   declare adr_createdat: Date;
   declare adr_updatedat: Date;
 }
@@ -44,6 +45,10 @@ SequelizeAddress.init({
     allowNull: true
   },
   adr_postalcode: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  adr_dimensions: {
     type: DataTypes.STRING,
     allowNull: true
   },

@@ -5,10 +5,11 @@ export interface AddressEntity {
     adr_address: string,
     adr_city: string,
     adr_province: string,    
-    adr_postalcode: string,    
+    adr_postalcode: string,
+    adr_dimensions: string,
     adr_createdat: Date,
     adr_updatedat: Date
 }
 
 //Update
-export type AddressUpdateData = Pick<AddressEntity, 'adr_address' | 'adr_city' | 'adr_province' | 'adr_postalcode'>;
+export type AddressUpdateData = Pick<AddressEntity, 'adr_address' | 'adr_city' | 'adr_province' | 'adr_postalcode' | 'adr_dimensions'>;
