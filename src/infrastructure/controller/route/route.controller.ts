@@ -22,7 +22,7 @@ export class RouteController {
                 return res.status(200).send({
                     success: true,
                     message: 'Rutas retornadas.',
-                    ...paginator(routes, page, perPage)
+                    ...paginator(routes, page.toString(), perPage.toString())
                 });
             } else {
                 const routes = await this.routeUseCase.getRoutes(cmp_uuid);
