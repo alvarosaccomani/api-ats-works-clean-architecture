@@ -29,7 +29,7 @@ export class WorkStateController {
                 return res.status(200).send({
                     success: true,
                     message: 'Work states retornados.',
-                    ...paginator(workStates, page, perPage)
+                    ...paginator(workStates, page.toString(), perPage.toString())
                 });
             } else {
                 const workStates = await this.workStateUseCase.getWorkStates(cmp_uuid)
