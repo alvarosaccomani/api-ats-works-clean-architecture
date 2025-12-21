@@ -21,7 +21,7 @@ export class ResourceTypeController {
                 return res.status(200).send({
                     success: true,
                     message: 'Tipos de recursos retornados.',
-                    ...paginator(items, page, perPage)
+                    ...paginator(items, page.toString(), perPage.toString())
                 });
             } else {
                 const items = await this.resourceTypeUseCase.getResourceTypes()
