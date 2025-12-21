@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { CustomerEntity } from "../../../domain/customer/customer.entity";
+import { SequelizeRoute } from '../route/route.model';
 
 export class SequelizeCustomer extends Model<CustomerEntity, Omit<CustomerEntity, 'id'>> {
   declare cmp_uuid: string;
@@ -70,4 +71,16 @@ SequelizeCustomer.init({
   updatedAt: 'cus_updatedat',
   tableName: 'cus_customers'
 });
+
+//Sequelize Address Foreign Key
+SequelizeCustomer.belongsTo(SequelizeRoute, {
+    foreignKey: "cmp_uuid",
+    targetKey: "cmp_uuid"
+});
+SequelizeCustomer.belongsTo(SequelizeRoute, {
+    foreignKey: 'rou_uuid',
+    targetKey: "rou_uuid",
+    as: 'rou'
+});
+
 SequelizeCustomer.sync();
