@@ -29,7 +29,7 @@ export class WorkDetailController {
                 return res.status(200).send({
                     success: true,
                     message: 'Work details retornados.',
-                    ...paginator(workDetails, page, perPage)
+                    ...paginator(workDetails, page.toString(), perPage.toString())
                 });
             } else {
                 const workDetails = await this.workDetailUseCase.getWorkDetails(cmp_uuid)
