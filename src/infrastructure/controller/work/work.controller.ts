@@ -29,7 +29,7 @@ export class WorkController {
                 return res.status(200).send({
                     success: true,
                     message: 'Works retornados.',
-                    ...paginator(works, page, perPage)
+                    ...paginator(works, page.toString(), perPage.toString())
                 });
             } else {
                 const works = await this.workUseCase.getWorks(cmp_uuid)
