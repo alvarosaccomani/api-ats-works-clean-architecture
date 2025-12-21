@@ -2,9 +2,10 @@ import { CustomerEntity, CustomerUpdateData } from "../../../domain/customer/cus
 import { CustomerRepository } from "../../../domain/customer/customer.repository";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { Sequelize, Op } from "sequelize";
+import { SequelizeRoute } from "../../model/route/route.model";
 
 export class SequelizeRepository implements CustomerRepository {
-    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, cus_order: string): Promise<CustomerEntity[] | null> {
+    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string, cus_order: string): Promise<CustomerEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -30,8 +31,11 @@ export class SequelizeRepository implements CustomerRepository {
             
             const customers = await SequelizeCustomer.findAll({ 
                 where,
+                include: [
+                    { as: 'rou', model: SequelizeRoute }
+                ],
                 order: [
-                    [Sequelize.col('cus_fullname'), cus_order], // Ordenar usando Sequelize.col
+                    [Sequelize.col(field_order), cus_order], // Ordenar usando Sequelize.col
                 ]
             });
             if(!customers) {

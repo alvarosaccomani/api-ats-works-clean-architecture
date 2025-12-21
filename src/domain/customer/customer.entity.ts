@@ -1,3 +1,5 @@
+import { RouteEntity } from "../route/route.entity"
+
 export interface CustomerEntity {
     cmp_uuid: string,
     cus_uuid: string,
@@ -6,6 +8,7 @@ export interface CustomerEntity {
     cus_phone: string,
     cus_dateofbirth: Date,
     rou_uuid: string,
+    rou?: RouteEntity
     pmt_uuid: string,
     usr_uuid: string,
     cus_createdat: Date,
