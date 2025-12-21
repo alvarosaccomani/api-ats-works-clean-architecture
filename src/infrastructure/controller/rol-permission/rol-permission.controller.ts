@@ -23,7 +23,7 @@ export class RolPermissionController {
                 return res.status(200).send({
                     success: true,
                     message: 'Permisos de rol retornados.',
-                    ...paginator(rolPermissions, page, perPage)
+                    ...paginator(rolPermissions, page.toString(), perPage.toString())
                 });
             } else {
                 const rolPermissions = await this.rolPermissionUseCase.getRolPermissions()
