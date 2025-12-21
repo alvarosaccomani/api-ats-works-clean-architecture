@@ -21,7 +21,7 @@ export class DataTypeController {
                 return res.status(200).send({
                     success: true,
                     message: 'Data types retornados.',
-                    ...paginator(dataTypes, page, perPage)
+                    ...paginator(dataTypes, page.toString(), perPage.toString())
                 });
             } else {
                 const dataTypes = await this.dataTypeUseCase.getDataTypes()
