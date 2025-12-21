@@ -22,7 +22,7 @@ export class PaymentMethodController {
                 return res.status(200).send({
                     success: true,
                     message: 'Payment methods retornados.',
-                    ...paginator(paymentMethods, page, perPage)
+                    ...paginator(paymentMethods, page.toString(), perPage.toString())
                 });
             } else {
                 const paymentMethods = await this.paymentMethodUseCase.getPaymentMethods(cmp_uuid)
