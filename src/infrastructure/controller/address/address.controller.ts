@@ -37,7 +37,7 @@ export class AddressController {
                 return res.status(200).send({
                     success: true,
                     message: 'Addresses retornados.',
-                    ...paginator(address, page, perPage)
+                    ...paginator(address, page.toString(), perPage.toString())
                 });
             } else {
                 const address = await this.addressUseCase.getAddresses(cmp_uuid, cus_uuid)
