@@ -21,7 +21,7 @@ export class RolController {
                 return res.status(200).send({
                     success: true,
                     message: 'Roles retornados.',
-                    ...paginator(roles, page, perPage)
+                    ...paginator(roles, page.toString(), perPage.toString())
                 });
             } else {
                 const roles = await this.rolUseCase.getRoles()
