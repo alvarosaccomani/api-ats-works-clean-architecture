@@ -31,7 +31,7 @@ export class UserRolCompanyController {
                 return res.status(200).send({
                     success: true,
                     message: 'User roles company retornados.',
-                    ...paginator(userRolesCompany, page, perPage)
+                    ...paginator(userRolesCompany, page.toString(), perPage.toString())
                 });
             } else {
                 const userRolesCompany = await this.userRolCompanyUseCase.getUserRolesCompany(cmp_uuid)
