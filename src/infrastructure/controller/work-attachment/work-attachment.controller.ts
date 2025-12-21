@@ -29,7 +29,7 @@ export class WorkAttachmentController {
                 return res.status(200).send({
                     success: true,
                     message: 'Work attachments retornados.',
-                    ...paginator(workAttachments, page, perPage)
+                    ...paginator(workAttachments, page.toString(), perPage.toString())
                 });
             } else {
                 const workAttachments = await this.workAttachmentUseCase.getWorkAttachments(cmp_uuid)
