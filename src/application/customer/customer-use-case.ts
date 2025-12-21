@@ -14,13 +14,13 @@ export class CustomerUseCase {
         this.findCustomerByName = this.findCustomerByName.bind(this);
     }
 
-    public async getCustomers(cmp_uuid: string) {
+    public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, cus_order: string | undefined) {
         try {
-            const typeCustomers = await this.customerRepository.getCustomers(cmp_uuid);
-            if(!typeCustomers) {
+            const customers = await this.customerRepository.getCustomers(cmp_uuid, cus_fullname, cus_email, cus_order);
+            if(!customers) {
                 throw new Error('No hay customers.');
             }
-            return typeCustomers.map((customer) => ({
+            return customers.map((customer) => ({
                 cmp_uuid: customer.cmp_uuid,
                 cus_uuid: customer.cus_uuid,
                 cus_fullname: customer.cus_fullname,

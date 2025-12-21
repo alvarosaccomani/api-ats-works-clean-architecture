@@ -1,17 +1,39 @@
 import { CustomerEntity, CustomerUpdateData } from "../../../domain/customer/customer.entity";
 import { CustomerRepository } from "../../../domain/customer/customer.repository";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
-import { Op } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 
 export class SequelizeRepository implements CustomerRepository {
-    async getCustomers(cmp_uuid: string): Promise<CustomerEntity[] | null> {
+    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, cus_order: string): Promise<CustomerEntity[] | null> {
         try {
-            let config = {
-                where: {
-                    cmp_uuid: cmp_uuid ?? null
-                }
+            // Base del where
+            const where: any = {
+                cmp_uuid: cmp_uuid
+            };
+
+            // Condiciones opcionales para OR
+            const orConditions: any[] = [];
+            if (cus_fullname) {
+                orConditions.push({ cus_fullname: { [Op.iLike]: `%${cus_fullname}%` } });
             }
-            const customers = await SequelizeCustomer.findAll(config);
+
+            if (cus_email) {
+                orConditions.push({ cus_email: { [Op.iLike]: `%${cus_email}%` } });
+            }
+
+            // Si hay condiciones OR, las agregamos
+            if (orConditions.length > 0) {
+                where[Op.and] = {
+                    [Op.or]: orConditions
+                };
+            }
+            
+            const customers = await SequelizeCustomer.findAll({ 
+                where,
+                order: [
+                    [Sequelize.col('cus_fullname'), cus_order], // Ordenar usando Sequelize.col
+                ]
+            });
             if(!customers) {
                 throw new Error(`No hay customers`)
             };

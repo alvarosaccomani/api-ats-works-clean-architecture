@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CustomerUseCase } from "../../../application/customer/customer-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { getStringFromQuery } from "../../utils/util";
 import { paginator } from "../../services/paginator.service";
 
 export class CustomerController {
@@ -15,8 +16,7 @@ export class CustomerController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const page = (req.params.page ? parseInt(req.params.page) : null);
-            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            const { cus_fullname, cus_email, page, perPage, cus_order } = req.query;
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -25,14 +25,14 @@ export class CustomerController {
                 });
             }
             if (page && perPage) {
-                const customers = await this.customerUseCase.getCustomers(cmp_uuid)
+                const customers = await this.customerUseCase.getCustomers(cmp_uuid, getStringFromQuery(cus_fullname), getStringFromQuery(cus_email), getStringFromQuery(cus_order))
                 return res.status(200).send({
                     success: true,
                     message: 'Customers retornados.',
-                    ...paginator(customers, page, perPage)
+                    ...paginator(customers, page.toString(), perPage.toString())
                 });
             } else {
-                const customers = await this.customerUseCase.getCustomers(cmp_uuid)
+                const customers = await this.customerUseCase.getCustomers(cmp_uuid, getStringFromQuery(cus_fullname), getStringFromQuery(cus_email), getStringFromQuery(cus_order))
                 return res.status(200).send({
                     success: true,
                     message: 'Customers retornados.',
