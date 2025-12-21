@@ -29,7 +29,7 @@ export class GroupDetailModelItemController {
                 return res.status(200).send({
                     success: true,
                     message: 'Group detail model items items retornados.',
-                    ...paginator(groupDetailModelItems, page, perPage)
+                    ...paginator(groupDetailModelItems, page.toString(), perPage.toString())
                 });
             } else {
                 const groupDetailModelItems = await this.groupDetailModelItemUseCase.getGroupDetailModelItems(cmp_uuid)
