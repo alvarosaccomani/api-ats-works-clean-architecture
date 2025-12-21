@@ -21,7 +21,7 @@ export class PermissionController {
                 return res.status(200).send({
                     success: true,
                     message: 'Permisos retornados.',
-                    ...paginator(permission, page, perPage)
+                    ...paginator(permission, page.toString(), perPage.toString())
                 });
             } else {
                 const permission = await this.permissionUseCase.getPermissions()
