@@ -29,7 +29,7 @@ export class ModelItemController {
                 return res.status(200).send({
                     success: true,
                     message: 'Model items items retornados.',
-                    ...paginator(modelItems, page, perPage)
+                    ...paginator(modelItems, page.toString(), perPage.toString())
                 });
             } else {
                 const modelItems = await this.modelItemUseCase.getModelItems(cmp_uuid)
