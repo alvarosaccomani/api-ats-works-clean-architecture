@@ -21,7 +21,7 @@ export class ItemController {
                 return res.status(200).send({
                     success: true,
                     message: 'Items retornados.',
-                    ...paginator(items, page, perPage)
+                    ...paginator(items, page.toString(), perPage.toString())
                 });
             } else {
                 const items = await this.itemUseCase.getItems()
