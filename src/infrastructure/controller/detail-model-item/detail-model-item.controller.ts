@@ -29,7 +29,7 @@ export class DetailModelItemController {
                 return res.status(200).send({
                     success: true,
                     message: 'Detail model items items retornados.',
-                    ...paginator(detailModelItems, page, perPage)
+                    ...paginator(detailModelItems, page.toString(), perPage.toString())
                 });
             } else {
                 const detailModelItems = await this.detailModelItemUseCase.getDetailModelItems(cmp_uuid)
