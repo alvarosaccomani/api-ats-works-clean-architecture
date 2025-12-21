@@ -26,7 +26,7 @@ export class UserController {
                 return res.status(200).send({
                     success: true,
                     message: 'Usuarios retornados.',
-                    ...paginator(users, page, perPage)
+                    ...paginator(users, page.toString(), perPage.toString())
                 });
             } else {
                 const users = await this.userUseCase.getUsers()
