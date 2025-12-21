@@ -14,9 +14,9 @@ export class CustomerUseCase {
         this.findCustomerByName = this.findCustomerByName.bind(this);
     }
 
-    public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, cus_order: string | undefined) {
+    public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string | undefined, cus_order: string | undefined) {
         try {
-            const customers = await this.customerRepository.getCustomers(cmp_uuid, cus_fullname, cus_email, cus_order);
+            const customers = await this.customerRepository.getCustomers(cmp_uuid, cus_fullname, cus_email, field_order, cus_order);
             if(!customers) {
                 throw new Error('No hay customers.');
             }
@@ -28,6 +28,7 @@ export class CustomerUseCase {
                 cus_phone: customer.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customer.rou_uuid,
+                rou: customer.rou,
                 pmt_uuid: customer.pmt_uuid,
                 usr_uuid: customer.usr_uuid,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customer.cus_createdat, 'America/Buenos_Aires'),
