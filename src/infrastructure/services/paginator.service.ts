@@ -1,23 +1,34 @@
-export function paginator (items:any, page: number = 1, perPage: number = 10) {
-    let offset = (page - 1) * perPage;
+import { parseQueryParamToInt } from "../../infrastructure/utils/util";
 
-    let i = 1;
-    items.forEach((e: any) => {
-        e["index"] = i++;
-    });
+export function paginator(items: any[], rawPage: string | null | undefined = '1', rawPerPage: string | null | undefined = '10') {
+  // Convertimos y validamos los parámetros
+  const page = parseQueryParamToInt(rawPage) ?? 1;
+  const perPage = parseQueryParamToInt(rawPerPage) ?? 10;
 
-    let paginatedItems = items.slice(offset).slice(0, perPage);
-    let totalPages = Math.ceil(items.length / perPage);
+  // Aseguramos que sean positivos y razonables
+  const clampedPage = Math.max(1, page);
+  const clampedPerPage = Math.max(1, Math.min(perPage, 100)); // límite máximo opcional
 
-    return {
-      page: page,
-      item: paginatedItems[0]?.index || 0,
-      itemOf: paginatedItems[paginatedItems.length-1]?.index || 0,
-      perPage: perPage,
-      prePage: page - 1 ? page - 1 : null,
-      nextPage: (totalPages > page) ? page + 1 : null,
-      total: items.length,
-      totalPages: totalPages,
-      data: paginatedItems
-    };
+  const offset = (clampedPage - 1) * clampedPerPage;
+
+  // Añadimos índice (empezando en 1)
+  const itemsWithIndex = items.map((e, idx) => ({
+    ...e,
+    index: idx + 1
+  }));
+
+  const paginatedItems = itemsWithIndex.slice(offset, offset + clampedPerPage);
+  const totalPages = Math.ceil(items.length / clampedPerPage);
+
+  return {
+    page: clampedPage,
+    item: paginatedItems.length > 0 ? paginatedItems[0].index : 0,
+    itemOf: paginatedItems.length > 0 ? paginatedItems[paginatedItems.length - 1].index : 0,
+    perPage: clampedPerPage,
+    prePage: clampedPage > 1 ? clampedPage - 1 : null,
+    nextPage: clampedPage < totalPages ? clampedPage + 1 : null,
+    total: items.length,
+    totalPages: totalPages,
+    data: paginatedItems
+  };
 }
