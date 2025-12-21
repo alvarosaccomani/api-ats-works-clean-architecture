@@ -21,7 +21,7 @@ export class CompanyController {
                 return res.status(200).send({
                     success: true,
                     message: 'Companies retornadas.',
-                    ...paginator(companies, page, perPage)
+                    ...paginator(companies, page.toString(), perPage.toString())
                 });
             } else {
                 const companies = await this.companyUseCase.getCompanies()
