@@ -29,7 +29,7 @@ export class CompanyItemController {
                 return res.status(200).send({
                     success: true,
                     message: 'Companies items retornados.',
-                    ...paginator(companies, page, perPage)
+                    ...paginator(companies, page.toString(), perPage.toString())
                 });
             } else {
                 const companies = await this.companyItemUseCase.getCompanyItems(cmp_uuid)
