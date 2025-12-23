@@ -12,6 +12,7 @@ export class AddressValue implements AddressEntity {
     adr_postalcode: string;
     adr_dimensions: string;
     subp_uuid: string;
+    adr_active: boolean;
     adr_createdat: Date;
     adr_updatedat: Date;
     
@@ -25,6 +26,7 @@ export class AddressValue implements AddressEntity {
             adr_postalcode,
             adr_dimensions,
             subp_uuid,
+            adr_active,
             adr_createdat,
             adr_updatedat
         }:{ 
@@ -37,6 +39,7 @@ export class AddressValue implements AddressEntity {
             adr_postalcode: string,
             adr_dimensions: string,
             subp_uuid: string,
+            adr_active: boolean,
             adr_createdat?: Date,
             adr_updatedat?: Date
         }) {
@@ -49,6 +52,7 @@ export class AddressValue implements AddressEntity {
         this.adr_postalcode = adr_postalcode;
         this.adr_dimensions = adr_dimensions;
         this.subp_uuid = subp_uuid;
+        this.adr_active = adr_active;
         this.adr_createdat = adr_createdat ?? moment().toDate();
         this.adr_updatedat = adr_updatedat ?? moment().toDate();
     }

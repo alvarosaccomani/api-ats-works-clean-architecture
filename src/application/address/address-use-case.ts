@@ -31,6 +31,7 @@ export class AddressUseCase {
                 adr_dimensions: address.adr_dimensions,
                 subp_uuid: address.subp_uuid,
                 subp: address.subp,
+                adr_active: address.adr_active,
                 adr_createdat: TimezoneConverter.toIsoStringInTimezone(address.adr_createdat, 'America/Buenos_Aires'),
                 adr_updatedat: TimezoneConverter.toIsoStringInTimezone(address.adr_updatedat, 'America/Buenos_Aires')
             }));
@@ -57,6 +58,7 @@ export class AddressUseCase {
                 adr_dimensions: address.adr_dimensions,
                 subp_uuid: address.subp_uuid,
                 subp: address.subp,
+                adr_active: address.adr_active,
                 adr_createdat: TimezoneConverter.toIsoStringInTimezone(address.adr_createdat, 'America/Buenos_Aires'),
                 adr_updatedat: TimezoneConverter.toIsoStringInTimezone(address.adr_updatedat, 'America/Buenos_Aires')
             };
@@ -66,9 +68,9 @@ export class AddressUseCase {
         }
     }
     
-    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid } : { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string }) {
+    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active } : { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
-            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid });
+            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
             const addressCreated = await this.addressRepository.createAddress(addressValue);
             if(!addressCreated) {
                 throw new Error(`No se pudo insertar el address.`);
@@ -83,6 +85,7 @@ export class AddressUseCase {
                 adr_postalcode: addressCreated.adr_postalcode,
                 adr_dimensions: addressCreated.adr_dimensions,
                 subp_uuid: addressCreated.subp_uuid,
+                adr_active: addressCreated.adr_active,
                 adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressCreated.adr_createdat, 'America/Buenos_Aires'),
                 adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressCreated.adr_updatedat, 'America/Buenos_Aires')
             };
@@ -92,9 +95,9 @@ export class AddressUseCase {
         }
     }
 
-    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid } : { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string }) {
+    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active } : { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
-            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid });
+            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
             if(!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
@@ -108,6 +111,7 @@ export class AddressUseCase {
                 adr_postalcode: addressUpdated.adr_postalcode,
                 adr_dimensions: addressUpdated.adr_dimensions,
                 subp_uuid: addressUpdated.subp_uuid,
+                adr_active: addressUpdated.adr_active,
                 adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressUpdated.adr_createdat, 'America/Buenos_Aires'),
                 adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressUpdated.adr_updatedat, 'America/Buenos_Aires')
             };
@@ -133,6 +137,7 @@ export class AddressUseCase {
                 adr_postalcode: addressDeleted.adr_postalcode,
                 adr_dimensions: addressDeleted.adr_dimensions,
                 subp_uuid: addressDeleted.subp_uuid,
+                adr_active: addressDeleted.adr_active,
                 adr_createdat: TimezoneConverter.toIsoStringInTimezone(addressDeleted.adr_createdat, 'America/Buenos_Aires'),
                 adr_updatedat: TimezoneConverter.toIsoStringInTimezone(addressDeleted.adr_updatedat, 'America/Buenos_Aires')
             };;

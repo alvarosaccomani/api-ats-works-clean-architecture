@@ -42,8 +42,8 @@ export class SequelizeRepository implements AddressRepository {
     }
     async createAddress(address: AddressEntity): Promise<AddressEntity | null> {
         try {
-            let { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_createdat, adr_updatedat } = address
-            const result = await SequelizeAddress.create({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_createdat, adr_updatedat });
+            let { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active, adr_createdat, adr_updatedat } = address
+            const result = await SequelizeAddress.create({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active, adr_createdat, adr_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el address`);
             }
@@ -63,7 +63,8 @@ export class SequelizeRepository implements AddressRepository {
                     adr_province: address.adr_province, 
                     adr_postalcode: address.adr_postalcode,
                     adr_dimensions: address.adr_dimensions,
-                    subp_uuid: address.subp_uuid
+                    subp_uuid: address.subp_uuid,
+                    adr_active: address.adr_active
                 },
                 { 
                     where: { cmp_uuid, cus_uuid, adr_uuid },
