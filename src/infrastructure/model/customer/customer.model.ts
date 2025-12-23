@@ -13,6 +13,8 @@ export class SequelizeCustomer extends Model<CustomerEntity, Omit<CustomerEntity
   declare rou_uuid: string;
   declare pmt_uuid: string; 
   declare usr_uuid: string;
+  declare cus_subscriptionplanbycustomer: boolean;
+  declare subp_uuid: string;
   declare cus_createdat: Date;
   declare cus_updatedat: Date;
 }
@@ -53,6 +55,14 @@ SequelizeCustomer.init({
     allowNull: true
   },
   usr_uuid: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  cus_subscriptionplanbycustomer: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+  subp_uuid: {
     type: DataTypes.STRING,
     allowNull: true
   },

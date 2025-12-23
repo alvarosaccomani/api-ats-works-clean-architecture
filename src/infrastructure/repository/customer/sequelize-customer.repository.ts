@@ -66,8 +66,8 @@ export class SequelizeRepository implements CustomerRepository {
     }
     async createCustomer(customer: CustomerEntity): Promise<CustomerEntity | null> {
         try {
-            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_createdat, cus_updatedat } = customer
-            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_createdat, cus_updatedat });
+            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_createdat, cus_updatedat } = customer
+            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_createdat, cus_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el customer`);
             }
@@ -88,7 +88,9 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_dateofbirth: customer.cus_dateofbirth,
                     rou_uuid: customer.rou_uuid,
                     pmt_uuid: customer.pmt_uuid,
-                    usr_uuid: customer.usr_uuid
+                    usr_uuid: customer.usr_uuid,
+                    cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
+                    subp_uuid: customer.subp_uuid,
                 },
                 { 
                     where: { cmp_uuid, cus_uuid },
