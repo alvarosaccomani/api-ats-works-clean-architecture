@@ -19,6 +19,7 @@ export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<
   declare dmitm_defaultvalue: string;
 	declare dmitm_active: boolean;
   declare dmitm_order: number;
+  declare gdmitm_uuid: string;
   declare dmitm_createdat: Date;
   declare dmitm_updatedat: Date;
 }
@@ -76,6 +77,10 @@ SequelizeDetailModelItem.init({
     type: DataTypes.INTEGER,
     allowNull: true
   },
+  gdmitm_uuid: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   dmitm_createdat: {
     type: DataTypes.DATE,
     allowNull: true
@@ -95,8 +100,15 @@ SequelizeDetailModelItem.belongsTo(SequelizeDataType, {
     foreignKey: 'dtp_uuid',
     as: 'dtp'
 });
+
+//Sequelize Group detail model item Foreign Key
+SequelizeDetailModelItem.belongsTo(SequelizeGroupDetailModelItem, {
+    foreignKey: "cmp_uuid",
+    targetKey: "cmp_uuid"
+});
 SequelizeDetailModelItem.belongsTo(SequelizeGroupDetailModelItem, {
     foreignKey: 'gdmitm_uuid',
+    targetKey: "gdmitm_uuid",
     as: 'gdmitm'
 });
 

@@ -1,3 +1,5 @@
+import { GroupDetailModelItemEntity } from "../group-detail-model-item/group-detail-model-item.entity"
+
 export interface DetailModelItemEntity {
     cmp_uuid: string,
     itm_uuid: string,
@@ -11,10 +13,12 @@ export interface DetailModelItemEntity {
     dmitm_arrayvalues: string,
     dmitm_defaultvalue: string,
     dmitm_order: number,
+    gdmitm_uuid: string,
+    gdmitm?: GroupDetailModelItemEntity,
     dmitm_active: boolean,
 	dmitm_createdat: Date,
     dmitm_updatedat: Date
 }
 
 //Update
-export type DetailModelItemUpdateData = Pick<DetailModelItemEntity, 'dmitm_key' | 'dmitm_name' | 'dmitm_description' | 'dtp_uuid' | 'dmitm_arrayvalues' | 'dmitm_defaultvalue' | 'dmitm_order' | 'dmitm_active'>
+export type DetailModelItemUpdateData = Pick<DetailModelItemEntity, 'dmitm_key' | 'dmitm_name' | 'dmitm_description' | 'dtp_uuid' | 'dmitm_arrayvalues' | 'dmitm_defaultvalue' | 'dmitm_order' | 'gdmitm_uuid' | 'dmitm_active'>

@@ -15,6 +15,7 @@ export class DetailModelItemValue implements DetailModelItemEntity {
     dmitm_defaultvalue: string;
     dmitm_arrayvalues: string;
     dmitm_order: number;
+    gdmitm_uuid: string;
     dmitm_active: boolean;
 	dmitm_createdat: Date;
     dmitm_updatedat: Date;
@@ -33,6 +34,7 @@ export class DetailModelItemValue implements DetailModelItemEntity {
             dmitm_arrayvalues,
             dmitm_defaultvalue,
             dmitm_order,
+            gdmitm_uuid,
             dmitm_active,
             dmitm_createdat,
             dmitm_updatedat
@@ -49,6 +51,7 @@ export class DetailModelItemValue implements DetailModelItemEntity {
             dmitm_arrayvalues: string,
             dmitm_defaultvalue: string,
             dmitm_order: number,
+            gdmitm_uuid: string,
             dmitm_active: boolean,
             dmitm_createdat?: Date,
             dmitm_updatedat?: Date
@@ -65,6 +68,7 @@ export class DetailModelItemValue implements DetailModelItemEntity {
         this.dmitm_arrayvalues = dmitm_arrayvalues;
         this.dmitm_defaultvalue = dmitm_defaultvalue;
         this.dmitm_order = dmitm_order;
+        this.gdmitm_uuid = gdmitm_uuid;
         this.dmitm_active = dmitm_active;
         this.dmitm_createdat = dmitm_createdat ?? moment().toDate();
         this.dmitm_updatedat = dmitm_updatedat ?? moment().toDate();
