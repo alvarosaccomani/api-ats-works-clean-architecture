@@ -4,6 +4,7 @@ import { ModelItemRepository } from "../../../domain/model-item/model-item.repos
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
+import { SequelizeGroupDetailModelItem } from '../../model/group-detail-model-item/group-detail-model-item.model';
 
 export class SequelizeRepository implements ModelItemRepository {
     async getModelItems(cmp_uuid: string): Promise<ModelItemEntity[] | null> {
@@ -40,6 +41,10 @@ export class SequelizeRepository implements ModelItemRepository {
                             { 
                                 as: 'dtp', 
                                 model: SequelizeDataType
+                            },
+                            {
+                                as: 'gdmitm',
+                                model: SequelizeGroupDetailModelItem
                             }
                         ]
                     }
