@@ -13,6 +13,7 @@ export class WorkDetailValue implements WorkDetailEntity {
     wrkd_value: string;
     wrkd_order: string;
     wrkd_groupkey: string;
+    wrkd_worker: string;
     wrkd_createdat: Date;
     wrkd_updatedat: Date;
     
@@ -27,6 +28,7 @@ export class WorkDetailValue implements WorkDetailEntity {
             wrkd_value,
             wrkd_order,
             wrkd_groupkey,
+            wrkd_worker,
             wrkd_createdat,
             wrkd_updatedat
         }:{ 
@@ -40,6 +42,7 @@ export class WorkDetailValue implements WorkDetailEntity {
             wrkd_value: string,
             wrkd_order: string,
             wrkd_groupkey: string,
+            wrkd_worker: string,
             wrkd_createdat?: Date,
             wrkd_updatedat?: Date
         }) {
@@ -53,6 +56,7 @@ export class WorkDetailValue implements WorkDetailEntity {
         this.wrkd_value = wrkd_value;
         this.wrkd_order = wrkd_order;
         this.wrkd_groupkey = wrkd_groupkey;
+        this.wrkd_worker = wrkd_worker;
         this.wrkd_createdat = wrkd_createdat ?? moment().toDate();
         this.wrkd_updatedat = wrkd_updatedat ?? moment().toDate();
     }

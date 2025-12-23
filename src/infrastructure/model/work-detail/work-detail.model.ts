@@ -14,6 +14,7 @@ export class SequelizeWorkDetail extends Model<WorkDetailEntity, Omit<WorkDetail
   declare wrkd_order: string;
   declare wrkd_groupkey: string;
 	declare wrkd_value: string;
+  declare wrkd_worker: string;
 	declare wrkd_createdat: Date;
   declare wrkd_updatedat: Date;
 }
@@ -56,6 +57,10 @@ SequelizeWorkDetail.init({
     allowNull: true
   },
   wrkd_groupkey: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrkd_worker: {
     type: DataTypes.STRING,
     allowNull: true
   },

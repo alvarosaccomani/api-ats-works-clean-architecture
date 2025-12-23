@@ -39,8 +39,8 @@ export class SequelizeRepository implements WorkDetailRepository {
     }
     async createWorkDetail(workDetail: WorkDetailEntity): Promise<WorkDetailEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupkey, wrkd_createdat, wrkd_updatedat } = workDetail
-            const result = await SequelizeWorkDetail.create({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupkey, wrkd_createdat, wrkd_updatedat });
+            let { cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupkey, wrkd_worker, wrkd_createdat, wrkd_updatedat } = workDetail
+            const result = await SequelizeWorkDetail.create({ cmp_uuid, wrk_uuid, wrkd_uuid, wrkd_key, wrkd_name, wrkd_description, dtp_uuid, wrkd_value, wrkd_order, wrkd_groupkey, wrkd_worker, wrkd_createdat, wrkd_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work detail`);
             }
@@ -61,7 +61,8 @@ export class SequelizeRepository implements WorkDetailRepository {
                     dtp_uuid: workDetail.dtp_uuid,
                     wrkd_value: workDetail.wrkd_value,
                     wrkd_order: workDetail.wrkd_order,
-                    wrkd_groupkey: workDetail.wrkd_groupkey
+                    wrkd_groupkey: workDetail.wrkd_groupkey,
+                    wrkd_worker: workDetail.wrkd_worker,
                 }, 
                 { 
                     where: { cmp_uuid, wrk_uuid, wrkd_uuid },
