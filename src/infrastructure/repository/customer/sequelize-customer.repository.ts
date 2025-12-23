@@ -35,7 +35,7 @@ export class SequelizeRepository implements CustomerRepository {
                     { as: 'rou', model: SequelizeRoute }
                 ],
                 order: [
-                    [Sequelize.col(field_order), cus_order], // Ordenar usando Sequelize.col
+                    [Sequelize.col(field_order || 'cus_fullname'), cus_order || 'ASC'], // Ordenar usando Sequelize.col
                 ]
             });
             if(!customers) {
