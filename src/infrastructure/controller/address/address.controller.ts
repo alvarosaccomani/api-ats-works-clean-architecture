@@ -125,14 +125,14 @@ export class AddressController {
                     error: 'Debe proporcionar un Nombre para el address.'
                 })
             };
-            const addressByName = await this.addressUseCase.findAddressByName(cmp_uuid, cus_uuid, adr_address);
-            if(addressByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo insertar el address.',
-                    error: `El nombre ${adr_address} de address ya existe.`
-                });
-            }
+            // const addressByName = await this.addressUseCase.findAddressByName(cmp_uuid, cus_uuid, adr_address);
+            // if(addressByName) {
+            //     return res.status(400).json({
+            //         success: false,
+            //         message: 'No se pudo insertar el address.',
+            //         error: `El nombre ${adr_address} de address ya existe.`
+            //     });
+            // }
             const address = await this.addressUseCase.createAddress(body)
             return res.status(200).json({
                 success: true,
