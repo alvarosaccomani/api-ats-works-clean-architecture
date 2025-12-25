@@ -16,6 +16,9 @@ export class WorkValue implements WorkEntity {
     wrk_operator_uuid2: string;
     wrk_operator_uuid3: string;
     wrk_operator_uuid4: string;
+    wrk_eventualclient: string;
+    wrk_eventualaddress: string;
+    wrk_eventualphone: string;
     itm_uuid: string;
     cmpitm_uuid: string;
     mitm_uuid: string;
@@ -36,6 +39,9 @@ export class WorkValue implements WorkEntity {
             wrk_operator_uuid2,
             wrk_operator_uuid3,
             wrk_operator_uuid4,
+            wrk_eventualclient,
+            wrk_eventualaddress,
+            wrk_eventualphone,
             itm_uuid,
             cmpitm_uuid,
             mitm_uuid,
@@ -55,6 +61,9 @@ export class WorkValue implements WorkEntity {
             wrk_operator_uuid2: string,
             wrk_operator_uuid3: string,
             wrk_operator_uuid4: string,
+            wrk_eventualclient: string,
+            wrk_eventualaddress: string,
+            wrk_eventualphone: string,
             itm_uuid: string,
             cmpitm_uuid: string,
             mitm_uuid: string,
@@ -74,6 +83,9 @@ export class WorkValue implements WorkEntity {
         this.wrk_operator_uuid2 = wrk_operator_uuid2;
         this.wrk_operator_uuid3 = wrk_operator_uuid3;
         this.wrk_operator_uuid4 = wrk_operator_uuid4;
+        this.wrk_eventualclient = wrk_eventualclient;
+        this.wrk_eventualaddress = wrk_eventualaddress;
+        this.wrk_eventualphone = wrk_eventualphone;
         this.itm_uuid = itm_uuid;
         this.cmpitm_uuid = cmpitm_uuid;
         this.mitm_uuid = mitm_uuid;

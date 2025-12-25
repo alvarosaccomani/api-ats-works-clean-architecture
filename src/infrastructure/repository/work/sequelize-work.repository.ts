@@ -151,8 +151,8 @@ export class SequelizeRepository implements WorkRepository {
     }
     async createWork(work: WorkEntity): Promise<WorkEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
-            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
+            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_eventualclient, wrk_eventualaddress, wrk_eventualphone, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
+            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_eventualclient, wrk_eventualaddress, wrk_eventualphone, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work`);
             }
@@ -177,6 +177,9 @@ export class SequelizeRepository implements WorkRepository {
                     wrk_operator_uuid2: work.wrk_operator_uuid2,
                     wrk_operator_uuid3: work.wrk_operator_uuid3,
                     wrk_operator_uuid4: work.wrk_operator_uuid4,
+                    wrk_eventualclient: work.wrk_eventualclient,
+                    wrk_eventualaddress: work.wrk_eventualaddress,
+                    wrk_eventualphone: work.wrk_eventualphone,
                     itm_uuid: work.itm_uuid,
                     cmpitm_uuid: work.cmpitm_uuid,
                     mitm_uuid: work.mitm_uuid, 

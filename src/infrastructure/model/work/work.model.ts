@@ -22,6 +22,9 @@ export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare wrk_operator_uuid2: string;
   declare wrk_operator_uuid3: string;
   declare wrk_operator_uuid4: string;
+  declare wrk_eventualclient: string;
+  declare wrk_eventualaddress: string;
+  declare wrk_eventualphone: string;
   declare itm_uuid: string;
   declare cmpitm_uuid: string;
   declare mitm_uuid: string;
@@ -79,6 +82,18 @@ SequelizeWork.init({
     allowNull: true
   },
   wrk_operator_uuid4: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_eventualclient: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_eventualaddress: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_eventualphone: {
     type: DataTypes.STRING,
     allowNull: true
   },
