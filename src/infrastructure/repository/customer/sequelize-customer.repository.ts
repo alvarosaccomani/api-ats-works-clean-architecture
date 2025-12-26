@@ -3,6 +3,7 @@ import { CustomerRepository } from "../../../domain/customer/customer.repository
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { Sequelize, Op } from "sequelize";
 import { SequelizeRoute } from "../../model/route/route.model";
+import { SequelizeAddress } from "../../model/address/address.model";
 
 export class SequelizeRepository implements CustomerRepository {
     async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string, cus_order: string): Promise<CustomerEntity[] | null> {
@@ -29,18 +30,98 @@ export class SequelizeRepository implements CustomerRepository {
                 };
             }
             
-            const customers = await SequelizeCustomer.findAll({ 
+            const customersDb = await SequelizeCustomer.findAll({
                 where,
+                attributes: {
+                    include: [
+                    [
+                        Sequelize.fn(
+                        'STRING_AGG',
+                        Sequelize.fn(
+                            'NULLIF',
+                            Sequelize.fn(
+                            'ARRAY_TO_STRING',
+                            Sequelize.fn(
+                                'ARRAY_REMOVE',
+                                Sequelize.literal(`ARRAY[
+                                NULLIF("adrs"."adr_address", ''),
+                                NULLIF("adrs"."adr_city", ''),
+                                NULLIF("adrs"."adr_province", ''),
+                                NULLIF("adrs"."adr_postalcode", '')
+                                ]::text[]`),
+                                null
+                            ),
+                            ', '
+                            ),
+                            ''
+                        ),
+                        ' | '
+                        ),
+                        'cus_addresses'
+                    ]
+                    ]
+                },
                 include: [
-                    { as: 'rou', model: SequelizeRoute }
+                    {
+                    as: 'rou',
+                    model: SequelizeRoute,
+                    attributes: ['rou_uuid', 'rou_name', 'rou_description']
+                    },
+                    {
+                    as: 'adrs',
+                    model: SequelizeAddress,
+                    attributes: []
+                    }
                 ],
-                order: [
-                    [Sequelize.col(field_order || 'cus_fullname'), cus_order || 'ASC'], // Ordenar usando Sequelize.col
-                ]
+                group: [
+                    'SequelizeCustomer.cmp_uuid',
+                    'SequelizeCustomer.cus_uuid',
+                    'SequelizeCustomer.cus_fullname',
+                    'SequelizeCustomer.cus_email',
+                    'SequelizeCustomer.cus_phone',
+                    'SequelizeCustomer.cus_dateofbirth',
+                    'SequelizeCustomer.rou_uuid',
+                    'SequelizeCustomer.pmt_uuid',
+                    'SequelizeCustomer.usr_uuid',
+                    'SequelizeCustomer.cus_subscriptionplanbycustomer',
+                    'SequelizeCustomer.subp_uuid',
+                    'SequelizeCustomer.cus_active',
+                    'SequelizeCustomer.cus_createdat',
+                    'SequelizeCustomer.cus_updatedat',
+                    'rou.cmp_uuid',
+                    'rou.rou_uuid',
+                    'rou.rou_name',
+                    'rou.rou_description'
+                ],
+                order: [[Sequelize.col(field_order || 'cus_fullname'), cus_order || 'ASC']]
             });
-            if(!customers) {
+            if(!customersDb) {
                 throw new Error(`No hay customers`)
             };
+
+            const customers: CustomerEntity[] = customersDb.map(customer => {
+                const customerPlain = customer.get({ plain: true });
+
+                return {
+                    cmp_uuid: customerPlain.cmp_uuid,
+                    cus_uuid: customerPlain.cus_uuid,
+                    cus_fullname: customerPlain.cus_fullname,
+                    cus_email: customerPlain.cus_email,
+                    cus_phone: customerPlain.cus_phone,
+                    cus_dateofbirth: customerPlain.cus_dateofbirth,
+                    cus_addresses: customerPlain.cus_addresses ?? undefined, // importante: incluir addresses
+                    rou_uuid: customerPlain.rou_uuid,
+                    rou: customerPlain.rou,
+                    pmt_uuid: customerPlain.pmt_uuid,
+                    usr_uuid: customerPlain.usr_uuid,
+                    cus_subscriptionplanbycustomer: customerPlain.cus_subscriptionplanbycustomer,
+                    subp_uuid: customerPlain.subp_uuid,
+                    subp: customerPlain.subp,
+                    cus_active: customerPlain.cus_active,
+                    cus_createdat: customerPlain.cus_createdat,
+                    cus_updatedat: customerPlain.cus_updatedat
+                };
+            });
             return customers;
         } catch (error: any) {
             console.error('Error en getCustomers:', error.message);

@@ -27,6 +27,7 @@ export class CustomerUseCase {
                 cus_email: customer.cus_email,
                 cus_phone: customer.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
+                cus_addresses: customer.cus_addresses,
                 rou_uuid: customer.rou_uuid,
                 rou: customer.rou,
                 pmt_uuid: customer.pmt_uuid,

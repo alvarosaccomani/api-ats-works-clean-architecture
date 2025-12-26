@@ -8,6 +8,7 @@ export interface CustomerEntity {
     cus_email: string,
     cus_phone: string,
     cus_dateofbirth: Date,
+    cus_addresses?: string,
     rou_uuid: string,
     rou?: RouteEntity
     pmt_uuid: string,
