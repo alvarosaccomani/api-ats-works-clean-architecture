@@ -5,6 +5,7 @@ import { createServer } from 'http';
 import initSocket from "./infrastructure/sockets/socketInit";
 import configureSocketsEvents from "./infrastructure/sockets";
 import configureExpressRoutes from "./infrastructure/router";
+import "./infrastructure/model/associations";
 
 
 class Server {

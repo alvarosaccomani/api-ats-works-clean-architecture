@@ -77,19 +77,3 @@ SequelizeAddress.init({
   updatedAt: 'adr_updatedat',
   tableName: 'adr_addresses'
 });
-
-//Sequelize Address Foreign Key
-SequelizeAddress.belongsTo(SequelizeCustomer, {
-    foreignKey: "cmp_uuid",
-    targetKey: "cmp_uuid"
-});
-SequelizeAddress.belongsTo(SequelizeCustomer, {
-    foreignKey: 'cus_uuid',
-    targetKey: "cus_uuid",
-    as: 'cus'
-});
-
-// Sincronizar (solo en desarrollo)
-if (process.env.NODE_ENV !== "production") {
-    SequelizeAddress.sync();
-}

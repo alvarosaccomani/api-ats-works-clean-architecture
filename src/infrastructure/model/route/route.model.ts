@@ -65,8 +65,3 @@ SequelizeRoute.init({
   updatedAt: 'rou_updatedat',
   tableName: 'rou_routes'
 });
-
-// Sincronizar (solo en desarrollo)
-if (process.env.NODE_ENV !== "production") {
-    SequelizeRoute.sync();
-}
