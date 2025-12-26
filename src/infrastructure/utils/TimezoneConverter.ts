@@ -8,7 +8,12 @@ export class TimezoneConverter {
    *   input: new Date('2024-04-05T14:30:00.000Z'), 'America/Buenos_Aires'
    *   output: '2024-04-05T11:30:00.000-03:00'
    */
-  static toIsoStringInTimezone(date: Date, timezone: string): string {
+  static toIsoStringInTimezone(date: Date, timezone: string): string | null {
+
+    if(!date) {
+      return null;
+    }
+
     // Asegúrate de que la fecha se interprete como UTC
     const utcMoment = moment.utc(date);
     
