@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { WorkUseCase } from "../../../application/work/work-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { getStringFromQuery } from "../../utils/util";
 import { paginator } from "../../services/paginator.service";
 
 export class WorkController {
@@ -15,8 +16,7 @@ export class WorkController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const page = (req.params.page ? parseInt(req.params.page) : null);
-            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            const { wrk_dateFrom, wrk_dateTo, wrk_fullname, page, perPage, field_order, wrk_order } = req.query;
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -25,14 +25,14 @@ export class WorkController {
                 });
             }
             if (page && perPage) {
-                const works = await this.workUseCase.getWorks(cmp_uuid)
+                const works = await this.workUseCase.getWorks(cmp_uuid, wrk_dateFrom ? new Date(wrk_dateFrom.toString()) : undefined, wrk_dateTo ? new Date(wrk_dateTo.toString()) : undefined, getStringFromQuery(wrk_fullname), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
                 return res.status(200).send({
                     success: true,
                     message: 'Works retornados.',
                     ...paginator(works, page.toString(), perPage.toString())
                 });
             } else {
-                const works = await this.workUseCase.getWorks(cmp_uuid)
+                const works = await this.workUseCase.getWorks(cmp_uuid, wrk_dateFrom ? new Date(wrk_dateFrom.toString()) : undefined, wrk_dateTo ? new Date(wrk_dateTo.toString()) : undefined, getStringFromQuery(wrk_fullname), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
                 return res.status(200).send({
                     success: true,
                     message: 'Works retornados.',

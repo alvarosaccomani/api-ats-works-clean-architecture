@@ -13,9 +13,9 @@ export class WorkUseCase {
         this.deleteWork = this.deleteWork.bind(this);
     }
 
-    public async getWorks(cmp_uuid: string) {
+    public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
         try {
-            const works = await this.workRepository.getWorks(cmp_uuid);
+            const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, field_order, wrk_order);
             if(!works) {
                 throw new Error('No hay works.');
             }

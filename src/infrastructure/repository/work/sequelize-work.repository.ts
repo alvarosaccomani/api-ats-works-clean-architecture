@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import { WorkEntity, WorkUpdateData } from "../../../domain/work/work.entity";
 import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
+import { Op } from 'sequelize';
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from '../../model/customer/customer.model';
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
@@ -13,12 +14,50 @@ import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeWorkAttachment } from '../../model/work-attachment/work-attachment.model';
 
 export class SequelizeRepository implements WorkRepository {
-    async getWorks(cmp_uuid: string): Promise<WorkEntity[] | null> {
+    async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
         try {
+            // Base del where
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null
+            };
+
+            // // Condiciones opcionales para AND
+
+            const andConditions: any[] = [];
+
+            // Filtro por rango de fechas
+            if (wrk_dateFrom || wrk_dateTo) {
+                const dateCondition: any = {};
+                if (wrk_dateFrom) dateCondition[Op.gte] = wrk_dateFrom;
+                if (wrk_dateTo) dateCondition[Op.lte] = wrk_dateTo;
+                andConditions.push({ wrk_workdate: dateCondition });
+            }
+
+            // Filtro por nombre (OR entre work y customer)
+            if (wrk_fullname) {
+                const search = `%${wrk_fullname.toLowerCase()}%`;
+                andConditions.push({
+                    [Op.or]: [
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('SequelizeWork.wrk_eventualclient')),
+                        'LIKE',
+                        search
+                    ),
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('adr.cus.cus_fullname')),
+                        'LIKE',
+                        search
+                    )
+                    ]
+                });
+            }
+
+            if (andConditions.length > 0) {
+                where[Op.and] = andConditions;
+            }
+
             const works = await SequelizeWork.findAll({ 
-                where: { 
-                    cmp_uuid: cmp_uuid ?? null
-                },
+                where,
                 include: [
                     {
                         as: 'adr',
@@ -58,7 +97,8 @@ export class SequelizeRepository implements WorkRepository {
                         as: 'mitm',
                         model: SequelizeModelItem
                     }
-                ]
+                ],
+                order: [[Sequelize.col(field_order || 'wrk_workdate'), wrk_order || 'ASC']]
             });
             if(!works) {
                 throw new Error(`No hay works`)
