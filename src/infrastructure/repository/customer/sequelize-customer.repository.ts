@@ -63,14 +63,14 @@ export class SequelizeRepository implements CustomerRepository {
                 },
                 include: [
                     {
-                    as: 'rou',
-                    model: SequelizeRoute,
-                    attributes: ['rou_uuid', 'rou_name', 'rou_description']
+                        as: 'rou',
+                        model: SequelizeRoute,
+                        attributes: ['rou_uuid', 'rou_name', 'rou_description']
                     },
                     {
-                    as: 'adrs',
-                    model: SequelizeAddress,
-                    attributes: []
+                        as: 'adrs',
+                        model: SequelizeAddress,
+                        attributes: []
                     }
                 ],
                 group: [
