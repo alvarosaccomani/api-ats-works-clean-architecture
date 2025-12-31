@@ -1,7 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { AddressEntity } from "../../../domain/address/address.entity";
-import { SequelizeCustomer } from '../customer/customer.model';
 
 export class SequelizeAddress extends Model<AddressEntity, Omit<AddressEntity, 'id'>> {
   declare cmp_uuid: string;

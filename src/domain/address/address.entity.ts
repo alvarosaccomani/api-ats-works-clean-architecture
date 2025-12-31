@@ -1,9 +1,11 @@
+import { CustomerEntity } from "../customer/customer.entity";
 import { SubscriptionPlanEntity } from "../subscription-plan/subscription-plan.entity";
 
 export interface AddressEntity {
     cmp_uuid: string,
     adr_uuid: string,
-    cus_uuid: string,    
+    cus_uuid: string,
+    cus?: CustomerEntity,
     adr_address: string,
     adr_city: string,
     adr_province: string,    

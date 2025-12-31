@@ -1,7 +1,8 @@
 import { AddressEntity, AddressUpdateData } from "../../../domain/address/address.entity";
+import { Op } from "sequelize";
 import { AddressRepository } from "../../../domain/address/address.repository";
 import { SequelizeAddress } from "../../model/address/address.model";
-import { Op } from "sequelize";
+import { SequelizeCustomer } from "../../model/customer/customer.model";
 
 export class SequelizeRepository implements AddressRepository {
     async getAddresses(cmp_uuid: string, cus_uuid: string): Promise<AddressEntity[] | null> {
@@ -29,7 +30,13 @@ export class SequelizeRepository implements AddressRepository {
                     cmp_uuid: cmp_uuid ?? null,
                     cus_uuid: cus_uuid ?? null,
                     adr_uuid: adr_uuid ?? null
-                } 
+                },
+                include: [
+                    {
+                        as: 'cus', 
+                        model: SequelizeCustomer
+                    }
+                ]
             });
             if(!address) {
                 throw new Error(`No hay address con el Id: ${cmp_uuid}, ${adr_uuid}`);

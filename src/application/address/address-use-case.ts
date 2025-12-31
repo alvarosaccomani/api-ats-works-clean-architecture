@@ -50,6 +50,7 @@ export class AddressUseCase {
             return {
                 cmp_uuid: address.cmp_uuid,
                 cus_uuid: address.cus_uuid,
+                cus: address.cus,
                 adr_uuid: address.adr_uuid,
                 adr_address: address.adr_address,
                 adr_city: address.adr_city,
