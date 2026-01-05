@@ -26,9 +26,12 @@ export interface WorkEntity {
     wrk_operator3?: UserEntity,
     wrk_operator_uuid4: string,
     wrk_operator4?: UserEntity,
-    wrk_eventualclient: string,
-    wrk_eventualaddress: string,
-    wrk_eventualphone: string,
+    wrk_customer: string,
+    wrk_address: string,
+    wrk_coordinates: string,
+    wrk_phone: string,
+    wrk_route: string,
+    twrk_uuid: string,
     itm_uuid: string,
     cmpitm_uuid: string,
     mitm_uuid: string,
@@ -40,4 +43,4 @@ export interface WorkEntity {
 }
 
 //Update
-export type WorkUpdateData = Pick<WorkEntity, 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid1' | 'wrk_operator_uuid2' | 'wrk_operator_uuid3' | 'wrk_operator_uuid4' | 'wrk_eventualclient' | 'wrk_eventualaddress' | 'wrk_eventualphone' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid'>
+export type WorkUpdateData = Pick<WorkEntity, 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid1' | 'wrk_operator_uuid2' | 'wrk_operator_uuid3' | 'wrk_operator_uuid4' | 'wrk_customer' | 'wrk_address' | 'wrk_coordinates' | 'wrk_phone' | 'wrk_route' | 'twrk_uuid' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid'>
