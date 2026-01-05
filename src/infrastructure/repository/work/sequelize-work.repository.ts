@@ -5,6 +5,7 @@ import { SequelizeWork } from "../../model/work/work.model";
 import { Op } from 'sequelize';
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from '../../model/customer/customer.model';
+import { SequelizeRoute } from '../../model/route/route.model';
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { SequelizeUser } from "../../model/user/user.model";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
@@ -65,7 +66,13 @@ export class SequelizeRepository implements WorkRepository {
                         include: [
                             { 
                                 as: 'cus', 
-                                model: SequelizeCustomer
+                                model: SequelizeCustomer,
+                                include: [
+                                    { 
+                                        as: 'rou', 
+                                        model: SequelizeRoute
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -123,7 +130,13 @@ export class SequelizeRepository implements WorkRepository {
                         include: [
                             { 
                                 as: 'cus', 
-                                model: SequelizeCustomer
+                                model: SequelizeCustomer,
+                                include: [
+                                    { 
+                                        as: 'rou', 
+                                        model: SequelizeRoute
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -295,7 +308,13 @@ export class SequelizeRepository implements WorkRepository {
                         include: [
                             { 
                                 as: 'cus', 
-                                model: SequelizeCustomer
+                                model: SequelizeCustomer,
+                                include: [
+                                    { 
+                                        as: 'rou', 
+                                        model: SequelizeRoute
+                                    }
+                                ]
                             }
                         ]
                     },
