@@ -29,7 +29,7 @@ export class SubscriptionPlanValue implements SubscriptionPlanEntity {
             subp_updatedat?: Date
         }) {
         this.cmp_uuid = cmp_uuid;
-        this.subp_uuid = subp_uuid;
+        this.subp_uuid = uuid();
         this.subp_name = subp_name;
         this.subp_description = subp_description;
         this.subp_active = subp_active;
