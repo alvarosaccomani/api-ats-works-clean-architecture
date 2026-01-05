@@ -7,4 +7,5 @@ export interface WorkRepository {
     updateWork(cmp_uuid: string, wrk_uuid: string, work: WorkUpdateData): Promise<WorkEntity | null>;
     deleteWork(cmp_uuid: string, wrk_uuid: string): Promise<WorkEntity | null>;
     existWork(cmp_uuid: string, wrk_uuid: string): Promise<WorkEntity | null>;
+    getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null>;
 }

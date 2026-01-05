@@ -21,7 +21,7 @@ export class SequelizeRepository implements WorkRepository {
                 cmp_uuid: cmp_uuid ?? null
             };
 
-            // // Condiciones opcionales para AND
+            // Condiciones opcionales para AND
 
             const andConditions: any[] = [];
 
@@ -262,6 +262,77 @@ export class SequelizeRepository implements WorkRepository {
             return work;
         } catch (error: any) {
             console.error('Error en deleteWork:', error.message);
+            throw error;
+        }
+    }
+    async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+        try {
+            // Base del where
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null
+            };
+
+            // Condiciones opcionales para AND
+            const andConditions: any[] = [];
+
+            // Filtro por estado
+            if (wrks_uuid) {
+                andConditions.push({ wrks_uuid: wrks_uuid });
+            }
+
+            //TODO Add users
+
+            if (andConditions.length > 0) {
+                where[Op.and] = andConditions;
+            }
+
+            const works = await SequelizeWork.findAll({ 
+                where,
+                include: [
+                    {
+                        as: 'adr',
+                        model: SequelizeAddress,
+                        include: [
+                            { 
+                                as: 'cus', 
+                                model: SequelizeCustomer
+                            }
+                        ]
+                    },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem
+                    }
+                ],
+                order: [[Sequelize.col(field_order || 'wrk_workdate'), wrk_order || 'ASC']]
+            });
+            return works;
+        } catch (error: any) {
+            console.error('Error en getPendingWorks:', error.message);
             throw error;
         }
     }

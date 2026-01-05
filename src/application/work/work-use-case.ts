@@ -11,6 +11,8 @@ export class WorkUseCase {
         this.createWork = this.createWork.bind(this);
         this.updateWork = this.updateWork.bind(this);
         this.deleteWork = this.deleteWork.bind(this);
+        this.existWork = this.existWork.bind(this);
+        this.getPendingWorks = this.getPendingWorks.bind(this);
     }
 
     public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
@@ -213,6 +215,49 @@ export class WorkUseCase {
             return work;
         } catch (error: any) {
             console.error('Error en existWork (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+        try {
+            const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, field_order, wrk_order);
+            if(!works) {
+                throw new Error('No hay works.');
+            }
+            return works.map((work) => ({
+                cmp_uuid: work.cmp_uuid,
+                wrk_uuid: work.wrk_uuid,
+                adr_uuid: work.adr_uuid,
+                adr: work.adr,
+                wrk_description: work.wrk_description,
+                wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
+                wrk_workdateinit: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdateinit, 'America/Argentina/Buenos_Aires'),
+                wrk_workdatefinish: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdatefinish, 'America/Argentina/Buenos_Aires'),
+                wrks_uuid: work.wrks_uuid,
+                wrks: work.wrks,
+                wrk_user_uuid: work.wrk_user_uuid,
+                wrk_user: work.wrk_user,
+                wrk_operator_uuid1: work.wrk_operator_uuid1,
+                wrk_operator1: work.wrk_operator1,
+                wrk_operator_uuid2: work.wrk_operator_uuid2,
+                wrk_user2: work.wrk_operator2,
+                wrk_operator_uuid3: work.wrk_operator_uuid3,
+                wrk_operator3: work.wrk_operator3,
+                wrk_operator_uuid4: work.wrk_operator_uuid4,
+                wrk_operator4: work.wrk_operator4,
+                wrk_eventualclient: work.wrk_eventualclient,
+                wrk_eventualaddress: work.wrk_eventualaddress,
+                wrk_eventualphone: work.wrk_eventualphone,
+                itm_uuid: work.itm_uuid,
+                cmpitm_uuid: work.cmpitm_uuid,
+                mitm_uuid: work.mitm_uuid,
+                mitm: work.mitm,
+                wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
+                wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
+            }));
+        } catch (error: any) {
+            console.error('Error en getPendingWorks (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }

@@ -11,6 +11,7 @@ export class WorkController {
         this.insertCtrl = this.insertCtrl.bind(this);
         this.updateCtrl = this.updateCtrl.bind(this);
         this.deleteCtrl = this.deleteCtrl.bind(this);
+        this.getPendingWorksCtrl = this.getPendingWorksCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -145,6 +146,43 @@ export class WorkController {
             return res.status(400).json({
                 success: false,
                 message: 'No se pudo eliminar el work.',
+                error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getPendingWorksCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const { wrks_uuid, page, perPage, field_order, wrk_order } = req.query;
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los works.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            console.info('getPendingWorksCtrl', cmp_uuid, wrks_uuid, page, perPage, field_order, wrk_order)
+            if (page && perPage) {
+                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Pending works retornados.',
+                    ...paginator(works, page.toString(), perPage.toString())
+                });
+            } else {
+                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Pending works retornados.',
+                    data: works
+                });
+            }
+        } catch (error: any) {
+            console.error('Error en getPendingWorksCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar los pending works.',
                 error: error.message, // Mensaje claro del error
             });
         }
