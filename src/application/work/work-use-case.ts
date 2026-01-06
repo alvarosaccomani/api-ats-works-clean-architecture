@@ -225,9 +225,9 @@ export class WorkUseCase {
         }
     }
 
-    public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+    public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
         try {
-            const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, field_order, wrk_order);
+            const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, wrk_route, field_order, wrk_order);
             if(!works) {
                 throw new Error('No hay works.');
             }

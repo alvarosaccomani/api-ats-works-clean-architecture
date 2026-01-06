@@ -154,7 +154,7 @@ export class WorkController {
     public async getPendingWorksCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const { wrks_uuid, page, perPage, field_order, wrk_order } = req.query;
+            const { wrks_uuid, wrk_route, page, perPage, field_order, wrk_order } = req.query;
             if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
@@ -162,16 +162,16 @@ export class WorkController {
                     error: 'Debe proporcionar un Id de company.'
                 });
             }
-            console.info('getPendingWorksCtrl', cmp_uuid, wrks_uuid, page, perPage, field_order, wrk_order)
+            console.info('getPendingWorksCtrl', cmp_uuid, wrks_uuid, wrk_route, page, perPage, field_order, wrk_order)
             if (page && perPage) {
-                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
+                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(wrk_route), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
                 return res.status(200).send({
                     success: true,
                     message: 'Pending works retornados.',
                     ...paginator(works, page.toString(), perPage.toString())
                 });
             } else {
-                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
+                const works = await this.workUseCase.getPendingWorks(cmp_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(wrk_route), getStringFromQuery(field_order), getStringFromQuery(wrk_order));
                 return res.status(200).send({
                     success: true,
                     message: 'Pending works retornados.',

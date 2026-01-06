@@ -105,7 +105,12 @@ export class SequelizeRepository implements WorkRepository {
                         model: SequelizeModelItem
                     }
                 ],
-                order: [[Sequelize.col(field_order || 'wrk_workdate'), wrk_order || 'ASC']]
+                order: [
+                    [
+                        Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
+                        wrk_order ? wrk_order : 'ASC'
+                    ]
+                ]
             });
             if(!works) {
                 throw new Error(`No hay works`)
@@ -281,7 +286,7 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
-    async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+    async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -294,6 +299,11 @@ export class SequelizeRepository implements WorkRepository {
             // Filtro por estado
             if (wrks_uuid) {
                 andConditions.push({ wrks_uuid: wrks_uuid });
+            }
+
+            // Filtro por recorrido
+            if (wrk_route) {
+                andConditions.push({ wrk_route: wrk_route });
             }
 
             //TODO Add users
@@ -350,7 +360,12 @@ export class SequelizeRepository implements WorkRepository {
                         model: SequelizeModelItem
                     }
                 ],
-                order: [[Sequelize.col(field_order || 'wrk_workdate'), wrk_order || 'ASC']]
+                order: [
+                    [
+                        Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
+                        wrk_order ? wrk_order : 'ASC'
+                    ]
+                ]
             });
             return works;
         } catch (error: any) {
