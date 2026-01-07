@@ -373,5 +373,100 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
+    async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+        try {
+            // Base del where
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null
+            };
+
+            // Condiciones opcionales para AND
+            const andConditions: any[] = [];
+
+            // Filtro por rango de fechas
+            if (wrk_dateFrom || wrk_dateTo) {
+                const dateCondition: any = {};
+                if (wrk_dateFrom) dateCondition[Op.gte] = wrk_dateFrom;
+                if (wrk_dateTo) dateCondition[Op.lte] = wrk_dateTo;
+                andConditions.push({ wrk_workdate: dateCondition });
+            }
+
+            // Filtro por estado
+            if (wrks_uuid) {
+                andConditions.push({ wrks_uuid: wrks_uuid });
+            }
+
+            // Filtro por recorrido
+            if (wrk_route) {
+                andConditions.push({ wrk_route: wrk_route });
+            }
+
+            //TODO Add users
+
+            if (andConditions.length > 0) {
+                where[Op.and] = andConditions;
+            }
+
+            const works = await SequelizeWork.findAll({ 
+                where,
+                include: [
+                    // {
+                    //     as: 'adr',
+                    //     model: SequelizeAddress,
+                    //     include: [
+                    //         { 
+                    //             as: 'cus', 
+                    //             model: SequelizeCustomer,
+                    //             include: [
+                    //                 { 
+                    //                     as: 'rou', 
+                    //                     model: SequelizeRoute
+                    //                 }
+                    //             ]
+                    //         }
+                    //     ]
+                    // },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem
+                    }
+                ],
+                order: [
+                    [
+                        Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
+                        wrk_order ? wrk_order : 'ASC'
+                    ]
+                ]
+            });
+            return works;
+        } catch (error: any) {
+            console.error('Error en getWorkScheduler:', error.message);
+            throw error;
+        }
+    }
     
 }

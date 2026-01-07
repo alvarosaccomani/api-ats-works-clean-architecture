@@ -13,6 +13,7 @@ export class WorkUseCase {
         this.deleteWork = this.deleteWork.bind(this);
         this.existWork = this.existWork.bind(this);
         this.getPendingWorks = this.getPendingWorks.bind(this);
+        this.getWorksScheduler = this.getWorksScheduler.bind(this);
     }
 
     public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
@@ -264,6 +265,36 @@ export class WorkUseCase {
             }));
         } catch (error: any) {
             console.error('Error en getPendingWorks (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+        try {
+            console.info('getWorkScheduler (use case):', cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
+            const works = await this.workRepository.getWorksScheduler(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
+            if(!works) {
+                throw new Error('No hay works.');
+            }
+            return works.map((work) => ({
+                cmp_uuid: work.cmp_uuid,
+                wrk_uuid: work.wrk_uuid,
+                adr_uuid: work.adr_uuid,
+                wrk_description: work.wrk_description,
+                wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
+                wrks_uuid: work.wrks_uuid,
+                wrks: work.wrks,
+                wrk_user_uuid: work.wrk_user_uuid,
+                wrk_operator_uuid1: work.wrk_operator_uuid1,
+                wrk_operator_uuid2: work.wrk_operator_uuid2,
+                wrk_operator_uuid3: work.wrk_operator_uuid3,
+                wrk_operator_uuid4: work.wrk_operator_uuid4,
+                wrk_customer: work.wrk_customer,
+                wrk_address: work.wrk_address,
+                wrk_phone: work.wrk_phone
+            }));
+        } catch (error: any) {
+            console.error('Error en getWorkScheduler (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }
