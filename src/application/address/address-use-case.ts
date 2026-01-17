@@ -12,12 +12,13 @@ export class AddressUseCase {
         this.updateAddress = this.updateAddress.bind(this);
         this.deleteAddress = this.deleteAddress.bind(this);
         this.findAddressByName = this.findAddressByName.bind(this);
+        this.getAddressesWithClient = this.getAddressesWithClient.bind(this);
     }
 
     public async getAddresses(cmp_uuid: string, cus_uuid: string) {
         try {
             const address = await this.addressRepository.getAddresses(cmp_uuid, cus_uuid);
-            if(!address) {
+            if (!address) {
                 throw new Error('No hay addresses.');
             }
             return address.map(address => ({
@@ -44,7 +45,7 @@ export class AddressUseCase {
     public async getDetailAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string) {
         try {
             const address = await this.addressRepository.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
-            if(!address) {
+            if (!address) {
                 throw new Error(`No hay address con el Id: ${cmp_uuid}, ${cus_uuid}, ${adr_uuid}`);
             }
             return {
@@ -68,12 +69,12 @@ export class AddressUseCase {
             throw error; // Propagar el error hacia el controlador
         }
     }
-    
-    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active } : { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
+
+    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
             const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
             const addressCreated = await this.addressRepository.createAddress(addressValue);
-            if(!addressCreated) {
+            if (!addressCreated) {
                 throw new Error(`No se pudo insertar el address.`);
             }
             return {
@@ -96,10 +97,10 @@ export class AddressUseCase {
         }
     }
 
-    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active } : { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
+    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
             const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
-            if(!addressUpdated) {
+            if (!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
             return {
@@ -125,7 +126,7 @@ export class AddressUseCase {
     public async deleteAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string) {
         try {
             const addressDeleted = await this.addressRepository.deleteAddress(cmp_uuid, cus_uuid, adr_uuid);
-            if(!addressDeleted) {
+            if (!addressDeleted) {
                 throw new Error(`No se pudo eliminar el address.`);
             }
             return {
@@ -151,12 +152,40 @@ export class AddressUseCase {
     public async findAddressByName(cmp_uuid: string, cus_uuid: string, adr_address: string, excludeUuid?: string) {
         try {
             const address = await this.addressRepository.findAddressByName(cmp_uuid, cus_uuid, adr_address, excludeUuid)
-            if(address) {
+            if (address) {
                 throw new Error(`Ya existe un address con el nombre ${adr_address}.`);
             }
             return address
         } catch (error: any) {
             console.error('Error en findAddressByName (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async getAddressesWithClient(cmp_uuid: string, rou_uuid: string) {
+        try {
+            const address = await this.addressRepository.getAddressesWithClient(cmp_uuid, rou_uuid);
+            if (!address) {
+                throw new Error('No hay addresses.');
+            }
+            return address.map(address => ({
+                cmp_uuid: address.cmp_uuid,
+                cus_uuid: address.cus_uuid,
+                cus: address.cus,
+                adr_uuid: address.adr_uuid,
+                adr_address: address.adr_address,
+                adr_city: address.adr_city,
+                adr_province: address.adr_province,
+                adr_postalcode: address.adr_postalcode,
+                adr_dimensions: address.adr_dimensions,
+                subp_uuid: address.subp_uuid,
+                subp: address.subp,
+                adr_active: address.adr_active,
+                adr_createdat: TimezoneConverter.toIsoStringInTimezone(address.adr_createdat, 'America/Buenos_Aires'),
+                adr_updatedat: TimezoneConverter.toIsoStringInTimezone(address.adr_updatedat, 'America/Buenos_Aires')
+            }));
+        } catch (error: any) {
+            console.error('Error en getAddressesWithClient (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }

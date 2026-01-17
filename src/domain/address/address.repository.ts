@@ -7,4 +7,5 @@ export interface AddressRepository {
     updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, address: AddressUpdateData): Promise<AddressEntity | null>;
     deleteAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string): Promise<AddressEntity | null>;
     findAddressByName(cmp_uuid: string, cus_uuid: string, adr_address: string, excludeUuid?: string | null): Promise<AddressEntity | null>;
+    getAddressesWithClient(cmp_uuid: string, rou_uuid: string): Promise<AddressEntity[] | null>;
 }

@@ -3,6 +3,7 @@ import { Op } from "sequelize";
 import { AddressRepository } from "../../../domain/address/address.repository";
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
+import { SequelizeRoute } from "../../model/route/route.model";
 
 export class SequelizeRepository implements AddressRepository {
     async getAddresses(cmp_uuid: string, cus_uuid: string): Promise<AddressEntity[] | null> {
@@ -14,7 +15,7 @@ export class SequelizeRepository implements AddressRepository {
                 }
             }
             const addresses = await SequelizeAddress.findAll(config);
-            if(!addresses) {
+            if (!addresses) {
                 throw new Error(`No hay addresses`)
             };
             return addresses;
@@ -25,20 +26,20 @@ export class SequelizeRepository implements AddressRepository {
     }
     async findAddressById(cmp_uuid: string, cus_uuid: string, adr_uuid: string): Promise<AddressEntity | null> {
         try {
-            const address = await SequelizeAddress.findOne({ 
-                where: { 
+            const address = await SequelizeAddress.findOne({
+                where: {
                     cmp_uuid: cmp_uuid ?? null,
                     cus_uuid: cus_uuid ?? null,
                     adr_uuid: adr_uuid ?? null
                 },
                 include: [
                     {
-                        as: 'cus', 
+                        as: 'cus',
                         model: SequelizeCustomer
                     }
                 ]
             });
-            if(!address) {
+            if (!address) {
                 throw new Error(`No hay address con el Id: ${cmp_uuid}, ${adr_uuid}`);
             };
             return address.dataValues;
@@ -51,7 +52,7 @@ export class SequelizeRepository implements AddressRepository {
         try {
             let { cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active, adr_createdat, adr_updatedat } = address
             const result = await SequelizeAddress.create({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active, adr_createdat, adr_updatedat });
-            if(!result) {
+            if (!result) {
                 throw new Error(`No se ha agregado el address`);
             }
             let newAddress = result.dataValues as SequelizeAddress
@@ -64,16 +65,16 @@ export class SequelizeRepository implements AddressRepository {
     async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, address: AddressUpdateData): Promise<AddressEntity | null> {
         try {
             const [updatedCount, [updatedAddress]] = await SequelizeAddress.update(
-                { 
-                    adr_address: address.adr_address, 
-                    adr_city: address.adr_city, 
-                    adr_province: address.adr_province, 
+                {
+                    adr_address: address.adr_address,
+                    adr_city: address.adr_city,
+                    adr_province: address.adr_province,
                     adr_postalcode: address.adr_postalcode,
                     adr_dimensions: address.adr_dimensions,
                     subp_uuid: address.subp_uuid,
                     adr_active: address.adr_active
                 },
-                { 
+                {
                     where: { cmp_uuid, cus_uuid, adr_uuid },
                     returning: true, // necesario en PostgreSQL
                 }
@@ -91,7 +92,7 @@ export class SequelizeRepository implements AddressRepository {
         try {
             const address = await this.findAddressById(cmp_uuid, cus_uuid, adr_uuid);
             const result = await SequelizeAddress.destroy({ where: { cmp_uuid, cus_uuid, adr_uuid } });
-            if(!result) {
+            if (!result) {
                 throw new Error(`No se ha eliminado el address`);
             };
             return address;
@@ -102,14 +103,14 @@ export class SequelizeRepository implements AddressRepository {
     }
     async findAddressByName(cmp_uuid: string, cus_uuid: string, excludeUuid?: string): Promise<AddressEntity | null> {
         try {
-            const whereCondition: any = { 
+            const whereCondition: any = {
                 cmp_uuid: cmp_uuid ?? null,
                 cus_uuid: cus_uuid ?? null
-             };
+            };
             if (excludeUuid) {
                 whereCondition.adr_uuid = { [Op.ne]: excludeUuid };
             }
-            const address = await SequelizeAddress.findOne({ 
+            const address = await SequelizeAddress.findOne({
                 where: whereCondition
             });
             return address;
@@ -118,5 +119,38 @@ export class SequelizeRepository implements AddressRepository {
             throw error;
         }
     }
-    
+    async getAddressesWithClient(cmp_uuid: string, rou_uuid: string): Promise<AddressEntity[] | null> {
+        try {
+            const customerWhere: any = {};
+            if (rou_uuid) {
+                customerWhere.rou_uuid = rou_uuid;
+            }
+            const addresses = await SequelizeAddress.findAll({
+                where: {
+                    cmp_uuid: cmp_uuid ?? null
+                },
+                include: [
+                    {
+                        as: 'cus',
+                        model: SequelizeCustomer,
+                        ...(Object.keys(customerWhere).length > 0 ? { where: customerWhere } : {}),
+                        include: [
+                            {
+                                as: 'rou',
+                                model: SequelizeRoute
+                            }
+                        ]
+                    }
+                ]
+            });
+            if (!addresses) {
+                throw new Error(`No hay addresses`);
+            }
+            return addresses.map(address => address.get({ plain: true }) as AddressEntity);
+        } catch (error: any) {
+            console.error('Error en getAddressesWithClient:', error.message);
+            throw error;
+        }
+    }
+
 }

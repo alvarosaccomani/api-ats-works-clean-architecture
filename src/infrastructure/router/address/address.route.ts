@@ -8,26 +8,27 @@ function configureAddressRoutes(app: Express, socketAdapter: SocketAdapter) {
     /*
     *   Iniciar repository
     */
-    
+
     const sequelizeAddressRepository = new SequelizeRepository();
-    
+
     /*
     *   Iniciar casos de uso
     */
-    
+
     const addressUseCase = new AddressUseCase(sequelizeAddressRepository);
-    
+
     /*
     *   Iniciar controller
     */
-    
+
     const addressCtrl = new AddressController(addressUseCase, socketAdapter);
-    
+
     app.get(`/${process.env.BASE_URL_API}/addresses/:cmp_uuid/:cus_uuid/:filter?/:page?/:perPage?`, addressCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/address/:cmp_uuid/:cus_uuid/:adr_uuid`, addressCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/address`, addressCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/address/:cmp_uuid/:cus_uuid/:adr_uuid`, addressCtrl.updateCtrl);
     app.delete(`/${process.env.BASE_URL_API}/address/:cmp_uuid/:cus_uuid/:adr_uuid`, addressCtrl.deleteCtrl);
+    app.get(`/${process.env.BASE_URL_API}/addresses-with-client/:cmp_uuid/:rou_uuid?/:filter?/:page?/:perPage?`, addressCtrl.getAllWithClientCtrl);
 }
 
 export default configureAddressRoutes;
