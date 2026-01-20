@@ -1,16 +1,17 @@
 import { v4 as uuid } from "uuid";
 import moment from 'moment';
 import { WorkEntity } from "./work.entity";
+import { WorkDetailEntity } from "../work-detail/work-detail.entity";
 
 export class WorkValue implements WorkEntity {
     cmp_uuid: string;
     wrk_uuid: string;
     adr_uuid: string;
-    wrk_description: string;	
-	wrk_workdate: Date;
+    wrk_description: string;
+    wrk_workdate: Date;
     wrk_workdateinit: Date;
     wrk_workdatefinish: Date;
-	wrks_uuid: string;
+    wrks_uuid: string;
     wrk_user_uuid: string;
     wrk_operator_uuid1: string;
     wrk_operator_uuid2: string;
@@ -25,60 +26,63 @@ export class WorkValue implements WorkEntity {
     itm_uuid: string;
     cmpitm_uuid: string;
     mitm_uuid: string;
-	wrk_createdat: Date;
+    wrk_createdat: Date;
     wrk_updatedat: Date;
-    
+    workDetails: WorkDetailEntity[];
+
     constructor({
-            cmp_uuid,
-            wrk_uuid,
-            adr_uuid,
-            wrk_description,	
-            wrk_workdate,
-            wrk_workdateinit,
-            wrk_workdatefinish,
-            wrks_uuid,
-            wrk_user_uuid,
-            wrk_operator_uuid1,
-            wrk_operator_uuid2,
-            wrk_operator_uuid3,
-            wrk_operator_uuid4,
-            wrk_customer,
-            wrk_address,
-            wrk_coordinates,
-            wrk_phone,
-            wrk_route,
-            twrk_uuid,
-            itm_uuid,
-            cmpitm_uuid,
-            mitm_uuid,
-            wrk_createdat,
-            wrk_updatedat
-        }:{ 
-            cmp_uuid: string,
-            wrk_uuid: string,
-            adr_uuid: string,
-            wrk_description: string,	
-            wrk_workdate: Date,
-            wrk_workdateinit: Date,
-            wrk_workdatefinish: Date,
-            wrks_uuid: string,
-            wrk_user_uuid: string,
-            wrk_operator_uuid1: string,
-            wrk_operator_uuid2: string,
-            wrk_operator_uuid3: string,
-            wrk_operator_uuid4: string,
-            wrk_customer: string,
-            wrk_address: string,
-            wrk_coordinates: string,
-            wrk_phone: string,
-            wrk_route: string,
-            twrk_uuid: string,
-            itm_uuid: string,
-            cmpitm_uuid: string,
-            mitm_uuid: string,
-            wrk_createdat?: Date,
-            wrk_updatedat?: Date
-        }) {
+        cmp_uuid,
+        wrk_uuid,
+        adr_uuid,
+        wrk_description,
+        wrk_workdate,
+        wrk_workdateinit,
+        wrk_workdatefinish,
+        wrks_uuid,
+        wrk_user_uuid,
+        wrk_operator_uuid1,
+        wrk_operator_uuid2,
+        wrk_operator_uuid3,
+        wrk_operator_uuid4,
+        wrk_customer,
+        wrk_address,
+        wrk_coordinates,
+        wrk_phone,
+        wrk_route,
+        twrk_uuid,
+        itm_uuid,
+        cmpitm_uuid,
+        mitm_uuid,
+        wrk_createdat,
+        wrk_updatedat,
+        workDetails
+    }: {
+        cmp_uuid: string,
+        wrk_uuid: string,
+        adr_uuid: string,
+        wrk_description: string,
+        wrk_workdate: Date,
+        wrk_workdateinit: Date,
+        wrk_workdatefinish: Date,
+        wrks_uuid: string,
+        wrk_user_uuid: string,
+        wrk_operator_uuid1: string,
+        wrk_operator_uuid2: string,
+        wrk_operator_uuid3: string,
+        wrk_operator_uuid4: string,
+        wrk_customer: string,
+        wrk_address: string,
+        wrk_coordinates: string,
+        wrk_phone: string,
+        wrk_route: string,
+        twrk_uuid: string,
+        itm_uuid: string,
+        cmpitm_uuid: string,
+        mitm_uuid: string,
+        wrk_createdat?: Date,
+        wrk_updatedat?: Date,
+        workDetails?: WorkDetailEntity[]
+    }) {
         this.cmp_uuid = cmp_uuid;
         this.wrk_uuid = uuid();
         this.adr_uuid = adr_uuid;
@@ -103,5 +107,6 @@ export class WorkValue implements WorkEntity {
         this.mitm_uuid = mitm_uuid;
         this.wrk_createdat = wrk_createdat ?? moment().toDate();
         this.wrk_updatedat = wrk_updatedat ?? moment().toDate();
+        this.workDetails = workDetails ?? [];
     }
 }

@@ -1,5 +1,6 @@
 import { Express } from "express";
-import { SequelizeRepository } from "../../repository/work/sequelize-work.repository";
+import { SequelizeRepository as SequelizeWorkRepository } from "../../repository/work/sequelize-work.repository";
+import { SequelizeRepository as SequelizeWorkDetailRepository } from "../../repository/work-detail/sequelize-work-detail.repository";
 import { WorkUseCase } from "../../../application/work/work-use-case";
 import { WorkController } from "../../controller/work/work.controller";
 import SocketAdapter from "../../services/socketAdapter";
@@ -9,13 +10,14 @@ function configureWorkRoutes(app: Express, socketAdapter: SocketAdapter) {
     *   Iniciar repository
     */
     
-    const sequelizeWorkRepository = new SequelizeRepository();
+    const sequelizeWorkRepository = new SequelizeWorkRepository();
+    const sequelizeWorkDetailRepository = new SequelizeWorkDetailRepository();
     
     /*
     *   Iniciar casos de uso
     */
     
-    const workUseCase = new WorkUseCase(sequelizeWorkRepository);
+    const workUseCase = new WorkUseCase(sequelizeWorkRepository, sequelizeWorkDetailRepository);
     
     /*
     *   Iniciar controller

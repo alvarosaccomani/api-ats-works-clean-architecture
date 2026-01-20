@@ -1,10 +1,14 @@
+import { v4 as uuid } from "uuid";
 import { WorkRepository } from "../../domain/work/work.repository";
 import { WorkValue } from "../../domain/work/work.value";
 import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
+import { WorkDetailRepository } from "../../domain/work-detail/work-detail.repository";
+import { WorkDetailEntity } from "../../domain/work-detail/work-detail.entity";
 
 export class WorkUseCase {
     constructor(
-        private readonly workRepository: WorkRepository
+        private readonly workRepository: WorkRepository,
+        private readonly workDetailRepository: WorkDetailRepository
     ) {
         this.getWorks = this.getWorks.bind(this);
         this.getDetailWork = this.getDetailWork.bind(this);
@@ -19,7 +23,7 @@ export class WorkUseCase {
     public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
         try {
             const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, field_order, wrk_order);
-            if(!works) {
+            if (!works) {
                 throw new Error('No hay works.');
             }
             return works.map((work) => ({
@@ -65,7 +69,7 @@ export class WorkUseCase {
     public async getDetailWork(cmp_uuid: string, wrk_uuid: string) {
         try {
             const works = await this.workRepository.findWorkById(cmp_uuid, wrk_uuid);
-            if(!works) {
+            if (!works) {
                 throw new Error(`No hay works con el Id: ${cmp_uuid}, ${wrk_uuid}`);
             }
             return {
@@ -109,13 +113,25 @@ export class WorkUseCase {
             throw error; // Propagar el error hacia el controlador
         }
     }
-    
-    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route , itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
+
+    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, workDetails: WorkDetailEntity[] }) {
         try {
-            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid });
+            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails });
             const worksCreated = await this.workRepository.createWork(worksValue);
-            if(!worksCreated) {
+            if (!worksCreated) {
                 throw new Error(`No se pudo insertar el work.`);
+            }
+            if (worksValue.workDetails.length) {
+                const workDetailsCreated = [];
+                for (const workDetail of worksValue.workDetails) {
+                    workDetail.wrk_uuid = worksCreated.wrk_uuid;
+                    workDetail.wrkd_uuid = uuid();
+                    const workDetailCreated = await this.workDetailRepository.createWorkDetail(workDetail);
+                    if (!workDetailCreated) {
+                        throw new Error(`No se pudo insertar el work detail.`);
+                    }
+                    workDetailsCreated.push(workDetailCreated);
+                }
             }
             return {
                 cmp_uuid: worksCreated.cmp_uuid,
@@ -146,10 +162,10 @@ export class WorkUseCase {
         }
     }
 
-    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid } : { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
+    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
         try {
             const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid });
-            if(!worksUpdated) {
+            if (!worksUpdated) {
                 throw new Error(`No se pudo actualizar el work.`);
             }
             return {
@@ -184,7 +200,7 @@ export class WorkUseCase {
     public async deleteWork(cmp_uuid: string, wrk_uuid: string) {
         try {
             const worksDeleted = await this.workRepository.deleteWork(cmp_uuid, wrk_uuid);
-            if(!worksDeleted) {
+            if (!worksDeleted) {
                 throw new Error(`No se pudo eliminar el work.`);
             }
             return {
@@ -229,7 +245,7 @@ export class WorkUseCase {
     public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
         try {
             const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, wrk_route, field_order, wrk_order);
-            if(!works) {
+            if (!works) {
                 throw new Error('No hay works.');
             }
             return works.map((work) => ({
@@ -273,7 +289,7 @@ export class WorkUseCase {
         try {
             console.info('getWorkScheduler (use case):', cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
             const works = await this.workRepository.getWorksScheduler(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
-            if(!works) {
+            if (!works) {
                 throw new Error('No hay works.');
             }
             return works.map((work) => ({
