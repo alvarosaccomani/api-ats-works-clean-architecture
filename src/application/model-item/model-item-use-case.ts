@@ -1,10 +1,14 @@
+import { v4 as uuid } from "uuid";
 import { ModelItemRepository } from "../../domain/model-item/model-item.repository";
 import { ModelItemValue } from "../../domain/model-item/model-item.value";
 import { TimezoneConverter } from "../../infrastructure/utils/TimezoneConverter";
+import { DetailModelItemRepository } from "../../domain/detail-model-item/detail-model-item.repository";
+import { DetailModelItemEntity } from "../../domain/detail-model-item/detail-model-item.entity";
 
 export class ModelItemUseCase {
     constructor(
-        private readonly modelItemRepository: ModelItemRepository
+        private readonly modelItemRepository: ModelItemRepository,
+        private readonly detailModelItemRepository: DetailModelItemRepository,
     ) {
         this.getModelItems = this.getModelItems.bind(this);
         this.getDetailModelItem = this.getDetailModelItem.bind(this);
@@ -16,7 +20,7 @@ export class ModelItemUseCase {
     public async getModelItems(cmp_uuid: string) {
         try {
             const modelItems = await this.modelItemRepository.getModelItems(cmp_uuid);
-            if(!modelItems) {
+            if (!modelItems) {
                 throw new Error('No hay model items.');
             }
             return modelItems.map((modelItem) => ({
@@ -39,7 +43,7 @@ export class ModelItemUseCase {
     public async getDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string) {
         try {
             const modelItems = await this.modelItemRepository.findModelItemById(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid);
-            if(!modelItems) {
+            if (!modelItems) {
                 throw new Error(`No hay model items con el Id: ${cmp_uuid}, ${itm_uuid}, ${cmpitm_uuid}, ${mitm_uuid}`);
             }
             return {
@@ -59,13 +63,25 @@ export class ModelItemUseCase {
             throw error; // Propagar el error hacia el controlador
         }
     }
-    
-    public async createModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, mitm_name: string, mitm_description: string, mitm_active: boolean }) {
+
+    public async createModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description, mitm_active, detailModelItems }: { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, mitm_name: string, mitm_description: string, mitm_active: boolean, detailModelItems: DetailModelItemEntity[] }) {
         try {
-            const modelItemsValue = new ModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description,	mitm_active });
+            const modelItemsValue = new ModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, mitm_name, mitm_description, mitm_active, detailModelItems });
             const modelItemsCreated = await this.modelItemRepository.createModelItem(modelItemsValue);
-            if(!modelItemsCreated) {
+            if (!modelItemsCreated) {
                 throw new Error(`No se pudo insertar el model item.`);
+            }
+            if (modelItemsValue.detailModelItems.length) {
+                const detailModelItemsCreated = [];
+                for (const detailModelItem of modelItemsValue.detailModelItems) {
+                    detailModelItem.mitm_uuid = modelItemsCreated.mitm_uuid;
+                    detailModelItem.dmitm_uuid = uuid();
+                    const detailModelItemCreated = await this.detailModelItemRepository.createDetailModelItem(detailModelItem);
+                    if (!detailModelItemCreated) {
+                        throw new Error(`No se pudo insertar el detail model item.`);
+                    }
+                    detailModelItemsCreated.push(detailModelItemCreated);
+                }
             }
             return {
                 cmp_uuid: modelItemsCreated.cmp_uuid,
@@ -84,10 +100,10 @@ export class ModelItemUseCase {
         }
     }
 
-    public async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, { mitm_name, mitm_description,	mitm_active } : { mitm_name: string, mitm_description: string,	mitm_active: boolean }) {
+    public async updateModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, { mitm_name, mitm_description, mitm_active }: { mitm_name: string, mitm_description: string, mitm_active: boolean }) {
         try {
-            const modelItemsUpdated = await this.modelItemRepository.updateModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, { mitm_name, mitm_description,	mitm_active });
-            if(!modelItemsUpdated) {
+            const modelItemsUpdated = await this.modelItemRepository.updateModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, { mitm_name, mitm_description, mitm_active });
+            if (!modelItemsUpdated) {
                 throw new Error(`No se pudo actualizar el model item.`);
             }
             return {
@@ -110,7 +126,7 @@ export class ModelItemUseCase {
     public async deleteModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string) {
         try {
             const modelItemsDeleted = await this.modelItemRepository.deleteModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid);
-            if(!modelItemsDeleted) {
+            if (!modelItemsDeleted) {
                 throw new Error(`No se pudo eliminar el model item.`);
             }
             return {

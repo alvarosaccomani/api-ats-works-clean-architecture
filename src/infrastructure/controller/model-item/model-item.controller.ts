@@ -17,7 +17,7 @@ export class ModelItemController {
             const cmp_uuid = req.params.cmp_uuid;
             const page = (req.params.page ? parseInt(req.params.page) : null);
             const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
-            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+            if (!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el model item.',
@@ -55,7 +55,7 @@ export class ModelItemController {
             const itm_uuid = req.params.itm_uuid;
             const cmpitm_uuid = req.params.cmpitm_uuid;
             const mitm_uuid = req.params.mitm_uuid;
-            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined' || !itm_uuid || itm_uuid.toLowerCase() === 'null' || itm_uuid.toLowerCase() === 'undefined' || !cmpitm_uuid || cmpitm_uuid.toLowerCase() === 'null' || cmpitm_uuid.toLowerCase() === 'undefined' || !mitm_uuid || mitm_uuid.toLowerCase() === 'null' || mitm_uuid.toLowerCase() === 'undefined') {
+            if (!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined' || !itm_uuid || itm_uuid.toLowerCase() === 'null' || itm_uuid.toLowerCase() === 'undefined' || !cmpitm_uuid || cmpitm_uuid.toLowerCase() === 'null' || cmpitm_uuid.toLowerCase() === 'undefined' || !mitm_uuid || mitm_uuid.toLowerCase() === 'null' || mitm_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo recuperar el model item.',
@@ -84,14 +84,14 @@ export class ModelItemController {
             const itm_uuid = body.itm_uuid;
             const cmpitm_uuid = body.cmpitm_uuid;
             const mitm_uuid = body.mitm_uuid;
-            const modelItemExist = await this.modelItemUseCase.existModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid);
-            if(modelItemExist) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo insertar el model item.',
-                    error: `El model item ya existe.`
-                });
-            }
+            // const modelItemExist = await this.modelItemUseCase.existModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid);
+            // if(modelItemExist) {
+            //     return res.status(400).json({
+            //         success: false,
+            //         message: 'No se pudo insertar el model item.',
+            //         error: `El model item ya existe.`
+            //     });
+            // }
             const modelItem = await this.modelItemUseCase.createModelItem(body)
             return res.status(200).json({
                 success: true,
@@ -133,7 +133,7 @@ export class ModelItemController {
             const itm_uuid = req.params.itm_uuid;
             const cmpitm_uuid = req.params.cmpitm_uuid;
             const mitm_uuid = req.params.mitm_uuid;
-            if(!cmp_uuid) {
+            if (!cmp_uuid) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se pudo eliminar el model item.',

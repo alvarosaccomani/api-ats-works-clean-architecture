@@ -1,5 +1,6 @@
 import { Express } from "express";
-import { SequelizeRepository } from "../../repository/model-item/sequelize-model-item.repository";
+import { SequelizeRepository as SequelizeModelItemRepository } from "../../repository/model-item/sequelize-model-item.repository";
+import { SequelizeRepository as SequelizeDetailModelItemRepository } from "../../repository/detail-model-item/sequelize-detail-model-item.repository";
 import { ModelItemUseCase } from "../../../application/model-item/model-item-use-case";
 import { ModelItemController } from "../../controller/model-item/model-item.controller";
 import SocketAdapter from "../../services/socketAdapter";
@@ -9,13 +10,14 @@ function configureModelItemRoutes(app: Express, socketAdapter: SocketAdapter) {
     *   Iniciar repository
     */
     
-    const sequelizeModelItemRepository = new SequelizeRepository();
+    const sequelizeModelItemRepository = new SequelizeModelItemRepository();
+    const sequelizeDetailModelItemRepository = new SequelizeDetailModelItemRepository();
     
     /*
     *   Iniciar casos de uso
     */
     
-    const modelItemUseCase = new ModelItemUseCase(sequelizeModelItemRepository);
+    const modelItemUseCase = new ModelItemUseCase(sequelizeModelItemRepository, sequelizeDetailModelItemRepository);
     
     /*
     *   Iniciar controller

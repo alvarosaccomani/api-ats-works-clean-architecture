@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import moment from 'moment';
 import { ModelItemEntity } from "./model-item.entity";
+import { DetailModelItemEntity } from "../detail-model-item/detail-model-item.entity";
 
 export class ModelItemValue implements ModelItemEntity {
     cmp_uuid: string;
@@ -12,6 +13,7 @@ export class ModelItemValue implements ModelItemEntity {
 	mitm_active: boolean;
 	mitm_createdat: Date;
     mitm_updatedat: Date;
+    detailModelItems: DetailModelItemEntity[];
     
     constructor({
             cmp_uuid,
@@ -22,7 +24,8 @@ export class ModelItemValue implements ModelItemEntity {
             mitm_description,
             mitm_active,
             mitm_createdat,
-            mitm_updatedat
+            mitm_updatedat,
+            detailModelItems
         }:{ 
             cmp_uuid: string,
             itm_uuid: string,
@@ -32,7 +35,8 @@ export class ModelItemValue implements ModelItemEntity {
             mitm_description: string,
             mitm_active: boolean,
             mitm_createdat?: Date,
-            mitm_updatedat?: Date
+            mitm_updatedat?: Date,
+            detailModelItems?: DetailModelItemEntity[]
         }) {
         this.cmp_uuid = cmp_uuid;
         this.itm_uuid = itm_uuid;
@@ -43,5 +47,6 @@ export class ModelItemValue implements ModelItemEntity {
         this.mitm_active = mitm_active;
         this.mitm_createdat = mitm_createdat ?? moment().toDate();
         this.mitm_updatedat = mitm_updatedat ?? moment().toDate();
+        this.detailModelItems = detailModelItems ?? [];
     }
 }
