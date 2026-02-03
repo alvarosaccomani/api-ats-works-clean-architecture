@@ -7,6 +7,8 @@ export class AddressValue implements AddressEntity {
     adr_uuid: string;
     cus_uuid: string;
     adr_address: string;
+    adr_lat: number;
+    adr_lng: number;
     adr_city: string;
     adr_province: string;    
     adr_postalcode: string;
@@ -21,6 +23,8 @@ export class AddressValue implements AddressEntity {
             adr_uuid,
             cus_uuid,
             adr_address,
+            adr_lat,
+            adr_lng,
             adr_city,    
             adr_province,
             adr_postalcode,
@@ -34,6 +38,8 @@ export class AddressValue implements AddressEntity {
             adr_uuid: string,
             cus_uuid: string,
             adr_address: string,
+            adr_lat: number,
+            adr_lng: number,
             adr_city: string,
             adr_province: string,    
             adr_postalcode: string,
@@ -47,6 +53,8 @@ export class AddressValue implements AddressEntity {
         this.adr_uuid = uuid();
         this.cus_uuid = cus_uuid;
         this.adr_address = adr_address;
+        this.adr_lat = adr_lat;
+        this.adr_lng = adr_lng;
         this.adr_city = adr_city;
         this.adr_province = adr_province;  
         this.adr_postalcode = adr_postalcode;

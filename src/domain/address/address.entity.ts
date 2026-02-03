@@ -7,6 +7,8 @@ export interface AddressEntity {
     cus_uuid: string,
     cus?: CustomerEntity,
     adr_address: string,
+    adr_lat: number,
+    adr_lng: number,
     adr_city: string,
     adr_province: string,    
     adr_postalcode: string,
@@ -19,4 +21,4 @@ export interface AddressEntity {
 }
 
 //Update
-export type AddressUpdateData = Pick<AddressEntity, 'adr_address' | 'adr_city' | 'adr_province' | 'adr_postalcode' | 'adr_dimensions' | 'subp_uuid' | 'adr_active'>;
+export type AddressUpdateData = Pick<AddressEntity, 'adr_address' | 'adr_lat' | 'adr_lng' | 'adr_city' | 'adr_province' | 'adr_postalcode' | 'adr_dimensions' | 'subp_uuid' | 'adr_active'>;

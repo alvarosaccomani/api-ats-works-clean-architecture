@@ -26,6 +26,8 @@ export class AddressUseCase {
                 cus_uuid: address.cus_uuid,
                 adr_uuid: address.adr_uuid,
                 adr_address: address.adr_address,
+                adr_lat: address.adr_lat,
+                adr_lng: address.adr_lng,
                 adr_city: address.adr_city,
                 adr_province: address.adr_province,
                 adr_postalcode: address.adr_postalcode,
@@ -54,6 +56,8 @@ export class AddressUseCase {
                 cus: address.cus,
                 adr_uuid: address.adr_uuid,
                 adr_address: address.adr_address,
+                adr_lat: address.adr_lat,
+                adr_lng: address.adr_lng,
                 adr_city: address.adr_city,
                 adr_province: address.adr_province,
                 adr_postalcode: address.adr_postalcode,
@@ -70,9 +74,9 @@ export class AddressUseCase {
         }
     }
 
-    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
+    public async createAddress({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_lat, adr_lng, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { cmp_uuid: string, adr_uuid: string, cus_uuid: string, adr_address: string, adr_lat: number, adr_lng: number, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
-            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
+            const addressValue = new AddressValue({ cmp_uuid, adr_uuid, cus_uuid, adr_address, adr_lat, adr_lng, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
             const addressCreated = await this.addressRepository.createAddress(addressValue);
             if (!addressCreated) {
                 throw new Error(`No se pudo insertar el address.`);
@@ -82,6 +86,8 @@ export class AddressUseCase {
                 cus_uuid: addressCreated.cus_uuid,
                 adr_uuid: addressCreated.adr_uuid,
                 adr_address: addressCreated.adr_address,
+                adr_lat: addressCreated.adr_lat,
+                adr_lng: addressCreated.adr_lng,
                 adr_city: addressCreated.adr_city,
                 adr_province: addressCreated.adr_province,
                 adr_postalcode: addressCreated.adr_postalcode,
@@ -97,9 +103,9 @@ export class AddressUseCase {
         }
     }
 
-    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { adr_address: string, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
+    public async updateAddress(cmp_uuid: string, cus_uuid: string, adr_uuid: string, { adr_address, adr_lat, adr_lng, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active }: { adr_address: string, adr_lat: number, adr_lng: number, adr_city: string, adr_province: string, adr_postalcode: string, adr_dimensions: string, subp_uuid: string, adr_active: boolean }) {
         try {
-            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
+            const addressUpdated = await this.addressRepository.updateAddress(cmp_uuid, cus_uuid, adr_uuid, { adr_address, adr_lat, adr_lng, adr_city, adr_province, adr_postalcode, adr_dimensions, subp_uuid, adr_active });
             if (!addressUpdated) {
                 throw new Error(`No se pudo actualizar el address.`);
             }
@@ -108,6 +114,8 @@ export class AddressUseCase {
                 cus_uuid: addressUpdated.cus_uuid,
                 adr_uuid: addressUpdated.adr_uuid,
                 adr_address: addressUpdated.adr_address,
+                adr_lat: addressUpdated.adr_lat,
+                adr_lng: addressUpdated.adr_lng,
                 adr_city: addressUpdated.adr_city,
                 adr_province: addressUpdated.adr_province,
                 adr_postalcode: addressUpdated.adr_postalcode,
@@ -134,6 +142,8 @@ export class AddressUseCase {
                 cus_uuid: addressDeleted.cus_uuid,
                 adr_uuid: addressDeleted.adr_uuid,
                 adr_address: addressDeleted.adr_address,
+                adr_lat: addressDeleted.adr_lat,
+                adr_lng: addressDeleted.adr_lng,
                 adr_city: addressDeleted.adr_city,
                 adr_province: addressDeleted.adr_province,
                 adr_postalcode: addressDeleted.adr_postalcode,
@@ -174,6 +184,8 @@ export class AddressUseCase {
                 cus: address.cus,
                 adr_uuid: address.adr_uuid,
                 adr_address: address.adr_address,
+                adr_lat: address.adr_lat,
+                adr_lng: address.adr_lng,
                 adr_city: address.adr_city,
                 adr_province: address.adr_province,
                 adr_postalcode: address.adr_postalcode,
