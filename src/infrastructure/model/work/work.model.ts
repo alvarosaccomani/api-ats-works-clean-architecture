@@ -25,7 +25,8 @@ export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare wrk_customer: string;
   declare wrk_address: string;
   declare wrk_phone: string;
-  declare wrk_coordinates: string;
+  declare wrk_lat: number;
+  declare wrk_lng: number;
   declare twrk_uuid: string;
   declare wrk_route: string;
   declare itm_uuid: string;
@@ -96,8 +97,12 @@ SequelizeWork.init({
     type: DataTypes.STRING,
     allowNull: true
   },
-  wrk_coordinates: {
-    type: DataTypes.STRING,
+  wrk_lat: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  wrk_lng: {
+    type: DataTypes.FLOAT,
     allowNull: true
   },
   wrk_phone: {

@@ -19,7 +19,8 @@ export class WorkValue implements WorkEntity {
     wrk_operator_uuid4: string;
     wrk_customer: string;
     wrk_address: string;
-    wrk_coordinates: string;
+    wrk_lat: number;
+    wrk_lng: number;
     wrk_phone: string;
     wrk_route: string;
     twrk_uuid: string;
@@ -46,7 +47,8 @@ export class WorkValue implements WorkEntity {
         wrk_operator_uuid4,
         wrk_customer,
         wrk_address,
-        wrk_coordinates,
+        wrk_lat,
+        wrk_lng,
         wrk_phone,
         wrk_route,
         twrk_uuid,
@@ -72,7 +74,8 @@ export class WorkValue implements WorkEntity {
         wrk_operator_uuid4: string,
         wrk_customer: string,
         wrk_address: string,
-        wrk_coordinates: string,
+        wrk_lat: number,
+        wrk_lng: number,
         wrk_phone: string,
         wrk_route: string,
         twrk_uuid: string,
@@ -98,7 +101,8 @@ export class WorkValue implements WorkEntity {
         this.wrk_operator_uuid4 = wrk_operator_uuid4;
         this.wrk_customer = wrk_customer;
         this.wrk_address = wrk_address;
-        this.wrk_coordinates = wrk_coordinates;
+        this.wrk_lat = wrk_lat;
+        this.wrk_lng = wrk_lng;
         this.wrk_phone = wrk_phone;
         this.wrk_route = wrk_route;
         this.twrk_uuid = twrk_uuid;

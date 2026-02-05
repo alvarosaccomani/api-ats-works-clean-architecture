@@ -49,8 +49,9 @@ export class WorkUseCase {
                 wrk_operator4: work.wrk_operator4,
                 wrk_customer: work.wrk_customer,
                 wrk_address: work.wrk_address,
+                wrk_lat: work.wrk_lat,
+                wrk_lng: work.wrk_lng,
                 wrk_phone: work.wrk_phone,
-                wrk_coordinates: work.wrk_coordinates,
                 twrk_uuid: work.twrk_uuid,
                 wrk_route: work.wrk_route,
                 itm_uuid: work.itm_uuid,
@@ -95,8 +96,9 @@ export class WorkUseCase {
                 wrk_operator4: works.wrk_operator4,
                 wrk_customer: works.wrk_customer,
                 wrk_address: works.wrk_address,
+                wrk_lat: works.wrk_lat,
+                wrk_lng: works.wrk_lng,
                 wrk_phone: works.wrk_phone,
-                wrk_coordinates: works.wrk_coordinates,
                 twrk_uuid: works.twrk_uuid,
                 wrk_route: works.wrk_route,
                 itm_uuid: works.itm_uuid,
@@ -114,9 +116,9 @@ export class WorkUseCase {
         }
     }
 
-    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, workDetails: WorkDetailEntity[] }) {
+    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, workDetails: WorkDetailEntity[] }) {
         try {
-            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails });
+            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails });
             const worksCreated = await this.workRepository.createWork(worksValue);
             if (!worksCreated) {
                 throw new Error(`No se pudo insertar el work.`);
@@ -162,9 +164,9 @@ export class WorkUseCase {
         }
     }
 
-    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_coordinates: string, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
+    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string }) {
         try {
-            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_coordinates, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid });
+            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid });
             if (!worksUpdated) {
                 throw new Error(`No se pudo actualizar el work.`);
             }
@@ -271,6 +273,9 @@ export class WorkUseCase {
                 wrk_operator4: work.wrk_operator4,
                 wrk_customer: work.wrk_customer,
                 wrk_address: work.wrk_address,
+                wrk_lat: work.wrk_lat,
+                wrk_lng: work.wrk_lng,
+                wrk_route: work.wrk_route,
                 wrk_phone: work.wrk_phone,
                 itm_uuid: work.itm_uuid,
                 cmpitm_uuid: work.cmpitm_uuid,
@@ -307,6 +312,9 @@ export class WorkUseCase {
                 wrk_operator_uuid4: work.wrk_operator_uuid4,
                 wrk_customer: work.wrk_customer,
                 wrk_address: work.wrk_address,
+                wrk_lat: work.wrk_lat,
+                wrk_lng: work.wrk_lng,
+                wrk_route: work.wrk_route,
                 wrk_phone: work.wrk_phone
             }));
         } catch (error: any) {

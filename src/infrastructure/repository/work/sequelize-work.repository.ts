@@ -209,8 +209,8 @@ export class SequelizeRepository implements WorkRepository {
     }
     async createWork(work: WorkEntity): Promise<WorkEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_coordinates, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
-            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_coordinates, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
+            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat } = work
+            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_createdat, wrk_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work`);
             }
@@ -237,7 +237,8 @@ export class SequelizeRepository implements WorkRepository {
                     wrk_operator_uuid4: work.wrk_operator_uuid4,
                     wrk_customer: work.wrk_customer,
                     wrk_address: work.wrk_address,
-                    wrk_coordinates: work.wrk_coordinates,
+                    wrk_lat: work.wrk_lat,
+                    wrk_lng: work.wrk_lng,
                     wrk_phone: work.wrk_phone,
                     wrk_route: work.wrk_route,
                     twrk_uuid: work.twrk_uuid,
