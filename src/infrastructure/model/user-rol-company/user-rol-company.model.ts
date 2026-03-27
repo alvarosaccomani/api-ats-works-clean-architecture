@@ -25,6 +25,7 @@ SequelizeUserRolCompany.init({
   },
   rol_uuid: {
     type: DataTypes.STRING,
+    primaryKey: true,
     allowNull: false
   },
   usrrolcmp_createdat: {
