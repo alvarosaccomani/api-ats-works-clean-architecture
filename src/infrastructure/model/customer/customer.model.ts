@@ -14,6 +14,7 @@ export class SequelizeCustomer extends Model<CustomerEntity, Omit<CustomerEntity
   declare usr_uuid: string;
   declare cus_subscriptionplanbycustomer: boolean;
   declare subp_uuid: string;
+  declare cus_order: number;
   declare cus_active: boolean;
   declare cus_createdat: Date;
   declare cus_updatedat: Date;
@@ -64,6 +65,10 @@ SequelizeCustomer.init({
   },
   subp_uuid: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  cus_order: {
+    type: DataTypes.INTEGER,
     allowNull: true
   },
   cus_active: {

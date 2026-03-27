@@ -6,7 +6,7 @@ import { SequelizeRoute } from "../../model/route/route.model";
 import { SequelizeAddress } from "../../model/address/address.model";
 
 export class SequelizeRepository implements CustomerRepository {
-    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string, cus_order: string): Promise<CustomerEntity[] | null> {
+    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string, cus_orderby: string): Promise<CustomerEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -93,7 +93,7 @@ export class SequelizeRepository implements CustomerRepository {
                     'rou.rou_name',
                     'rou.rou_description'
                 ],
-                order: [[Sequelize.col(field_order || 'cus_fullname'), cus_order || 'ASC']]
+                order: [[Sequelize.col(field_order || 'cus_fullname'), cus_orderby || 'ASC']]
             });
             if(!customersDb) {
                 throw new Error(`No hay customers`)
@@ -117,6 +117,7 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_subscriptionplanbycustomer: customerPlain.cus_subscriptionplanbycustomer,
                     subp_uuid: customerPlain.subp_uuid,
                     subp: customerPlain.subp,
+                    cus_order: customerPlain.cus_order,
                     cus_active: customerPlain.cus_active,
                     cus_createdat: customerPlain.cus_createdat,
                     cus_updatedat: customerPlain.cus_updatedat
@@ -147,8 +148,8 @@ export class SequelizeRepository implements CustomerRepository {
     }
     async createCustomer(customer: CustomerEntity): Promise<CustomerEntity | null> {
         try {
-            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active, cus_createdat, cus_updatedat } = customer
-            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active, cus_createdat, cus_updatedat });
+            let { cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active, cus_createdat, cus_updatedat } = customer
+            const result = await SequelizeCustomer.create({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active, cus_createdat, cus_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el customer`);
             }
@@ -172,6 +173,7 @@ export class SequelizeRepository implements CustomerRepository {
                     usr_uuid: customer.usr_uuid,
                     cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
                     subp_uuid: customer.subp_uuid,
+                    cus_order: customer.cus_order,
                     cus_active: customer.cus_active,
                 },
                 { 

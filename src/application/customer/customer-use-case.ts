@@ -35,6 +35,7 @@ export class CustomerUseCase {
                 cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
                 subp_uuid: customer.subp_uuid,
                 subp: customer.subp,
+                cus_order: customer.cus_order,
                 cus_active: customer.cus_active,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customer.cus_createdat, 'America/Buenos_Aires'),
                 cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customer.cus_updatedat, 'America/Buenos_Aires')
@@ -64,6 +65,7 @@ export class CustomerUseCase {
                 cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
                 subp_uuid: customer.subp_uuid,
                 subp: customer.subp,
+                cus_order: customer.cus_order,
                 cus_active: customer.cus_active,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customer.cus_createdat, 'America/Buenos_Aires'),
                 cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customer.cus_updatedat, 'America/Buenos_Aires')
@@ -74,9 +76,9 @@ export class CustomerUseCase {
         }
     }
     
-    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_active: boolean }) {
+    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
         try {
-            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active });
+            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
             const customerCreated = await this.customerRepository.createCustomer(customerValue);
             if(!customerCreated) {
                 throw new Error(`No se pudo insertar el customer.`);
@@ -94,6 +96,7 @@ export class CustomerUseCase {
                 cus_subscriptionplanbycustomer: customerCreated.cus_subscriptionplanbycustomer,
                 subp_uuid: customerCreated.subp_uuid,
                 subp: customerCreated.subp,
+                cus_order: customerCreated.cus_order,
                 cus_active: customerCreated.cus_active,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_createdat, 'America/Buenos_Aires'),
                 cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_updatedat, 'America/Buenos_Aires')
@@ -104,9 +107,9 @@ export class CustomerUseCase {
         }
     }
 
-    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active } : { cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_active: boolean }) {
+    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
         try {
-            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_active });
+            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
             if(!customerUpdated) {
                 throw new Error(`No se pudo actualizar el customer.`);
             }
@@ -123,6 +126,7 @@ export class CustomerUseCase {
                 cus_subscriptionplanbycustomer: customerUpdated.cus_subscriptionplanbycustomer,
                 subp_uuid: customerUpdated.subp_uuid,
                 subp: customerUpdated.subp,
+                cus_order: customerUpdated.cus_order,
                 cus_active: customerUpdated.cus_active,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_createdat, 'America/Buenos_Aires'),
                 cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_updatedat, 'America/Buenos_Aires')
@@ -152,6 +156,7 @@ export class CustomerUseCase {
                 cus_subscriptionplanbycustomer: customerDeleted.cus_subscriptionplanbycustomer,
                 subp_uuid: customerDeleted.subp_uuid,
                 subp: customerDeleted.subp,
+                cus_order: customerDeleted.cus_order,
                 cus_active: customerDeleted.cus_active,
                 cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_createdat, 'America/Buenos_Aires'),
                 cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_updatedat, 'America/Buenos_Aires')
