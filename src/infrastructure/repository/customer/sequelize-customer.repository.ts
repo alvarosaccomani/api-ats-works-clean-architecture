@@ -6,7 +6,7 @@ import { SequelizeRoute } from "../../model/route/route.model";
 import { SequelizeAddress } from "../../model/address/address.model";
 
 export class SequelizeRepository implements CustomerRepository {
-    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string, cus_orderby: string): Promise<CustomerEntity[] | null> {
+    async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, rou_uuid: string | undefined, field_order: string | undefined, cus_orderby: string | undefined): Promise<CustomerEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -21,6 +21,10 @@ export class SequelizeRepository implements CustomerRepository {
 
             if (cus_email) {
                 orConditions.push({ cus_email: { [Op.iLike]: `%${cus_email}%` } });
+            }
+
+            if (rou_uuid) {
+                orConditions.push({ rou_uuid: rou_uuid });
             }
 
             // Si hay condiciones OR, las agregamos

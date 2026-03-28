@@ -14,9 +14,9 @@ export class CustomerUseCase {
         this.findCustomerByName = this.findCustomerByName.bind(this);
     }
 
-    public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, field_order: string | undefined, cus_orderby: string | undefined) {
+    public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, rou_uuid: string | undefined, field_order: string | undefined, cus_orderby: string | undefined) {
         try {
-            const customers = await this.customerRepository.getCustomers(cmp_uuid, cus_fullname, cus_email, field_order, cus_orderby);
+            const customers = await this.customerRepository.getCustomers(cmp_uuid, cus_fullname, cus_email, rou_uuid, field_order, cus_orderby);
             if(!customers) {
                 throw new Error('No hay customers.');
             }
