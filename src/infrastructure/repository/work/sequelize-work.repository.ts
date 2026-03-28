@@ -15,7 +15,7 @@ import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeWorkAttachment } from '../../model/work-attachment/work-attachment.model';
 
 export class SequelizeRepository implements WorkRepository {
-    async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+    async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -108,7 +108,7 @@ export class SequelizeRepository implements WorkRepository {
                 order: [
                     [
                         Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
-                        wrk_order ? wrk_order : 'ASC'
+                        wrk_orderby ? wrk_orderby : 'ASC'
                     ]
                 ]
             });
@@ -287,7 +287,7 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
-    async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+    async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -364,7 +364,7 @@ export class SequelizeRepository implements WorkRepository {
                 order: [
                     [
                         Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
-                        wrk_order ? wrk_order : 'ASC'
+                        wrk_orderby ? wrk_orderby : 'ASC'
                     ]
                 ]
             });
@@ -374,7 +374,7 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
-    async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined): Promise<WorkEntity[] | null> {
+    async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -459,7 +459,7 @@ export class SequelizeRepository implements WorkRepository {
                 order: [
                     [
                         Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
-                        wrk_order ? wrk_order : 'ASC'
+                        wrk_orderby ? wrk_orderby : 'ASC'
                     ]
                 ]
             });

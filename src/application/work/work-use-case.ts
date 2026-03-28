@@ -20,9 +20,9 @@ export class WorkUseCase {
         this.getWorksScheduler = this.getWorksScheduler.bind(this);
     }
 
-    public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+    public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
         try {
-            const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, field_order, wrk_order);
+            const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, field_order, wrk_orderby);
             if (!works) {
                 throw new Error('No hay works.');
             }
@@ -244,9 +244,9 @@ export class WorkUseCase {
         }
     }
 
-    public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+    public async getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
         try {
-            const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, wrk_route, field_order, wrk_order);
+            const works = await this.workRepository.getPendingWorks(cmp_uuid, wrks_uuid, wrk_route, field_order, wrk_orderby);
             if (!works) {
                 throw new Error('No hay works.');
             }
@@ -290,10 +290,10 @@ export class WorkUseCase {
         }
     }
 
-    public async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_order: string | undefined) {
+    public async getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
         try {
-            console.info('getWorkScheduler (use case):', cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
-            const works = await this.workRepository.getWorksScheduler(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_order);
+            console.info('getWorkScheduler (use case):', cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_orderby);
+            const works = await this.workRepository.getWorksScheduler(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrks_uuid, wrk_route, field_order, wrk_orderby);
             if (!works) {
                 throw new Error('No hay works.');
             }
