@@ -32,6 +32,7 @@ export class SequelizeWork extends Model<WorkEntity, Omit<WorkEntity, 'id'>> {
   declare itm_uuid: string;
   declare cmpitm_uuid: string;
   declare mitm_uuid: string;
+  declare wrk_order: number;
 	declare wrk_createdat: Date;
   declare wrk_updatedat: Date;
 }
@@ -127,6 +128,10 @@ SequelizeWork.init({
   },
   mitm_uuid: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  wrk_order: {
+    type: DataTypes.INTEGER,
     allowNull: true
   },
   wrk_createdat: {
