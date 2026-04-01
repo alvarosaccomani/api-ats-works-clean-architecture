@@ -13,6 +13,7 @@ export class WorkController {
         this.deleteCtrl = this.deleteCtrl.bind(this);
         this.getPendingWorksCtrl = this.getPendingWorksCtrl.bind(this);
         this.getWorksSchedulerCtrl = this.getWorksSchedulerCtrl.bind(this);
+        this.getWorksByAddressCtrl = this.getWorksByAddressCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -219,6 +220,43 @@ export class WorkController {
             return res.status(400).json({
                 success: false,
                 message: 'No se pudo recuperar los works scheduler.',
+                error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getWorksByAddressCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const { cus_uuid, adr_uuid, page, perPage, field_order, wrk_orderby } = req.query;
+            console.info({ cus_uuid, adr_uuid, page, perPage, field_order, wrk_orderby });
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los works.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if (page && perPage) {
+                const works = await this.workUseCase.getWorksByAddress(cmp_uuid, getStringFromQuery(cus_uuid), getStringFromQuery(adr_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_orderby));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Works retornados.',
+                    ...paginator(works, page.toString(), perPage.toString())
+                });
+            } else {
+                const works = await this.workUseCase.getWorksByAddress(cmp_uuid, getStringFromQuery(cus_uuid), getStringFromQuery(adr_uuid), getStringFromQuery(field_order), getStringFromQuery(wrk_orderby));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Works retornados.',
+                    data: works
+                });
+            }
+        } catch (error: any) {
+            console.error('Error en getWorksByAddressCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar los trabajos por dirección.',
                 error: error.message, // Mensaje claro del error
             });
         }

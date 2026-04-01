@@ -18,6 +18,7 @@ export class WorkUseCase {
         this.existWork = this.existWork.bind(this);
         this.getPendingWorks = this.getPendingWorks.bind(this);
         this.getWorksScheduler = this.getWorksScheduler.bind(this);
+        this.getWorksByAddress = this.getWorksByAddress.bind(this);
     }
 
     public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
@@ -319,6 +320,40 @@ export class WorkUseCase {
             }));
         } catch (error: any) {
             console.error('Error en getWorkScheduler (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async getWorksByAddress(cmp_uuid: string, cus_uuid: string | undefined, adr_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
+        try {
+            const works = await this.workRepository.getWorksByAddress(cmp_uuid, cus_uuid, adr_uuid, field_order, wrk_orderby);
+            if (!works) {
+                throw new Error('No hay works.');
+            }
+            return works.map((work) => ({
+                cmp_uuid: work.cmp_uuid,
+                wrk_uuid: work.wrk_uuid,
+                adr_uuid: work.adr_uuid,
+                wrk_description: work.wrk_description,
+                wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
+                wrks_uuid: work.wrks_uuid,
+                wrks: work.wrks,
+                wrk_user_uuid: work.wrk_user_uuid,
+                wrk_operator_uuid1: work.wrk_operator_uuid1,
+                wrk_operator_uuid2: work.wrk_operator_uuid2,
+                wrk_operator_uuid3: work.wrk_operator_uuid3,
+                wrk_operator_uuid4: work.wrk_operator_uuid4,
+                wrk_customer: work.wrk_customer,
+                wrk_address: work.wrk_address,
+                wrk_lat: work.wrk_lat,
+                wrk_lng: work.wrk_lng,
+                wrk_route: work.wrk_route,
+                wrk_phone: work.wrk_phone,
+                mitm_uuid: work.mitm_uuid,
+                mitm: work.mitm
+            }));
+        } catch (error: any) {
+            console.error('Error en getWorksByAddress (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }

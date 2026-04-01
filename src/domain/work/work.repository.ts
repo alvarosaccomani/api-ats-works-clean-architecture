@@ -9,4 +9,5 @@ export interface WorkRepository {
     existWork(cmp_uuid: string, wrk_uuid: string): Promise<WorkEntity | null>;
     getPendingWorks(cmp_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
     getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
+    getWorksByAddress(cmp_uuid: string, cus_uuid: string | undefined, adr_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
 }

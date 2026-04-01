@@ -470,5 +470,91 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
+    async getWorksByAddress(cmp_uuid: string, cus_uuid: string | undefined, adr_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
+        try {
+            // Base del where
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null
+            };
+
+            // Condiciones opcionales para AND
+            const andConditions: any[] = [];
+
+            // --- Lógica para adr_uuid con soporte para múltiples IDs ---
+            if (adr_uuid) {
+                // Spliteamos por ';' y limpiamos espacios o valores vacíos
+                const adrArray = adr_uuid.split(';').filter(id => id.trim() !== '');
+                
+                if (adrArray.length > 0) {
+                    // Si solo hay uno, Sequelize es inteligente, pero Op.in maneja ambos casos (uno o varios)
+                    andConditions.push({ adr_uuid: { [Op.in]: adrArray } });
+                }
+            }
+
+            if (andConditions.length > 0) {
+                where[Op.and] = andConditions;
+            }
+
+            const works = await SequelizeWork.findAll({ 
+                where,
+                include: [
+                    {
+                        as: 'adr',
+                        model: SequelizeAddress,
+                        include: [
+                            { 
+                                as: 'cus', 
+                                model: SequelizeCustomer,
+                                include: [
+                                    { 
+                                        as: 'rou', 
+                                        model: SequelizeRoute
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem
+                    }
+                ],
+                order: [
+                    [
+                        Sequelize.col(field_order ? field_order : 'wrk_workdate'), 
+                        wrk_orderby ? wrk_orderby : 'ASC'
+                    ]
+                ]
+            });
+            return works;
+        } catch (error: any) {
+            console.error('Error en getWorkScheduler:', error.message);
+            throw error;
+        }
+    }
     
 }
