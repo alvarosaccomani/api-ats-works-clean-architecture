@@ -2,6 +2,7 @@ import { CompanyEntity, CompanyUpdateData } from "../../../domain/company/compan
 import { CompanyRepository } from "../../../domain/company/company.repository";
 import { SequelizeCompany } from "../../model/company/company.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements CompanyRepository {
     async getCompanies(): Promise<CompanyEntity[] | null> {
@@ -77,6 +78,10 @@ export class SequelizeRepository implements CompanyRepository {
             };
             return company;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteCompany:', error.message);
             throw error;
         }

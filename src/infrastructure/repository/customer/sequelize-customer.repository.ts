@@ -2,6 +2,7 @@ import { CustomerEntity, CustomerUpdateData } from "../../../domain/customer/cus
 import { CustomerRepository } from "../../../domain/customer/customer.repository";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { Sequelize, Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 import { SequelizeRoute } from "../../model/route/route.model";
 import { SequelizeAddress } from "../../model/address/address.model";
 
@@ -203,6 +204,10 @@ export class SequelizeRepository implements CustomerRepository {
             };
             return customer;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteCustomer:', error.message);
             throw error;
         }

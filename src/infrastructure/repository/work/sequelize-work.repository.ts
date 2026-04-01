@@ -3,6 +3,7 @@ import { WorkEntity, WorkUpdateData } from "../../../domain/work/work.entity";
 import { WorkRepository } from "../../../domain/work/work.repository";
 import { SequelizeWork } from "../../model/work/work.model";
 import { Op } from 'sequelize';
+import { DbErrorHandler } from '../../utils/db-error-handler';
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from '../../model/customer/customer.model';
 import { SequelizeRoute } from '../../model/route/route.model';
@@ -270,6 +271,10 @@ export class SequelizeRepository implements WorkRepository {
             };
             return work;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteWork:', error.message);
             throw error;
         }
@@ -284,7 +289,7 @@ export class SequelizeRepository implements WorkRepository {
             });
             return work;
         } catch (error: any) {
-            console.error('Error en deleteWork:', error.message);
+            console.error('Error en existWork:', error.message);
             throw error;
         }
     }

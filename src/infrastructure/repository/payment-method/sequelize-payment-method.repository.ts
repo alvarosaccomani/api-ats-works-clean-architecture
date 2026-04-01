@@ -2,6 +2,7 @@ import { PaymentMethodEntity, PaymentMethodUpdateData } from "../../../domain/pa
 import { PaymentMethodRepository } from "../../../domain/payment-method/payment-method.repository";
 import { SequelizePaymentMethod } from "../../model/payment-method/payment-method.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements PaymentMethodRepository {
     async getPaymentMethods(cmp_uuid: string): Promise<PaymentMethodEntity[] | null> {
@@ -80,6 +81,10 @@ export class SequelizeRepository implements PaymentMethodRepository {
             };
             return paymentMethod;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deletePaymentMethod:', error.message);
             throw error;
         }

@@ -2,6 +2,7 @@ import { ResourceModuleEntity, ResourceModuleUpdateData } from "../../../domain/
 import { ResourceModuleRepository } from "../../../domain/resource-module/resource-module.repository";
 import { SequelizeResourceModule } from "../../model/resource-module/resource-module.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ResourceModuleRepository {
     async getResourceModules(): Promise<ResourceModuleEntity[] | null> {
@@ -76,6 +77,10 @@ export class SequelizeRepository implements ResourceModuleRepository {
             };
             return resourceModule;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteResourceModule:', error.message);
             throw error;
         }

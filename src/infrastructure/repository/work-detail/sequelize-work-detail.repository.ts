@@ -1,6 +1,7 @@
 import { WorkDetailEntity, WorkDetailUpdateData } from "../../../domain/work-detail/work-detail.entity";
 import { WorkDetailRepository } from "../../../domain/work-detail/work-detail.repository";
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements WorkDetailRepository {
     async getWorkDetails(cmp_uuid: string): Promise<WorkDetailEntity[] | null> {
@@ -87,6 +88,10 @@ export class SequelizeRepository implements WorkDetailRepository {
             };
             return workdetail;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteWorkDetail:', error.message);
             throw error;
         }
@@ -101,7 +106,7 @@ export class SequelizeRepository implements WorkDetailRepository {
             });
             return workdetail;
         } catch (error: any) {
-            console.error('Error en deleteWorkDetail:', error.message);
+            console.error('Error en existWorkDetail:', error.message);
             throw error;
         }
     }

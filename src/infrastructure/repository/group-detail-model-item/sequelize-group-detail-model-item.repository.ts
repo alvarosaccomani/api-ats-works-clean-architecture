@@ -1,6 +1,7 @@
 import { GroupDetailModelItemEntity, GroupDetailModelItemUpdateData } from "../../../domain/group-detail-model-item/group-detail-model-item.entity";
 import { GroupDetailModelItemRepository } from "../../../domain/group-detail-model-item/group-detail-model-item.repository";
 import { SequelizeGroupDetailModelItem } from "../../model/group-detail-model-item/group-detail-model-item.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements GroupDetailModelItemRepository {
     async getGroupDetailModelItems(cmp_uuid: string): Promise<GroupDetailModelItemEntity[] | null> {
@@ -87,6 +88,10 @@ export class SequelizeRepository implements GroupDetailModelItemRepository {
             };
             return groupDetailModelItem;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteGroupDetailModelItem:', error.message);
             throw error;
         }
@@ -104,7 +109,7 @@ export class SequelizeRepository implements GroupDetailModelItemRepository {
             });
             return groupDetailModelItem;
         } catch (error: any) {
-            console.error('Error en deleteGroupDetailModelItem:', error.message);
+            console.error('Error en existGroupDetailModelItem:', error.message);
             throw error;
         }
     }

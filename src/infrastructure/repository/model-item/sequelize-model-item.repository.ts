@@ -5,6 +5,7 @@ import { SequelizeModelItem } from "../../model/model-item/model-item.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeGroupDetailModelItem } from '../../model/group-detail-model-item/group-detail-model-item.model';
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ModelItemRepository {
     async getModelItems(cmp_uuid: string): Promise<ModelItemEntity[] | null> {
@@ -107,6 +108,10 @@ export class SequelizeRepository implements ModelItemRepository {
             };
             return modelItem;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteModelItem:', error.message);
             throw error;
         }
@@ -121,7 +126,7 @@ export class SequelizeRepository implements ModelItemRepository {
             });
             return modelItem;
         } catch (error: any) {
-            console.error('Error en deleteModelItem:', error.message);
+            console.error('Error en existModelItem:', error.message);
             throw error;
         }
     }

@@ -2,6 +2,7 @@ import { WorkStateEntity, WorkStateUpdateData } from "../../../domain/work-state
 import { WorkStateRepository } from "../../../domain/work-state/work-state.repository";
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements WorkStateRepository {
     async getWorkStates(cmp_uuid: string): Promise<WorkStateEntity[] | null> {
@@ -83,6 +84,10 @@ export class SequelizeRepository implements WorkStateRepository {
             };
             return workState;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteWorkState:', error.message);
             throw error;
         }

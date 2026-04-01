@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth-service.service';
 import { EmailService } from '../../services/email-service.service';
 import { generateToken, hashToken, calculateExpiration } from '../../services/token-service.service';
 import { Op } from 'sequelize';
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements UserRepository {
     async getUsers(): Promise<UserEntity[] | null> {
@@ -99,6 +100,10 @@ export class SequelizeRepository implements UserRepository {
             };
             return user;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteUser:', error.message);
             throw error;
         }

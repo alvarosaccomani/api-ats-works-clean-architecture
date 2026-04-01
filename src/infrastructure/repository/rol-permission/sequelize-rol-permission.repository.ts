@@ -3,6 +3,7 @@ import { RolPermissionRepository } from "../../../domain/rol-permission/rol-perm
 import { SequelizeRolPermission } from "../../model/rol-permission/rol-permission.model";
 import { SequelizePermission } from "../../model/permission/permission.model";
 import { SequelizeRol } from "../../model/rol/rol.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements RolPermissionRepository {
     async getRolPermissions(): Promise<RolPermissionEntity[] | null> {
@@ -78,6 +79,10 @@ export class SequelizeRepository implements RolPermissionRepository {
             };
             return rolPermission;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteRolPermission:', error.message);
             throw error;
         }

@@ -2,6 +2,7 @@ import { TypeWorkEntity, TypeWorkUpdateData } from "../../../domain/type-work/ty
 import { TypeWorkRepository } from "../../../domain/type-work/type-work.repository";
 import { SequelizeTypeWork } from "../../model/type-work/type-work.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements TypeWorkRepository {
     async getTypeWorks(cmp_uuid: string): Promise<TypeWorkEntity[] | null> {
@@ -87,6 +88,10 @@ export class SequelizeRepository implements TypeWorkRepository {
             };
             return typeWork;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteTypeWork:', error.message);
             throw error;
         }

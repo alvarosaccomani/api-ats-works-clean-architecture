@@ -2,6 +2,7 @@ import { RolEntity, RolUpdateData } from "../../../domain/rol/rol.entity";
 import { RolRepository } from "../../../domain/rol/rol.repository";
 import { SequelizeRol } from "../../model/rol/rol.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements RolRepository {
     async getRoles(): Promise<RolEntity[] | null> {
@@ -75,6 +76,10 @@ export class SequelizeRepository implements RolRepository {
             };
             return rol;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteRol:', error.message);
             throw error;
         }

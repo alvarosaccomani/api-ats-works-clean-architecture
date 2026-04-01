@@ -2,6 +2,7 @@ import { ItemEntity, ItemUpdateData } from "../../../domain/item/item.entity";
 import { ItemRepository } from "../../../domain/item/item.repository";
 import { SequelizeItem } from "../../model/item/item.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ItemRepository {
     async getItems(): Promise<ItemEntity[] | null> {
@@ -76,6 +77,10 @@ export class SequelizeRepository implements ItemRepository {
             };
             return item;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteItem:', error.message);
             throw error;
         }

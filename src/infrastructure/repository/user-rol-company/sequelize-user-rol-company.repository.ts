@@ -8,6 +8,7 @@ import { SequelizeRolPermission } from "../../model/rol-permission/rol-permissio
 import { SequelizePermission } from "../../model/permission/permission.model";
 import { SequelizeResourceType } from "../../model/resource-type/resource-type.model";
 import { SequelizeResourceModule } from "../../model/resource-module/resource-module.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements UserRolCompanyRepository {
     async getUserRolesCompany(cmp_uuid: string): Promise<UserRolCompanyEntity[] | null> {
@@ -83,6 +84,10 @@ export class SequelizeRepository implements UserRolCompanyRepository {
             };
             return userRolCompany;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteUserRolCompany:', error.message);
             throw error;
         }
@@ -98,7 +103,7 @@ export class SequelizeRepository implements UserRolCompanyRepository {
             });
             return userRolCompany;
         } catch (error: any) {
-            console.error('Error en deleteUserRolCompany:', error.message);
+            console.error('Error en existUserRolCompany:', error.message);
             throw error;
         }
     }

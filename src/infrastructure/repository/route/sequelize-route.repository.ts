@@ -3,6 +3,7 @@ import { RouteEntity, RouteUpdateData } from "../../../domain/route/route.entity
 import { RouteRepository } from "../../../domain/route/route.repository";
 import { SequelizeRoute } from "../../model/route/route.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements RouteRepository {
     async getRoutes(cmp_uuid: string): Promise<RouteEntity[] | null> {
@@ -89,6 +90,10 @@ export class SequelizeRepository implements RouteRepository {
             };
             return route;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteRoute:', error.message);
             throw error;
         }

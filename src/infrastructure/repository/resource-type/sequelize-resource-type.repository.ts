@@ -2,6 +2,7 @@ import { ResourceTypeEntity, ResourceTypeUpdateData } from "../../../domain/reso
 import { ResourceTypeRepository } from "../../../domain/resource-type/resource-type.repository";
 import { SequelizeResourceType } from "../../model/resource-type/resource-type.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ResourceTypeRepository {
     async getResourceTypes(): Promise<ResourceTypeEntity[] | null> {
@@ -76,6 +77,10 @@ export class SequelizeRepository implements ResourceTypeRepository {
             };
             return resourceType;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteResourceType:', error.message);
             throw error;
         }

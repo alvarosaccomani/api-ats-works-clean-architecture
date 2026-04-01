@@ -3,6 +3,7 @@ import { DetailModelItemRepository } from "../../../domain/detail-model-item/det
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 import { SequelizeGroupDetailModelItem } from "../../model/group-detail-model-item/group-detail-model-item.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements DetailModelItemRepository {
     async getDetailModelItems(cmp_uuid: string): Promise<DetailModelItemEntity[] | null> {
@@ -103,6 +104,10 @@ export class SequelizeRepository implements DetailModelItemRepository {
             };
             return detailModelItem;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteDetailModelItem:', error.message);
             throw error;
         }
@@ -120,7 +125,7 @@ export class SequelizeRepository implements DetailModelItemRepository {
             });
             return detailModelItem;
         } catch (error: any) {
-            console.error('Error en deleteDetailModelItem:', error.message);
+            console.error('Error en existDetailModelItem:', error.message);
             throw error;
         }
     }

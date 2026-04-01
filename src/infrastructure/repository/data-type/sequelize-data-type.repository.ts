@@ -2,6 +2,7 @@ import { DataTypeEntity, DataTypeUpdateData } from "../../../domain/data-type/da
 import { DataTypeRepository } from "../../../domain/data-type/data-type.repository";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements DataTypeRepository {
     async getDataTypes(): Promise<DataTypeEntity[] | null> {
@@ -78,6 +79,10 @@ export class SequelizeRepository implements DataTypeRepository {
             };
             return dataType;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteDataType:', error.message);
             throw error;
         }

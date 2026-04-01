@@ -2,6 +2,7 @@ import { PermissionEntity, PermissionUpdateData } from "../../../domain/permissi
 import { PermissionRepository } from "../../../domain/permission/permission.repository";
 import { SequelizePermission } from "../../model/permission/permission.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 import { SequelizeResourceType } from "../../model/resource-type/resource-type.model";
 import { SequelizeResourceModule } from "../../model/resource-module/resource-module.model";
 
@@ -101,6 +102,10 @@ export class SequelizeRepository implements PermissionRepository {
             };
             return permission;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deletePermission:', error.message);
             throw error;
         }

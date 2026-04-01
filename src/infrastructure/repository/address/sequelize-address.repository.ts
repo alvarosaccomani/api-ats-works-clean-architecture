@@ -1,5 +1,6 @@
 import { AddressEntity, AddressUpdateData } from "../../../domain/address/address.entity";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 import { AddressRepository } from "../../../domain/address/address.repository";
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
@@ -99,6 +100,10 @@ export class SequelizeRepository implements AddressRepository {
             };
             return address;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteAddress:', error.message);
             throw error;
         }

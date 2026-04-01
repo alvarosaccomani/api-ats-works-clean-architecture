@@ -3,6 +3,7 @@ import { SubscriptionPlanEntity, SubscriptionPlanUpdateData } from "../../../dom
 import { SubscriptionPlanRepository } from "../../../domain/subscription-plan/subscription-plan.repository";
 import { SequelizeSubscriptionPlan } from "../../model/subscription-plan/subscription-plan.model";
 import { Op } from "sequelize";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements SubscriptionPlanRepository {
     async getSubscriptionPlans(cmp_uuid: string): Promise<SubscriptionPlanEntity[] | null> {
@@ -83,6 +84,10 @@ export class SequelizeRepository implements SubscriptionPlanRepository {
             };
             return subscriptionPlan;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteSubscriptionPlan:', error.message);
             throw error;
         }

@@ -2,6 +2,7 @@ import { CompanyItemEntity } from "../../../domain/company-item/company-item.ent
 import { CompanyItemRepository } from "../../../domain/company-item/company-item.repository";
 import { SequelizeCompanyItem } from "../../model/company-item/company-item.model";
 import { SequelizeItem } from "../../model/item/item.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements CompanyItemRepository {
     async getCompanyItems(cmp_uuid: string): Promise<CompanyItemEntity[] | null> {
@@ -78,6 +79,10 @@ export class SequelizeRepository implements CompanyItemRepository {
             };
             return companyItem;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteCompanyItem:', error.message);
             throw error;
         }
@@ -92,7 +97,7 @@ export class SequelizeRepository implements CompanyItemRepository {
             });
             return companyItem;
         } catch (error: any) {
-            console.error('Error en deleteCompanyItem:', error.message);
+            console.error('Error en existCompanyItem:', error.message);
             throw error;
         }
     }

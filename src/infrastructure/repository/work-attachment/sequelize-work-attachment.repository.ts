@@ -1,6 +1,7 @@
 import { WorkAttachmentEntity, WorkAttachmentUpdateData } from "../../../domain/work-attachment/work-attachment.entity";
 import { WorkAttachmentRepository } from "../../../domain/work-attachment/work-attachment.repository";
 import { SequelizeWorkAttachment } from "../../model/work-attachment/work-attachment.model";
+import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements WorkAttachmentRepository {
     async getWorkAttachments(cmp_uuid: string): Promise<WorkAttachmentEntity[] | null> {
@@ -81,6 +82,10 @@ export class SequelizeRepository implements WorkAttachmentRepository {
             };
             return workattachment;
         } catch (error: any) {
+            if (error.name === 'SequelizeForeignKeyConstraintError') {
+                throw new Error(DbErrorHandler.handle(error));
+            }
+
             console.error('Error en deleteWorkAttachment:', error.message);
             throw error;
         }
@@ -95,7 +100,7 @@ export class SequelizeRepository implements WorkAttachmentRepository {
             });
             return workattachment;
         } catch (error: any) {
-            console.error('Error en deleteWorkAttachment:', error.message);
+            console.error('Error en existWorkAttachment:', error.message);
             throw error;
         }
     }
