@@ -1,13 +1,23 @@
 import { ItemEntity, ItemUpdateData } from "../../../domain/item/item.entity";
 import { ItemRepository } from "../../../domain/item/item.repository";
 import { SequelizeItem } from "../../model/item/item.model";
-import { Op } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ItemRepository {
-    async getItems(): Promise<ItemEntity[] | null> {
+    async getItems(itm_name: string | undefined, itm_description: string | undefined, field_order: string | undefined, itm_orderby: string | undefined): Promise<ItemEntity[] | null> {
         try {
-            const items = await SequelizeItem.findAll();
+            const where: any = {};
+            if (itm_name) {
+                where.itm_name = { [Op.iLike]: `%${itm_name}%` };
+            }
+            if (itm_description) {
+                where.itm_description = { [Op.iLike]: `%${itm_description}%` };
+            }
+            const items = await SequelizeItem.findAll({ 
+                where,
+                order: [[Sequelize.col(field_order || 'itm_name'), itm_orderby || 'ASC']]
+            });
             if(!items) {
                 throw new Error(`No hay items`)
             };

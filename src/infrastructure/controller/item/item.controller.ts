@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ItemUseCase } from "../../../application/item/item-use-case";
 import SocketAdapter from "../../services/socketAdapter";
+import { getStringFromQuery } from "../../utils/util";
 import { paginator } from "../../services/paginator.service";
 
 export class ItemController {
@@ -14,17 +15,16 @@ export class ItemController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const page = (req.params.page ? parseInt(req.params.page) : null);
-            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            const { itm_name, itm_description, page, perPage, field_order, itm_orderby } = req.query;
             if (page && perPage) {
-                const items = await this.itemUseCase.getItems()
+                const items = await this.itemUseCase.getItems(getStringFromQuery(itm_name), getStringFromQuery(itm_description), getStringFromQuery(field_order), getStringFromQuery(itm_orderby))
                 return res.status(200).send({
                     success: true,
                     message: 'Items retornados.',
                     ...paginator(items, page.toString(), perPage.toString())
                 });
             } else {
-                const items = await this.itemUseCase.getItems()
+                const items = await this.itemUseCase.getItems(getStringFromQuery(itm_name), getStringFromQuery(itm_description), getStringFromQuery(field_order), getStringFromQuery(itm_orderby))
                 return res.status(200).send({
                     success: true,
                     message: 'Items retornados.',

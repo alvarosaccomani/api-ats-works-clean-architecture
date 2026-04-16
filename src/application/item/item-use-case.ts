@@ -14,9 +14,9 @@ export class ItemUseCase {
         this.findItemByName = this.findItemByName.bind(this);
     }
 
-    public async getItems() {
+    public async getItems(itm_name: string | undefined, itm_description: string | undefined, field_order: string | undefined, itm_orderby: string | undefined) {
         try {
-            const typeItems = await this.itemRepository.getItems();
+            const typeItems = await this.itemRepository.getItems(itm_name, itm_description, field_order, itm_orderby);
             if(!typeItems) {
                 throw new Error('No hay items.');
             }

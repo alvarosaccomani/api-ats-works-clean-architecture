@@ -1,7 +1,7 @@
 import { ItemEntity, ItemUpdateData } from "./item.entity";
 
 export interface ItemRepository {
-    getItems(): Promise<ItemEntity[] | null>;
+    getItems(itm_name: string | undefined, itm_description: string | undefined, field_order: string | undefined, itm_orderby: string | undefined): Promise<ItemEntity[] | null>;
     findItemById(itm_uuid: string): Promise<ItemEntity | null>;
     createItem(item: ItemEntity): Promise<ItemEntity | null>;
     updateItem(itm_uuid: string, item: ItemUpdateData): Promise<ItemEntity | null>;
