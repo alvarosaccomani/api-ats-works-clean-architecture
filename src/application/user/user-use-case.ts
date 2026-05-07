@@ -21,6 +21,7 @@ export class UserUseCase {
         this.getUserByResetToken = this.getUserByResetToken.bind(this);
         this.findUserByNick = this.findUserByNick.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
+        this.userNickExist = this.userNickExist.bind(this);
     }
 
     public async getUsers() {
@@ -346,6 +347,16 @@ export class UserUseCase {
             await this.userRepository.updatePassword(usr_uuid, newPassword);
         } catch (error: any) {
             console.error('Error en updatePassword (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
+
+    public async userNickExist(usr_nick: string): Promise<boolean> {
+        try {
+            const user = await this.userRepository.findUserByNick(usr_nick);
+            return !!user;
+        } catch (error: any) {
+            console.error('Error en userNickExist (use case):', error.message);
             throw error; // Propagar el error hacia el controlador
         }
     }

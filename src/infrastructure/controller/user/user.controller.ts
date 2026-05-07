@@ -15,6 +15,7 @@ export class UserController {
         this.confirmCtrl = this.confirmCtrl.bind(this);
         this.forgotCtrl = this.forgotCtrl.bind(this);
         this.resetCtrl = this.resetCtrl.bind(this);
+        this.userNickExistCtrl = this.userNickExistCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -286,6 +287,33 @@ export class UserController {
             return res.status(500).json({
                 success: false,
                 message: 'Ocurrió un error al procesar la solicitud.',
+            });
+        }
+    }
+
+    public async userNickExistCtrl({ body }: Request, res: Response) {
+        try {
+            const usr_nick = body.usr_nick;
+
+            if (!usr_nick) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El nick de usuario es obligatorio.',
+                });
+            }
+            const exists = await this.userUseCase.userNickExist(usr_nick);
+            
+            return res.status(200).json({
+                success: true,
+                message: exists ? 'El nick de usuario existe.' : 'El nick de usuario no existe.',
+                data: exists,
+            });
+        } catch (error: any) {
+            console.error('Error en userNickExistCtrl (controller):', error.message);
+            return res.status(500).json({
+                success: false,
+                message: 'No se pudo verificar el nick de usuario.',
+                error: error.message, // Mensaje claro del error
             });
         }
     }

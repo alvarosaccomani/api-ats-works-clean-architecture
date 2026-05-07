@@ -61,6 +61,7 @@ function configureUserRoutes(app: Express, socketAdapter: SocketAdapter) {
     app.post(`/${process.env.BASE_URL_API}/confirm-account`, userCtrl.confirmCtrl);
     app.post(`/${process.env.BASE_URL_API}/forgot-password`, userCtrl.forgotCtrl);
     app.post(`/${process.env.BASE_URL_API}/reset-password`, userCtrl.resetCtrl);
+    app.post(`/${process.env.BASE_URL_API}/user-nick-exist`, userCtrl.userNickExistCtrl);
 }
 
 export default configureUserRoutes;
