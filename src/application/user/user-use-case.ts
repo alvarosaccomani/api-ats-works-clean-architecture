@@ -22,6 +22,7 @@ export class UserUseCase {
         this.findUserByNick = this.findUserByNick.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
         this.userNickExist = this.userNickExist.bind(this);
+        this.userEmailExist = this.userEmailExist.bind(this);
     }
 
     public async getUsers() {
@@ -361,4 +362,13 @@ export class UserUseCase {
         }
     }
 
+    public async userEmailExist(usr_email: string): Promise<boolean> {
+        try {
+            const user = await this.userRepository.findUserByEmail(usr_email);
+            return !!user;
+        } catch (error: any) {
+            console.error('Error en userEmailExist (use case):', error.message);
+            throw error; // Propagar el error hacia el controlador
+        }
+    }
 }

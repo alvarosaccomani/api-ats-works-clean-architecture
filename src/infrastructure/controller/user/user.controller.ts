@@ -16,6 +16,7 @@ export class UserController {
         this.forgotCtrl = this.forgotCtrl.bind(this);
         this.resetCtrl = this.resetCtrl.bind(this);
         this.userNickExistCtrl = this.userNickExistCtrl.bind(this);
+        this.userEmailExistCtrl = this.userEmailExistCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -313,6 +314,33 @@ export class UserController {
             return res.status(500).json({
                 success: false,
                 message: 'No se pudo verificar el nick de usuario.',
+                error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async userEmailExistCtrl({ body }: Request, res: Response) {
+        try {
+            const usr_email = body.usr_email;
+
+            if (!usr_email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El correo electrónico es obligatorio.',
+                });
+            }
+            const exists = await this.userUseCase.userEmailExist(usr_email);
+            
+            return res.status(200).json({
+                success: true,
+                message: exists ? 'El correo electrónico existe.' : 'El correo electrónico no existe.',
+                data: exists,
+            });
+        } catch (error: any) {
+            console.error('Error en userEmailExistCtrl (controller):', error.message);
+            return res.status(500).json({
+                success: false,
+                message: 'No se pudo verificar el correo electrónico.',
                 error: error.message, // Mensaje claro del error
             });
         }

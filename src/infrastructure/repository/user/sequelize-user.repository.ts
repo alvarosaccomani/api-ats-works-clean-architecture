@@ -45,10 +45,7 @@ export class SequelizeRepository implements UserRepository {
                     usr_email: usr_email ?? null
                 }
             });
-            if(!user) {
-                throw new Error(`No hay usuario con el email: ${usr_email}`);
-            };
-            return user.dataValues;
+            return user;
         } catch (error: any) {
             console.error('Error en findUserByEmail:', error.message);
             throw error;
