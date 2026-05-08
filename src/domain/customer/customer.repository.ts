@@ -7,4 +7,5 @@ export interface CustomerRepository {
     updateCustomer(cmp_uuid: string, cus_uuid: string, customer: CustomerUpdateData): Promise<CustomerEntity | null>;
     deleteCustomer(cmp_uuid: string, cus_uuid: string): Promise<CustomerEntity | null>;
     findCustomerByName(cmp_uuid: string, cus_fullname: string, excludeUuid?: string | null): Promise<CustomerEntity | null>;
+    findCustomerByUserId(cmp_uuid: string, usr_uuid: string): Promise<CustomerEntity | null>;
 }

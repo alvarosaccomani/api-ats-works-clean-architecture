@@ -11,6 +11,7 @@ export class CustomerController {
         this.insertCtrl = this.insertCtrl.bind(this);
         this.updateCtrl = this.updateCtrl.bind(this);
         this.deleteCtrl = this.deleteCtrl.bind(this);
+        this.getByUserIdCtrl = this.getByUserIdCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -191,6 +192,40 @@ export class CustomerController {
                 success: false,
                 message: 'No se pudo eliminar el customer.',
                 error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getByUserIdCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const usr_uuid = req.params.usr_uuid;
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar el customer.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if(!usr_uuid || usr_uuid.toLowerCase() === 'null' || usr_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar el customer.',
+                    error: 'Debe proporcionar un Id de usuario.'
+                });
+            }
+            const customer = await this.customerUseCase.findCustomerByUserId(`${cmp_uuid}`,`${usr_uuid}`)
+            return res.status(200).send({
+                success: true,
+                message: 'Customer retornado.',
+                data: customer
+            });
+        } catch (error: any) {
+            console.error('Error en getByUserIdCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar el customer.',
+                error: error.message,
             });
         }
     }
