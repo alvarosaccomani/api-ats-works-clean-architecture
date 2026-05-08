@@ -119,19 +119,24 @@ export class SequelizeRepository implements UserRepository {
             throw error;
         }
     }
-    async loginUser(usr_nick: string, usr_password: string, gettoken: boolean): Promise<UserEntity | String | null> {
+    async loginUser(identifier: string, usr_password: string, gettoken: boolean): Promise<UserEntity | String | null> {
         try {
+            // Buscamos al usuario por nick o por email
             const user = await SequelizeUser.findOne({ 
                 where: { 
-                    usr_nick: usr_nick ?? null
+                    [Op.or]: [
+                        { usr_nick: identifier ?? null },
+                        { usr_email: identifier ?? null }
+                    ]
                 }
             });            
+            
             if(!user) {
-                throw new Error(`No hay usuario con el nombre ${usr_nick}`);
+                throw new Error(`No hay usuario con el identificador: ${identifier}`);
             }
             
             if(!user.usr_confirmed) {
-                throw new Error(`El usuario con el nombre ${usr_nick} no se encuentra confirmado`);
+                throw new Error(`El usuario ${identifier} no se encuentra confirmado`);
             } 
             
             const isPasswordValid = await bcrypt.compare(usr_password, user.dataValues.usr_password);
