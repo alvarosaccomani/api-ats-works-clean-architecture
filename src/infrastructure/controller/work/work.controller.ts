@@ -14,6 +14,7 @@ export class WorkController {
         this.getPendingWorksCtrl = this.getPendingWorksCtrl.bind(this);
         this.getWorksSchedulerCtrl = this.getWorksSchedulerCtrl.bind(this);
         this.getWorksByAddressCtrl = this.getWorksByAddressCtrl.bind(this);
+        this.getPendingWorksByUserCtrl = this.getPendingWorksByUserCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -258,6 +259,50 @@ export class WorkController {
                 success: false,
                 message: 'No se pudo recuperar los trabajos por dirección.',
                 error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getPendingWorksByUserCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const usr_uuid = req.params.usr_uuid;
+            const { wrks_uuid, wrk_route, page, perPage, field_order, wrk_orderby } = req.query;
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los works.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if(!usr_uuid || usr_uuid.toLowerCase() === 'null' || usr_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo recuperar los works.',
+                    error: 'Debe proporcionar un Id de usuario.'
+                });
+            }
+            if (page && perPage) {
+                const works = await this.workUseCase.getPendingWorksByUser(cmp_uuid, usr_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(wrk_route), getStringFromQuery(field_order), getStringFromQuery(wrk_orderby));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Pending works del usuario retornados.',
+                    ...paginator(works, page.toString(), perPage.toString())
+                });
+            } else {
+                const works = await this.workUseCase.getPendingWorksByUser(cmp_uuid, usr_uuid, getStringFromQuery(wrks_uuid), getStringFromQuery(wrk_route), getStringFromQuery(field_order), getStringFromQuery(wrk_orderby));
+                return res.status(200).send({
+                    success: true,
+                    message: 'Pending works del usuario retornados.',
+                    data: works
+                });
+            }
+        } catch (error: any) {
+            console.error('Error en getPendingWorksByUserCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar los pending works del usuario.',
+                error: error.message,
             });
         }
     }

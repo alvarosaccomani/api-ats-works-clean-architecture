@@ -557,9 +557,123 @@ export class SequelizeRepository implements WorkRepository {
             });
             return works;
         } catch (error: any) {
-            console.error('Error en getWorkScheduler:', error.message);
+            console.error('Error en getWorksByAddress:', error.message);
             throw error;
         }
     }
-    
+
+    async getPendingWorksByUser(
+        cmp_uuid: string,
+        usr_uuid: string,
+        wrks_uuid: string | undefined,
+        wrk_route: string | undefined,
+        field_order: string | undefined,
+        wrk_orderby: string | undefined
+    ): Promise<WorkEntity[] | null> {
+        try {
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null,
+                [Op.or]: [
+                    { wrk_operator_uuid1: usr_uuid },
+                    { wrk_operator_uuid2: usr_uuid },
+                    { wrk_operator_uuid3: usr_uuid },
+                    { wrk_operator_uuid4: usr_uuid }
+                ]
+            };
+
+            const andConditions: any[] = [];
+            if (wrks_uuid) {
+                andConditions.push({ wrks_uuid: wrks_uuid });
+            }
+            if (wrk_route) {
+                andConditions.push({ wrk_route: wrk_route });
+            }
+
+            if (andConditions.length > 0) {
+                where[Op.and] = andConditions;
+            }
+
+            const works = await SequelizeWork.findAll({
+                where,
+                include: [
+                    {
+                        as: 'adr',
+                        model: SequelizeAddress,
+                        include: [
+                            {
+                                as: 'cus',
+                                model: SequelizeCustomer,
+                                include: [
+                                    {
+                                        as: 'rou',
+                                        model: SequelizeRoute
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        as: 'wrks',
+                        model: SequelizeWorkState
+                    },
+                    {
+                        as: 'wrk_user',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator1',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator2',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator3',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'wrk_operator4',
+                        model: SequelizeUser
+                    },
+                    {
+                        as: 'mitm',
+                        model: SequelizeModelItem,
+                        include: [
+                            {
+                                as: 'detailModelItems',
+                                model: SequelizeDetailModelItem
+                            }
+                        ]
+                    },
+                    {
+                        as: "workDetails",
+                        model: SequelizeWorkDetail,
+                        include: [
+                            {
+                                as: 'dtp',
+                                model: SequelizeDataType
+                            }
+                        ]
+                    },
+                    {
+                        as: "workAttachments",
+                        model: SequelizeWorkAttachment
+                    }
+                ],
+                order: [
+                    [
+                        Sequelize.col(field_order ? field_order : 'wrk_workdate'),
+                        wrk_orderby ? wrk_orderby : 'ASC'
+                    ],
+                    [Sequelize.col('workDetails.wrkd_order'), 'ASC']
+                ]
+            });
+
+            return works;
+        } catch (error: any) {
+            console.error('Error en getPendingWorksByUser:', error.message);
+            throw error;
+        }
+    }
 }
