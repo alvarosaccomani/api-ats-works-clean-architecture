@@ -1,6 +1,7 @@
 import { SequelizeCustomer } from './customer/customer.model';
 import { SequelizeRoute } from './route/route.model';
 import { SequelizeAddress } from './address/address.model';
+import { SequelizeCustomerRoute } from './customer-route/customer-route.model';
 
 //----------------------------------------------------------------
 // CUSTOMERS
@@ -48,4 +49,5 @@ if (process.env.NODE_ENV !== "production") {
     SequelizeCustomer.sync();
     SequelizeRoute.sync();
     SequelizeAddress.sync();
+    SequelizeCustomerRoute.sync();
 }

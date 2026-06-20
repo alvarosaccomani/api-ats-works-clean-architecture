@@ -5,6 +5,7 @@ import { Sequelize, Op } from "sequelize";
 import { DbErrorHandler } from '../../utils/db-error-handler';
 import { SequelizeRoute } from "../../model/route/route.model";
 import { SequelizeAddress } from "../../model/address/address.model";
+import { SequelizeCustomerRoute } from "../../model/customer-route/customer-route.model";
 
 export class SequelizeRepository implements CustomerRepository {
     async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, rou_uuid: string | undefined, field_order: string | undefined, cus_orderby: string | undefined): Promise<CustomerEntity[] | null> {
@@ -24,15 +25,21 @@ export class SequelizeRepository implements CustomerRepository {
                 orConditions.push({ cus_email: { [Op.iLike]: `%${cus_email}%` } });
             }
 
-            if (rou_uuid) {
-                orConditions.push({ rou_uuid: rou_uuid });
-            }
-
             // Si hay condiciones OR, las agregamos
             if (orConditions.length > 0) {
                 where[Op.and] = {
                     [Op.or]: orConditions
                 };
+            }
+
+            // Filtrado por recorrido (Many-to-Many)
+            if (rou_uuid) {
+                const customerRoutes = await SequelizeCustomerRoute.findAll({
+                    where: { cmp_uuid, rou_uuid },
+                    attributes: ['cus_uuid']
+                });
+                const cusUuids = customerRoutes.map(cr => cr.cus_uuid);
+                where.cus_uuid = { [Op.in]: cusUuids };
             }
             
             const customersDb = await SequelizeCustomer.findAll({
@@ -104,8 +111,14 @@ export class SequelizeRepository implements CustomerRepository {
                 throw new Error(`No hay customers`)
             };
 
+            // Traer todas las relaciones de recorridos de esta empresa para mapearlas (evita N+1)
+            const allRelations = await SequelizeCustomerRoute.findAll({
+                where: { cmp_uuid }
+            });
+
             const customers: CustomerEntity[] = customersDb.map(customer => {
                 const customerPlain = customer.get({ plain: true });
+                const myRelations = allRelations.filter(rel => rel.cus_uuid === customerPlain.cus_uuid);
 
                 return {
                     cmp_uuid: customerPlain.cmp_uuid,
@@ -114,8 +127,9 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_email: customerPlain.cus_email,
                     cus_phone: customerPlain.cus_phone,
                     cus_dateofbirth: customerPlain.cus_dateofbirth,
-                    cus_addresses: customerPlain.cus_addresses ?? undefined, // importante: incluir addresses
+                    cus_addresses: customerPlain.cus_addresses ?? undefined,
                     rou_uuid: customerPlain.rou_uuid,
+                    rou_uuids: myRelations.map(rel => rel.rou_uuid),
                     rou: customerPlain.rou,
                     pmt_uuid: customerPlain.pmt_uuid,
                     usr_uuid: customerPlain.usr_uuid,
@@ -145,7 +159,16 @@ export class SequelizeRepository implements CustomerRepository {
             if(!customer) {
                 throw new Error(`No hay customer con el Id: ${cmp_uuid}, ${cus_uuid}`);
             };
-            return customer.dataValues;
+
+            const customerData = customer.dataValues;
+
+            // Cargar los recorridos asociados
+            const relations = await SequelizeCustomerRoute.findAll({
+                where: { cmp_uuid, cus_uuid }
+            });
+            customerData.rou_uuids = relations.map(rel => rel.rou_uuid);
+
+            return customerData;
         } catch (error: any) {
             console.error('Error en findCustomerById:', error.message);
             throw error;
@@ -158,7 +181,19 @@ export class SequelizeRepository implements CustomerRepository {
             if(!result) {
                 throw new Error(`No se ha agregado el customer`);
             }
-            let newCustomer = result.dataValues as SequelizeCustomer
+            let newCustomer = result.dataValues as SequelizeCustomer;
+
+            // Guardar relaciones de múltiples recorridos
+            if (customer.rou_uuids && customer.rou_uuids.length > 0) {
+                const routeRelations = customer.rou_uuids.map(rUuid => ({
+                    cmp_uuid: cmp_uuid,
+                    cus_uuid: newCustomer.cus_uuid,
+                    rou_uuid: rUuid,
+                    cusrou_active: true
+                }));
+                await SequelizeCustomerRoute.bulkCreate(routeRelations);
+            }
+
             return newCustomer;
         } catch (error: any) {
             console.error('Error en createCustomer:', error.message);
@@ -189,7 +224,25 @@ export class SequelizeRepository implements CustomerRepository {
             if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el customer`);
             };
-            return UpdatedCustomer.get({ plain: true }) as CustomerEntity;
+
+            // Sincronizar tabla intermedia de recorridos
+            await SequelizeCustomerRoute.destroy({
+                where: { cmp_uuid, cus_uuid }
+            });
+
+            if (customer.rou_uuids && customer.rou_uuids.length > 0) {
+                const routeRelations = customer.rou_uuids.map(rUuid => ({
+                    cmp_uuid,
+                    cus_uuid,
+                    rou_uuid: rUuid,
+                    cusrou_active: true
+                }));
+                await SequelizeCustomerRoute.bulkCreate(routeRelations);
+            }
+
+            const updatedCustomerData = UpdatedCustomer.get({ plain: true }) as CustomerEntity;
+            updatedCustomerData.rou_uuids = customer.rou_uuids || [];
+            return updatedCustomerData;
         } catch (error: any) {
             console.error('Error en updateCustomer:', error.message);
             throw error;
@@ -198,6 +251,10 @@ export class SequelizeRepository implements CustomerRepository {
     async deleteCustomer(cmp_uuid: string, cus_uuid: string): Promise<CustomerEntity | null> {
         try {
             const customer = await this.findCustomerById(cmp_uuid, cus_uuid);
+
+            // Eliminar relaciones de la tabla intermedia
+            await SequelizeCustomerRoute.destroy({ where: { cmp_uuid, cus_uuid } });
+
             const result = await SequelizeCustomer.destroy({ where: { cmp_uuid, cus_uuid } });
             if(!result) {
                 throw new Error(`No se ha eliminado el customer`);
@@ -239,7 +296,17 @@ export class SequelizeRepository implements CustomerRepository {
                     usr_uuid: usr_uuid ?? null
                 } 
             });
-            return customer ? customer.dataValues : null;
+            if (!customer) return null;
+
+            const customerData = customer.dataValues;
+
+            // Cargar recorridos
+            const relations = await SequelizeCustomerRoute.findAll({
+                where: { cmp_uuid, cus_uuid: customerData.cus_uuid }
+            });
+            customerData.rou_uuids = relations.map(rel => rel.rou_uuid);
+
+            return customerData;
         } catch (error: any) {
             console.error('Error en findCustomerByUserId:', error.message);
             throw error;
