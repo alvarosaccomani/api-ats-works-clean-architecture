@@ -11,6 +11,7 @@ export interface CustomerEntity {
     cus_addresses?: string,
     rou_uuid: string,
     rou_uuids?: string[],
+    routes?: RouteEntity[],
     rou?: RouteEntity
     pmt_uuid: string,
     usr_uuid: string,

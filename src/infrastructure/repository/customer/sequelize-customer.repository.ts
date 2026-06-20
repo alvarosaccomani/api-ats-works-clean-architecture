@@ -111,14 +111,18 @@ export class SequelizeRepository implements CustomerRepository {
                 throw new Error(`No hay customers`)
             };
 
-            // Traer todas las relaciones de recorridos de esta empresa para mapearlas (evita N+1)
+            // Traer todas las relaciones de recorridos y recorridos de esta empresa para mapearlas (evita N+1)
             const allRelations = await SequelizeCustomerRoute.findAll({
+                where: { cmp_uuid }
+            });
+            const allRoutes = await SequelizeRoute.findAll({
                 where: { cmp_uuid }
             });
 
             const customers: CustomerEntity[] = customersDb.map(customer => {
                 const customerPlain = customer.get({ plain: true });
                 const myRelations = allRelations.filter(rel => rel.cus_uuid === customerPlain.cus_uuid);
+                const myRoutes = allRoutes.filter(r => myRelations.some(rel => rel.rou_uuid === r.rou_uuid));
 
                 return {
                     cmp_uuid: customerPlain.cmp_uuid,
@@ -130,7 +134,8 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_addresses: customerPlain.cus_addresses ?? undefined,
                     rou_uuid: customerPlain.rou_uuid,
                     rou_uuids: myRelations.map(rel => rel.rou_uuid),
-                    rou: customerPlain.rou,
+                    routes: myRoutes.map(r => r.get({ plain: true })),
+                    rou: customerPlain.rou || (myRoutes[0] ? myRoutes[0].get({ plain: true }) : undefined),
                     pmt_uuid: customerPlain.pmt_uuid,
                     usr_uuid: customerPlain.usr_uuid,
                     cus_subscriptionplanbycustomer: customerPlain.cus_subscriptionplanbycustomer,
@@ -167,6 +172,18 @@ export class SequelizeRepository implements CustomerRepository {
                 where: { cmp_uuid, cus_uuid }
             });
             customerData.rou_uuids = relations.map(rel => rel.rou_uuid);
+
+            if (customerData.rou_uuids.length > 0) {
+                const associatedRoutes = await SequelizeRoute.findAll({
+                    where: {
+                        cmp_uuid,
+                        rou_uuid: { [Op.in]: customerData.rou_uuids }
+                    }
+                });
+                customerData.routes = associatedRoutes.map(r => r.get({ plain: true }));
+            } else {
+                customerData.routes = [];
+            }
 
             return customerData;
         } catch (error: any) {
@@ -305,6 +322,18 @@ export class SequelizeRepository implements CustomerRepository {
                 where: { cmp_uuid, cus_uuid: customerData.cus_uuid }
             });
             customerData.rou_uuids = relations.map(rel => rel.rou_uuid);
+
+            if (customerData.rou_uuids.length > 0) {
+                const associatedRoutes = await SequelizeRoute.findAll({
+                    where: {
+                        cmp_uuid,
+                        rou_uuid: { [Op.in]: customerData.rou_uuids }
+                    }
+                });
+                customerData.routes = associatedRoutes.map(r => r.get({ plain: true }));
+            } else {
+                customerData.routes = [];
+            }
 
             return customerData;
         } catch (error: any) {
