@@ -4,7 +4,7 @@ import { UserRepository } from "../../../domain/user/user.repository";
 import { SequelizeUser } from "../../model/user/user.model";
 import { createToken } from "../../services/jwt.service";
 import { AuthService } from '../../services/auth-service.service';
-import { EmailService } from '../../services/email-service.service';
+import { emailService } from '../../services/email-service.service';
 import { generateToken, hashToken, calculateExpiration } from '../../services/token-service.service';
 import { Op } from 'sequelize';
 import { DbErrorHandler } from '../../utils/db-error-handler';
@@ -160,7 +160,6 @@ export class SequelizeRepository implements UserRepository {
         try {
             
             const authService = new AuthService(process.env.JWT_SECRET || 'default_secret');
-            const emailService = new EmailService();
 
             let { usr_uuid, usr_name, usr_surname, usr_password, usr_image, usr_email, usr_nick, usr_bio, usr_registered, usr_socket, usr_online, usr_confirmed, usr_confirmationtoken, usr_resetpasswordtoken, usr_resetpasswordexpires, usr_sysadmin, usr_createdat, usr_updatedat } = user;
 
@@ -271,8 +270,6 @@ export class SequelizeRepository implements UserRepository {
     }; 
     async forgotPassword( user: UserEntity ): Promise<UserEntity | null> {
         try {
-            const emailService = new EmailService();
-
             // Generar un token único para restablecer la contraseña
             const resetToken = generateToken();
             const hashedToken = hashToken(resetToken);
@@ -285,7 +282,7 @@ export class SequelizeRepository implements UserRepository {
 
             // Enviar el correo de confirmación usando EmailService
             try {
-                await emailService.sendReestablishmentEmail(user.usr_email, hashedToken);
+                await emailService.sendReestablishmentEmail(user.usr_email, resetToken);
             } catch (emailError) {
                 console.error('Error al enviar el correo para reestablecer el email:', emailError);
                 throw new Error('Error al enviar el correo para reestablecer el email:');
@@ -300,9 +297,10 @@ export class SequelizeRepository implements UserRepository {
     };
     async findUserByResetToken( token: string, expirationDate: Date ): Promise<UserEntity | null> {
         try {
+            const hashedToken = hashToken(token);
             const user = await SequelizeUser.findOne({
               where: {
-                usr_resetpasswordtoken: token,
+                usr_resetpasswordtoken: hashedToken,
                 usr_resetpasswordexpires: { [Op.gt]: expirationDate }, // Verifica que el token no haya expirado
               },
             });
