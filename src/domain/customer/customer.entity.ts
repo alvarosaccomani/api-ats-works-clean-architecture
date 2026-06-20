@@ -10,6 +10,7 @@ export interface CustomerEntity {
     cus_dateofbirth: Date,
     cus_addresses?: string,
     rou_uuid: string,
+    rou_uuids?: string[],
     rou?: RouteEntity
     pmt_uuid: string,
     usr_uuid: string,
@@ -23,4 +24,4 @@ export interface CustomerEntity {
 }
 
 //Update
-export type CustomerUpdateData = Pick<CustomerEntity, 'cus_fullname' | 'cus_email' | 'cus_phone' | 'cus_dateofbirth' | 'rou_uuid' | 'pmt_uuid' | 'usr_uuid' | 'cus_subscriptionplanbycustomer' | 'subp_uuid' | 'cus_order' | 'cus_active'>
+export type CustomerUpdateData = Pick<CustomerEntity, 'cus_fullname' | 'cus_email' | 'cus_phone' | 'cus_dateofbirth' | 'rou_uuid' | 'rou_uuids' | 'pmt_uuid' | 'usr_uuid' | 'cus_subscriptionplanbycustomer' | 'subp_uuid' | 'cus_order' | 'cus_active'>

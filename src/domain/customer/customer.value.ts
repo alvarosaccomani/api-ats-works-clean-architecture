@@ -10,6 +10,7 @@ export class CustomerValue implements CustomerEntity {
     cus_phone: string;
     cus_dateofbirth: Date;
     rou_uuid: string;
+    rou_uuids?: string[];
     pmt_uuid: string;
     usr_uuid: string;
     cus_subscriptionplanbycustomer: boolean;
@@ -27,6 +28,7 @@ export class CustomerValue implements CustomerEntity {
             cus_phone,
             cus_dateofbirth,
             rou_uuid,
+            rou_uuids,
             pmt_uuid,
             usr_uuid,
             cus_subscriptionplanbycustomer,
@@ -43,6 +45,7 @@ export class CustomerValue implements CustomerEntity {
             cus_phone: string,
             cus_dateofbirth: Date,
             rou_uuid: string,
+            rou_uuids?: string[],
             pmt_uuid: string,
             usr_uuid: string,
             cus_subscriptionplanbycustomer: boolean,
@@ -59,6 +62,7 @@ export class CustomerValue implements CustomerEntity {
         this.cus_phone = cus_phone;
         this.cus_dateofbirth = cus_dateofbirth;
         this.rou_uuid = rou_uuid;
+        this.rou_uuids = rou_uuids;
         this.pmt_uuid = pmt_uuid;
         this.usr_uuid = usr_uuid;
         this.cus_subscriptionplanbycustomer = cus_subscriptionplanbycustomer;

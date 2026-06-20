@@ -30,6 +30,7 @@ export class CustomerUseCase {
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
                 cus_addresses: customer.cus_addresses,
                 rou_uuid: customer.rou_uuid,
+                rou_uuids: customer.rou_uuids,
                 rou: customer.rou,
                 pmt_uuid: customer.pmt_uuid,
                 usr_uuid: customer.usr_uuid,
@@ -43,7 +44,7 @@ export class CustomerUseCase {
             }));
         } catch (error: any) {
             console.error('Error en getCustomers (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
 
@@ -61,6 +62,7 @@ export class CustomerUseCase {
                 cus_phone: customer.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customer.rou_uuid,
+                rou_uuids: customer.rou_uuids,
                 pmt_uuid: customer.pmt_uuid,
                 usr_uuid: customer.usr_uuid,
                 cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
@@ -73,13 +75,13 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en getDetailCustomer (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
     
-    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
+    public async createCustomer({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, rou_uuids, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cmp_uuid: string, cus_uuid: string, cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, rou_uuids?: string[], pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
         try {
-            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
+            const customerValue = new CustomerValue({ cmp_uuid, cus_uuid, cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, rou_uuids, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
             const customerCreated = await this.customerRepository.createCustomer(customerValue);
             if(!customerCreated) {
                 throw new Error(`No se pudo insertar el customer.`);
@@ -92,6 +94,7 @@ export class CustomerUseCase {
                 cus_phone: customerCreated.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerCreated.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customerCreated.rou_uuid,
+                rou_uuids: customerCreated.rou_uuids,
                 pmt_uuid: customerCreated.pmt_uuid,
                 usr_uuid: customerCreated.usr_uuid,
                 cus_subscriptionplanbycustomer: customerCreated.cus_subscriptionplanbycustomer,
@@ -104,13 +107,13 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en createCustomer (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
 
-    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
+    public async updateCustomer(cmp_uuid: string, cus_uuid: string, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, rou_uuids, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active } : { cus_fullname: string, cus_email: string, cus_phone: string, cus_dateofbirth: Date, rou_uuid: string, rou_uuids?: string[], pmt_uuid: string, usr_uuid: string, cus_subscriptionplanbycustomer: boolean, subp_uuid: string, cus_order: number, cus_active: boolean }) {
         try {
-            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
+            const customerUpdated = await this.customerRepository.updateCustomer(cmp_uuid, cus_uuid, { cus_fullname, cus_email, cus_phone, cus_dateofbirth, rou_uuid, rou_uuids, pmt_uuid, usr_uuid, cus_subscriptionplanbycustomer, subp_uuid, cus_order, cus_active });
             if(!customerUpdated) {
                 throw new Error(`No se pudo actualizar el customer.`);
             }
@@ -122,6 +125,7 @@ export class CustomerUseCase {
                 cus_phone: customerUpdated.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerUpdated.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customerUpdated.rou_uuid,
+                rou_uuids: customerUpdated.rou_uuids,
                 pmt_uuid: customerUpdated.pmt_uuid,
                 usr_uuid: customerUpdated.usr_uuid,
                 cus_subscriptionplanbycustomer: customerUpdated.cus_subscriptionplanbycustomer,
@@ -134,7 +138,7 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en updateCustomer (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
 
@@ -152,6 +156,7 @@ export class CustomerUseCase {
                 cus_phone: customerDeleted.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customerDeleted.rou_uuid,
+                rou_uuids: customerDeleted.rou_uuids,
                 pmt_uuid: customerDeleted.pmt_uuid,
                 usr_uuid: customerDeleted.usr_uuid,
                 cus_subscriptionplanbycustomer: customerDeleted.cus_subscriptionplanbycustomer,
@@ -164,7 +169,7 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en deleteCustomer (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
 
@@ -177,7 +182,7 @@ export class CustomerUseCase {
             return customer
         } catch (error: any) {
             console.error('Error en findCustomerByName (use case):', error.message);
-            throw error; // Propagar el error hacia el controlador
+            throw error;
         }
     }
 
@@ -195,6 +200,7 @@ export class CustomerUseCase {
                 cus_phone: customer.cus_phone,
                 cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customer.cus_dateofbirth, 'America/Buenos_Aires'),
                 rou_uuid: customer.rou_uuid,
+                rou_uuids: customer.rou_uuids,
                 pmt_uuid: customer.pmt_uuid,
                 usr_uuid: customer.usr_uuid,
                 cus_subscriptionplanbycustomer: customer.cus_subscriptionplanbycustomer,
@@ -210,5 +216,4 @@ export class CustomerUseCase {
             throw error;
         }
     }
-
 }
