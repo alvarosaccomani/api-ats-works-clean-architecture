@@ -128,7 +128,9 @@ export class SequelizeRepository implements AddressRepository {
     }
     async getAddressesWithClient(cmp_uuid: string, rou_uuid: string): Promise<AddressEntity[] | null> {
         try {
-            const customerWhere: any = {};
+            const customerWhere: any = {
+                cus_active: true
+            };
             if (rou_uuid) {
                 customerWhere.rou_uuid = rou_uuid;
             }
@@ -140,7 +142,7 @@ export class SequelizeRepository implements AddressRepository {
                     {
                         as: 'cus',
                         model: SequelizeCustomer,
-                        ...(Object.keys(customerWhere).length > 0 ? { where: customerWhere } : {}),
+                        where: customerWhere,
                         include: [
                             {
                                 as: 'rou',

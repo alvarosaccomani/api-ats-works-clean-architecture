@@ -11,6 +11,7 @@ export class CustomerController {
         this.insertCtrl = this.insertCtrl.bind(this);
         this.updateCtrl = this.updateCtrl.bind(this);
         this.deleteCtrl = this.deleteCtrl.bind(this);
+        this.softDeleteCtrl = this.softDeleteCtrl.bind(this);
         this.getByUserIdCtrl = this.getByUserIdCtrl.bind(this);
     }
 
@@ -192,6 +193,40 @@ export class CustomerController {
                 success: false,
                 message: 'No se pudo eliminar el customer.',
                 error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async softDeleteCtrl(req: Request, res: Response) {
+        try {
+            const cus_uuid = req.params.cus_uuid;
+            const cmp_uuid = req.params.cmp_uuid;
+            if(!cmp_uuid) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo desactivar el customer.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            };
+            if(!cus_uuid) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo desactivar el customer.',
+                    error: 'Debe proporcionar un Id de customer.'
+                });
+            };
+            const customer = await this.customerUseCase.softDeleteCustomer(cmp_uuid, cus_uuid);
+            return res.status(200).json({
+                success: true,
+                message: 'Customer desactivado (borrado lógico).',
+                data: customer
+            });
+        } catch (error: any) {
+            console.error('Error en softDeleteCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo desactivar el customer.',
+                error: error.message,
             });
         }
     }

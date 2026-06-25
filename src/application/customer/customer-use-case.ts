@@ -11,6 +11,7 @@ export class CustomerUseCase {
         this.createCustomer = this.createCustomer.bind(this);
         this.updateCustomer = this.updateCustomer.bind(this);
         this.deleteCustomer = this.deleteCustomer.bind(this);
+        this.softDeleteCustomer = this.softDeleteCustomer.bind(this);
         this.findCustomerByName = this.findCustomerByName.bind(this);
         this.findCustomerByUserId = this.findCustomerByUserId.bind(this);
     }
@@ -176,6 +177,37 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en deleteCustomer (use case):', error.message);
+            throw error;
+        }
+    }
+
+    public async softDeleteCustomer(cmp_uuid: string, cus_uuid: string) {
+        try {
+            const customerDeleted = await this.customerRepository.softDeleteCustomer(cmp_uuid, cus_uuid);
+            if(!customerDeleted) {
+                throw new Error(`No se pudo desactivar el customer.`);
+            }
+            return {
+                cmp_uuid: customerDeleted.cmp_uuid,
+                cus_uuid: customerDeleted.cus_uuid,
+                cus_fullname: customerDeleted.cus_fullname,
+                cus_email: customerDeleted.cus_email,
+                cus_phone: customerDeleted.cus_phone,
+                cus_dateofbirth: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_dateofbirth, 'America/Buenos_Aires'),
+                rou_uuid: customerDeleted.rou_uuid,
+                rou_uuids: customerDeleted.rou_uuids,
+                pmt_uuid: customerDeleted.pmt_uuid,
+                usr_uuid: customerDeleted.usr_uuid,
+                cus_subscriptionplanbycustomer: customerDeleted.cus_subscriptionplanbycustomer,
+                subp_uuid: customerDeleted.subp_uuid,
+                subp: customerDeleted.subp,
+                cus_order: customerDeleted.cus_order,
+                cus_active: customerDeleted.cus_active,
+                cus_createdat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_createdat, 'America/Buenos_Aires'),
+                cus_updatedat: TimezoneConverter.toIsoStringInTimezone(customerDeleted.cus_updatedat, 'America/Buenos_Aires')
+            };
+        } catch (error: any) {
+            console.error('Error en softDeleteCustomer (use case):', error.message);
             throw error;
         }
     }

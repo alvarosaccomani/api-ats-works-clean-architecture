@@ -64,10 +64,13 @@ export class SequelizeRepository implements WorkRepository {
                     {
                         as: 'adr',
                         model: SequelizeAddress,
+                        required: true,
                         include: [
                             { 
                                 as: 'cus', 
                                 model: SequelizeCustomer,
+                                where: { cus_active: true },
+                                required: true,
                                 include: [
                                     { 
                                         as: 'rou', 
@@ -325,10 +328,13 @@ export class SequelizeRepository implements WorkRepository {
                     {
                         as: 'adr',
                         model: SequelizeAddress,
+                        required: true,
                         include: [
                             { 
                                 as: 'cus', 
                                 model: SequelizeCustomer,
+                                where: { cus_active: true },
+                                required: true,
                                 include: [
                                     { 
                                         as: 'rou', 
@@ -599,10 +605,13 @@ export class SequelizeRepository implements WorkRepository {
                     {
                         as: 'adr',
                         model: SequelizeAddress,
+                        required: true,
                         include: [
                             {
                                 as: 'cus',
                                 model: SequelizeCustomer,
+                                where: { cus_active: true },
+                                required: true,
                                 include: [
                                     {
                                         as: 'rou',

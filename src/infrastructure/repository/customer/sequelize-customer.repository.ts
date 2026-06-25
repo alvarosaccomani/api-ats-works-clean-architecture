@@ -10,9 +10,10 @@ import { SequelizeCustomerRoute } from "../../model/customer-route/customer-rout
 export class SequelizeRepository implements CustomerRepository {
     async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, rou_uuid: string | undefined, field_order: string | undefined, cus_orderby: string | undefined): Promise<CustomerEntity[] | null> {
         try {
-            // Base del where
+            // Base del where (filtrando por clientes activos)
             const where: any = {
-                cmp_uuid: cmp_uuid
+                cmp_uuid: cmp_uuid,
+                cus_active: true
             };
 
             // Condiciones opcionales para OR
@@ -283,6 +284,25 @@ export class SequelizeRepository implements CustomerRepository {
             }
 
             console.error('Error en deleteCustomer:', error.message);
+            throw error;
+        }
+    }
+    async softDeleteCustomer(cmp_uuid: string, cus_uuid: string): Promise<CustomerEntity | null> {
+        try {
+            const customer = await this.findCustomerById(cmp_uuid, cus_uuid);
+            if (!customer) return null;
+
+            const [updatedCount] = await SequelizeCustomer.update(
+                { cus_active: false },
+                { where: { cmp_uuid, cus_uuid } }
+            );
+            if (updatedCount === 0) {
+                throw new Error(`No se ha desactivado el customer`);
+            }
+            customer.cus_active = false;
+            return customer;
+        } catch (error: any) {
+            console.error('Error en softDeleteCustomer:', error.message);
             throw error;
         }
     }
