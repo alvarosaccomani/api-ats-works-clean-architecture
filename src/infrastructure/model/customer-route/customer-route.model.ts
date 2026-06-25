@@ -15,38 +15,40 @@ export class SequelizeCustomerRoute extends Model {
 SequelizeCustomerRoute.init({
   cmp_uuid: {
     type: DataTypes.STRING(40),
-    primaryKey: true,
-    field: 'cmp_Uuid'
+    primaryKey: true
   },
   cus_uuid: {
     type: DataTypes.STRING(40),
-    primaryKey: true,
-    field: 'cus_Uuid'
+    primaryKey: true
   },
   rou_uuid: {
     type: DataTypes.STRING(40),
-    primaryKey: true,
-    field: 'rou_Uuid'
+    primaryKey: true
   },
   cusrou_obs: {
     type: DataTypes.TEXT,
-    allowNull: true,
-    field: 'cusrou_Obs'
+    allowNull: true
   },
   cusrou_order: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-    field: 'cusrou_Order'
+    allowNull: true
   },
   cusrou_active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
-    field: 'cusrou_Active'
+    defaultValue: true
+  },
+  cusrou_createdat: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  cusrou_updatedat: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 }, {
   sequelize,
   timestamps: true,
-  createdAt: 'cusrou_CreatedAt',
-  updatedAt: 'cusrou_UpdatedAt',
-  tableName: 'cusrou_CustomerRoutes'
+  createdAt: 'cusrou_createdat',
+  updatedAt: 'cusrou_updatedat',
+  tableName: 'cusrou_customerroutes'
 });
