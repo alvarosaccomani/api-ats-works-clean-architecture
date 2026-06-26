@@ -22,9 +22,9 @@ export class WorkUseCase {
         this.getPendingWorksByUser = this.getPendingWorksByUser.bind(this);
     }
 
-    public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
+    public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, wrks_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
         try {
-            const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, field_order, wrk_orderby);
+            const works = await this.workRepository.getWorks(cmp_uuid, wrk_dateFrom, wrk_dateTo, wrk_fullname, wrks_uuid, field_order, wrk_orderby);
             if (!works) {
                 throw new Error('No hay works.');
             }
@@ -166,9 +166,9 @@ export class WorkUseCase {
         }
     }
 
-    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, wrk_order: number }) {
+    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, comment }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, wrk_order: number, comment?: string }) {
         try {
-            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order });
+            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, comment });
             if (!worksUpdated) {
                 throw new Error(`No se pudo actualizar el work.`);
             }

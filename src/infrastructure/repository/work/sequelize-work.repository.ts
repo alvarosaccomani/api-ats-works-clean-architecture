@@ -14,9 +14,11 @@ import { SequelizeDetailModelItem } from '../../model/detail-model-item/detail-m
 import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeWorkAttachment } from '../../model/work-attachment/work-attachment.model';
+import { SequelizeWorkHistory } from '../../model/work-history/work-history.model';
+import { v4 as uuid } from 'uuid';
 
 export class SequelizeRepository implements WorkRepository {
-    async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
+    async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, wrks_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null> {
         try {
             // Base del where
             const where: any = {
@@ -26,6 +28,11 @@ export class SequelizeRepository implements WorkRepository {
             // Condiciones opcionales para AND
 
             const andConditions: any[] = [];
+
+            // Filtro por estado
+            if (wrks_uuid) {
+                andConditions.push({ wrks_uuid: wrks_uuid });
+            }
 
             // Filtro por rango de fechas
             if (wrk_dateFrom || wrk_dateTo) {
@@ -218,6 +225,18 @@ export class SequelizeRepository implements WorkRepository {
             if(!result) {
                 throw new Error(`No se ha agregado el work`);
             }
+            
+            // Insert initial history state record
+            await SequelizeWorkHistory.create({
+                cmp_uuid: result.cmp_uuid,
+                wrk_uuid: result.wrk_uuid,
+                wrkh_uuid: uuid(),
+                wrks_uuid: result.wrks_uuid,
+                usr_uuid: result.wrk_user_uuid,
+                wrkh_comment: 'Estado inicial: Trabajo creado',
+                wrkh_createdat: result.wrk_createdat || new Date()
+            });
+
             let newWork = result.dataValues as SequelizeWork
             return newWork;
         } catch (error: any) {
@@ -227,6 +246,11 @@ export class SequelizeRepository implements WorkRepository {
     }
     async updateWork(cmp_uuid: string, wrk_uuid: string, work: WorkUpdateData): Promise<WorkEntity | null> {
         try {
+            // Fetch current work state to check if it changed
+            const existingWork = await SequelizeWork.findOne({
+                where: { cmp_uuid, wrk_uuid }
+            });
+
             const [updatedCount, [updatedWork]] = await SequelizeWork.update(
                 { 
                     wrk_description: work.wrk_description,
@@ -259,6 +283,20 @@ export class SequelizeRepository implements WorkRepository {
             if (updatedCount === 0) {
                 throw new Error(`No se ha actualizado el work`);
             };
+
+            // If the status has changed OR a comment is provided, insert a history record
+            if (existingWork && ((work.wrks_uuid && existingWork.wrks_uuid !== work.wrks_uuid) || work.comment)) {
+                await SequelizeWorkHistory.create({
+                    cmp_uuid: cmp_uuid,
+                    wrk_uuid: wrk_uuid,
+                    wrkh_uuid: uuid(),
+                    wrks_uuid: work.wrks_uuid || existingWork.wrks_uuid,
+                    usr_uuid: work.wrk_user_uuid || existingWork.wrk_user_uuid,
+                    wrkh_comment: work.comment || 'Estado del trabajo actualizado',
+                    wrkh_createdat: new Date()
+                });
+            }
+
             return updatedWork.get({ plain: true }) as WorkEntity;
         } catch (error: any) {
             console.error('Error en updateWork:', error.message);
