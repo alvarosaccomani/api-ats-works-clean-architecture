@@ -44,6 +44,11 @@ SequelizeRolPermission.belongsTo(SequelizeRol, {
   foreignKey: 'rol_uuid'
 });
 
+SequelizePermission.hasMany(SequelizeRolPermission, {
+  as: 'rolPermissions',
+  foreignKey: 'per_uuid'
+});
+
 // Sincronizar (solo en desarrollo)
 if (process.env.NODE_ENV !== "production") {
     SequelizeRolPermission.sync();

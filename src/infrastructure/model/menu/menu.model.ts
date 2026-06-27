@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../db/sequelize';
 import { MenuEntity } from "../../../domain/menu/menu.entity";
+import { SequelizePermission } from '../permission/permission.model';
 
 export class SequelizeMenu extends Model<MenuEntity, Omit<MenuEntity, 'id'>> {
   declare mnu_uuid: string;
@@ -16,6 +17,7 @@ export class SequelizeMenu extends Model<MenuEntity, Omit<MenuEntity, 'id'>> {
   declare mnu_active: boolean;
   declare mnu_createdat: Date;
   declare mnu_updatedat: Date;
+  declare per_uuid: string | null;
 }
 
 SequelizeMenu.init({
@@ -60,6 +62,10 @@ SequelizeMenu.init({
         type: DataTypes.BOOLEAN, 
         defaultValue: true 
     },
+    per_uuid: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     mnu_createdat: { 
         type: DataTypes.DATE 
     },
@@ -72,6 +78,12 @@ SequelizeMenu.init({
     createdAt: 'mnu_createdat',
     updatedAt: 'mnu_updatedat',
     tableName: 'mnu_menus'
+});
+
+SequelizeMenu.belongsTo(SequelizePermission, {
+    foreignKey: 'per_uuid',
+    targetKey: 'per_uuid',
+    as: 'permission'
 });
 
 // Sincronizar (solo en desarrollo)

@@ -12,6 +12,7 @@ export interface MenuEntity {
     mnu_showifcompanyactive: boolean,
     mnu_createdat: Date,
     mnu_updatedat: Date,
+    per_uuid?: string | null,
 }
 
 export interface MenuItemTree extends MenuEntity {
@@ -19,4 +20,4 @@ export interface MenuItemTree extends MenuEntity {
 }
 
 //Update
-export type MenuUpdateData = Pick<MenuEntity, 'mnu_parent_uuid' | 'mnu_cod' | 'mnu_title' | 'mnu_description' | 'mnu_icon' | 'mnu_route' | 'mnu_order' | 'mnu_itemactive' | 'mnu_active' | 'mnu_showifcompanyactive'>;
+export type MenuUpdateData = Pick<MenuEntity, 'mnu_parent_uuid' | 'mnu_cod' | 'mnu_title' | 'mnu_description' | 'mnu_icon' | 'mnu_route' | 'mnu_order' | 'mnu_itemactive' | 'mnu_active' | 'mnu_showifcompanyactive' | 'per_uuid'>;

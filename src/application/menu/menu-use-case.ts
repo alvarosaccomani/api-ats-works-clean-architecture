@@ -16,7 +16,7 @@ export class MenuUseCase {
         try {
             const menus = await this.menuRepository.getMenus(mnu_title, field_order, mnu_orderby);
             if (!menus) throw new Error('No hay menús disponibles.');
-            return menus.map(menu => ({
+            return menus.map((menu: any) => ({
                 mnu_uuid: menu.mnu_uuid,
                 mnu_parent_uuid: menu.mnu_parent_uuid,
                 mnu_cod: menu.mnu_cod,
@@ -28,6 +28,7 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menu.mnu_showifcompanyactive,
                 mnu_itemactive: menu.mnu_itemactive,
                 mnu_active: menu.mnu_active,
+                per_uuid: menu.per_uuid,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires')
             }));
@@ -53,6 +54,8 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menu.mnu_showifcompanyactive,
                 mnu_itemactive: menu.mnu_itemactive,
                 mnu_active: menu.mnu_active,
+                per_uuid: menu.per_uuid,
+                allowedRoles: (menu as any).permission?.rolPermissions?.map((rp: any) => rp.rol?.rol_name).filter(Boolean) || [],
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -79,6 +82,7 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menuCreated.mnu_showifcompanyactive,
                 mnu_itemactive: menuCreated.mnu_itemactive,
                 mnu_active: menuCreated.mnu_active,
+                per_uuid: menuCreated.per_uuid,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuCreated.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuCreated.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -104,6 +108,7 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menuUpdated.mnu_showifcompanyactive,
                 mnu_itemactive: menuUpdated.mnu_itemactive,
                 mnu_active: menuUpdated.mnu_active,
+                per_uuid: menuUpdated.per_uuid,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuUpdated.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuUpdated.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -129,6 +134,7 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menuDeleted.mnu_showifcompanyactive,
                 mnu_itemactive: menuDeleted.mnu_itemactive,
                 mnu_active: menuDeleted.mnu_active,
+                per_uuid: menuDeleted.per_uuid,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuDeleted.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuDeleted.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -155,6 +161,9 @@ export class MenuUseCase {
                 mnu_showifcompanyactive: menu.mnu_showifcompanyactive,
                 mnu_itemactive: menu.mnu_itemactive,
                 mnu_active: menu.mnu_active,
+                per_uuid: menu.per_uuid,
+                appPermission: menu.permission?.per_slug || null,
+                allowedRoles: menu.permission?.rolPermissions?.map((rp: any) => rp.rol?.rol_name).filter(Boolean) || [],
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires'),
                 items: [] as any[]

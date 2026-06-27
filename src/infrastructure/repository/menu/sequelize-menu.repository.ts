@@ -2,6 +2,28 @@ import { Op } from "sequelize";
 import { MenuEntity, MenuUpdateData } from "../../../domain/menu/menu.entity";
 import { MenuRepository } from "../../../domain/menu/menu.repository";
 import { SequelizeMenu } from "../../model/menu/menu.model";
+import { SequelizePermission } from "../../model/permission/permission.model";
+import { SequelizeRolPermission } from "../../model/rol-permission/rol-permission.model";
+import { SequelizeRol } from "../../model/rol/rol.model";
+
+const includePermissions = [
+    {
+        model: SequelizePermission,
+        as: 'permission',
+        include: [
+            {
+                model: SequelizeRolPermission,
+                as: 'rolPermissions',
+                include: [
+                    {
+                        model: SequelizeRol,
+                        as: 'rol'
+                    }
+                ]
+            }
+        ]
+    }
+];
 
 export class SequelizeRepository implements MenuRepository {
     async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string): Promise<MenuEntity[] | null> {
@@ -14,7 +36,7 @@ export class SequelizeRepository implements MenuRepository {
             const orderDirection = mnu_orderby || 'ASC';
             return await SequelizeMenu.findAll({ 
                 where,
-                order: [[orderField, orderDirection]] 
+                order: [[orderField, orderDirection]]
             });
         } catch (error: any) {
             console.error('Error en getMenus:', error.message);
@@ -24,7 +46,9 @@ export class SequelizeRepository implements MenuRepository {
 
     async findMenuById(mnu_uuid: string): Promise<MenuEntity | null> {
         try {
-            return await SequelizeMenu.findByPk(mnu_uuid);
+            return await SequelizeMenu.findByPk(mnu_uuid, {
+                include: includePermissions
+            });
         } catch (error: any) {
             console.error('Error en findMenuById:', error.message);
             throw error;
@@ -35,7 +59,7 @@ export class SequelizeRepository implements MenuRepository {
         try {
             const result = await SequelizeMenu.create(menu as any);
             if (!result) throw new Error(`No se pudo insertar el menú.`);
-            return result.dataValues;
+            return this.findMenuById(result.dataValues.mnu_uuid);
         } catch (error: any) {
             console.error('Error en createMenu:', error.message);
             throw error;
@@ -65,7 +89,9 @@ export class SequelizeRepository implements MenuRepository {
 
     async findMenuByTitle(mnu_title: string): Promise<MenuEntity | null> {
         try {
-            return await SequelizeMenu.findOne({ where: { mnu_title } });
+            return await SequelizeMenu.findOne({ 
+                where: { mnu_title }
+            });
         } catch (error: any) {
             console.error('Error en findMenuByTitle:', error.message);
             throw error;
@@ -76,7 +102,8 @@ export class SequelizeRepository implements MenuRepository {
         try {
             return await SequelizeMenu.findAll({ 
                 where: { mnu_itemactive: true, mnu_active: true },
-                order: [['mnu_order', 'ASC']] 
+                order: [['mnu_order', 'ASC']],
+                include: includePermissions
             });
         } catch (error: any) {
             console.error('Error en getMenuItems:', error.message);
