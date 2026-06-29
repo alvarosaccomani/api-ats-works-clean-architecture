@@ -17,6 +17,9 @@ export class MenuValue implements MenuEntity {
     mnu_createdat: Date;
     mnu_updatedat: Date;
     per_uuid?: string | null;
+    mnu_showondashboard?: boolean;
+    mnu_dashboardicon?: string | null;
+    mnu_dashboardtitle?: string | null;
     
     constructor({
             mnu_uuid,
@@ -32,7 +35,10 @@ export class MenuValue implements MenuEntity {
             mnu_active,
             mnu_createdat,
             mnu_updatedat,
-            per_uuid
+            per_uuid,
+            mnu_showondashboard,
+            mnu_dashboardicon,
+            mnu_dashboardtitle
         }:{ 
             mnu_uuid: string,
             mnu_parent_uuid: string,
@@ -47,7 +53,10 @@ export class MenuValue implements MenuEntity {
             mnu_active: boolean,
             mnu_createdat?: Date,
             mnu_updatedat?: Date,
-            per_uuid?: string | null
+            per_uuid?: string | null,
+            mnu_showondashboard?: boolean,
+            mnu_dashboardicon?: string | null,
+            mnu_dashboardtitle?: string | null
         }) {
         this.mnu_uuid = uuid();
         this.mnu_parent_uuid = mnu_parent_uuid;
@@ -63,5 +72,8 @@ export class MenuValue implements MenuEntity {
         this.mnu_createdat = mnu_createdat ?? moment().toDate();
         this.mnu_updatedat = mnu_updatedat ?? moment().toDate();
         this.per_uuid = per_uuid ?? null;
+        this.mnu_showondashboard = mnu_showondashboard ?? false;
+        this.mnu_dashboardicon = mnu_dashboardicon ?? null;
+        this.mnu_dashboardtitle = mnu_dashboardtitle ?? null;
     }
 }

@@ -8,4 +8,5 @@ export interface MenuRepository {
     deleteMenu(mnu_uuid: string): Promise<MenuEntity | null>;
     findMenuByTitle(mnu_title: string): Promise<MenuEntity | null>;
     getMenuItems(): Promise<MenuEntity[] | null>;
+    getDashboardMenuItems(): Promise<MenuEntity[] | null>;
 }

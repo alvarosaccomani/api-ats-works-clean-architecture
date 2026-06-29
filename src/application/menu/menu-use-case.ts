@@ -10,6 +10,7 @@ export class MenuUseCase {
         this.updateMenu = this.updateMenu.bind(this);
         this.deleteMenu = this.deleteMenu.bind(this);
         this.getMenuItems = this.getMenuItems.bind(this);
+        this.getDashboardMenuItems = this.getDashboardMenuItems.bind(this);
     }
 
     public async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string) {
@@ -29,6 +30,9 @@ export class MenuUseCase {
                 mnu_itemactive: menu.mnu_itemactive,
                 mnu_active: menu.mnu_active,
                 per_uuid: menu.per_uuid,
+                mnu_dashboardicon: menu.mnu_dashboardicon,
+                mnu_showondashboard: menu.mnu_showondashboard,
+                mnu_dashboardtitle: menu.mnu_dashboardtitle,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires')
             }));
@@ -55,6 +59,9 @@ export class MenuUseCase {
                 mnu_itemactive: menu.mnu_itemactive,
                 mnu_active: menu.mnu_active,
                 per_uuid: menu.per_uuid,
+                mnu_dashboardicon: menu.mnu_dashboardicon,
+                mnu_showondashboard: menu.mnu_showondashboard,
+                mnu_dashboardtitle: menu.mnu_dashboardtitle,
                 allowedRoles: (menu as any).permission?.rolPermissions?.map((rp: any) => rp.rol?.rol_name).filter(Boolean) || [],
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires')
@@ -83,6 +90,9 @@ export class MenuUseCase {
                 mnu_itemactive: menuCreated.mnu_itemactive,
                 mnu_active: menuCreated.mnu_active,
                 per_uuid: menuCreated.per_uuid,
+                mnu_dashboardicon: menuCreated.mnu_dashboardicon,
+                mnu_showondashboard: menuCreated.mnu_showondashboard,
+                mnu_dashboardtitle: menuCreated.mnu_dashboardtitle,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuCreated.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuCreated.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -109,6 +119,9 @@ export class MenuUseCase {
                 mnu_itemactive: menuUpdated.mnu_itemactive,
                 mnu_active: menuUpdated.mnu_active,
                 per_uuid: menuUpdated.per_uuid,
+                mnu_dashboardicon: menuUpdated.mnu_dashboardicon,
+                mnu_showondashboard: menuUpdated.mnu_showondashboard,
+                mnu_dashboardtitle: menuUpdated.mnu_dashboardtitle,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuUpdated.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuUpdated.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -135,6 +148,9 @@ export class MenuUseCase {
                 mnu_itemactive: menuDeleted.mnu_itemactive,
                 mnu_active: menuDeleted.mnu_active,
                 per_uuid: menuDeleted.per_uuid,
+                mnu_dashboardicon: menuDeleted.mnu_dashboardicon,
+                mnu_showondashboard: menuDeleted.mnu_showondashboard,
+                mnu_dashboardtitle: menuDeleted.mnu_dashboardtitle,
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menuDeleted.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menuDeleted.mnu_updatedat, 'America/Buenos_Aires')
             };
@@ -163,6 +179,9 @@ export class MenuUseCase {
                 mnu_active: menu.mnu_active,
                 per_uuid: menu.per_uuid,
                 appPermission: menu.permission?.per_slug || null,
+                mnu_dashboardicon: menu.mnu_dashboardicon,
+                mnu_showondashboard: menu.mnu_showondashboard,
+                mnu_dashboardtitle: menu.mnu_dashboardtitle,
                 allowedRoles: menu.permission?.rolPermissions?.map((rp: any) => rp.rol?.rol_name).filter(Boolean) || [],
                 mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
                 mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires'),
@@ -173,6 +192,37 @@ export class MenuUseCase {
             return this.buildMenuTree(flatMenus);
         } catch (error: any) {
             console.error('Error en getMenuItems (use case):', error.message);
+            throw error;
+        }
+    }
+
+    public async getDashboardMenuItems() {
+        try {
+            const menus = await this.menuRepository.getDashboardMenuItems();
+            if (!menus) throw new Error('No hay ítems de menú para el dashboard disponibles.');
+            return menus.map((menu: any) => ({
+                mnu_uuid: menu.mnu_uuid,
+                mnu_parent_uuid: menu.mnu_parent_uuid,
+                mnu_cod: menu.mnu_cod,
+                mnu_title: menu.mnu_title,
+                mnu_description: menu.mnu_description,
+                mnu_icon: menu.mnu_icon,
+                mnu_route: menu.mnu_route,
+                mnu_order: menu.mnu_order,
+                mnu_showifcompanyactive: menu.mnu_showifcompanyactive,
+                mnu_itemactive: menu.mnu_itemactive,
+                mnu_active: menu.mnu_active,
+                per_uuid: menu.per_uuid,
+                appPermission: menu.permission?.per_slug || null,
+                mnu_dashboardicon: menu.mnu_dashboardicon,
+                mnu_showondashboard: menu.mnu_showondashboard,
+                mnu_dashboardtitle: menu.mnu_dashboardtitle,
+                allowedRoles: menu.permission?.rolPermissions?.map((rp: any) => rp.rol?.rol_name).filter(Boolean) || [],
+                mnu_createdat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_createdat, 'America/Buenos_Aires'),
+                mnu_updatedat: TimezoneConverter.toIsoStringInTimezone(menu.mnu_updatedat, 'America/Buenos_Aires')
+            }));
+        } catch (error: any) {
+            console.error('Error en getDashboardMenuItems (use case):', error.message);
             throw error;
         }
     }

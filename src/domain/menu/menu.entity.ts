@@ -13,6 +13,9 @@ export interface MenuEntity {
     mnu_createdat: Date,
     mnu_updatedat: Date,
     per_uuid?: string | null,
+    mnu_showondashboard?: boolean,
+    mnu_dashboardicon?: string | null,
+    mnu_dashboardtitle?: string | null,
 }
 
 export interface MenuItemTree extends MenuEntity {
@@ -20,4 +23,4 @@ export interface MenuItemTree extends MenuEntity {
 }
 
 //Update
-export type MenuUpdateData = Pick<MenuEntity, 'mnu_parent_uuid' | 'mnu_cod' | 'mnu_title' | 'mnu_description' | 'mnu_icon' | 'mnu_route' | 'mnu_order' | 'mnu_itemactive' | 'mnu_active' | 'mnu_showifcompanyactive' | 'per_uuid'>;
+export type MenuUpdateData = Pick<MenuEntity, 'mnu_parent_uuid' | 'mnu_cod' | 'mnu_title' | 'mnu_description' | 'mnu_icon' | 'mnu_route' | 'mnu_order' | 'mnu_itemactive' | 'mnu_active' | 'mnu_showifcompanyactive' | 'per_uuid' | 'mnu_showondashboard' | 'mnu_dashboardicon' | 'mnu_dashboardtitle'>;

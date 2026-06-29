@@ -24,6 +24,7 @@ function configureMenuRoutes(app: Express) {
     const menuCtrl = new MenuController(menuUseCase);
     app.get(`/${process.env.BASE_URL_API}/menus`, menuCtrl.getAllCtrl);
     app.get(`/${process.env.BASE_URL_API}/menu-tree`, menuCtrl.getMenuItemsCtrl);
+    app.get(`/${process.env.BASE_URL_API}/menu-dashboard`, menuCtrl.getDashboardItemsCtrl);
     app.get(`/${process.env.BASE_URL_API}/menu/:mnu_uuid`, menuCtrl.getDetailCtrl);
     app.post(`/${process.env.BASE_URL_API}/menu`, authMiddleware, menuCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/menu/:mnu_uuid`, authMiddleware, menuCtrl.updateCtrl);

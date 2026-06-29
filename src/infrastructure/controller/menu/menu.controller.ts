@@ -11,6 +11,7 @@ export class MenuController {
         this.updateCtrl = this.updateCtrl.bind(this);
         this.deleteCtrl = this.deleteCtrl.bind(this);
         this.getMenuItemsCtrl = this.getMenuItemsCtrl.bind(this);
+        this.getDashboardItemsCtrl = this.getDashboardItemsCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -129,6 +130,24 @@ export class MenuController {
             res.status(400).send({
                 success: false,
                 message: 'No se pudo recuperar el árbol de menús.',
+                error: e.message
+            });
+        }
+    }
+
+    public async getDashboardItemsCtrl(req: Request, res: Response) {
+        try {
+            const data = await this.menuUseCase.getDashboardMenuItems();
+            res.status(200).send({
+                success: true,
+                message: 'Items de menú para el dashboard retornados.',
+                data
+            });
+        } catch (e: any) {
+            console.error('Error en getDashboardItemsCtrl (controller):', e.message);
+            res.status(400).send({
+                success: false,
+                message: 'No se pudo recuperar los ítems del dashboard.',
                 error: e.message
             });
         }

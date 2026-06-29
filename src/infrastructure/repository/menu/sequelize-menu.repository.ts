@@ -110,4 +110,17 @@ export class SequelizeRepository implements MenuRepository {
             throw error;
         }
     }
+
+    async getDashboardMenuItems(): Promise<MenuEntity[] | null> {
+        try {
+            return await SequelizeMenu.findAll({ 
+                where: { mnu_showondashboard: true, mnu_active: true },
+                order: [['mnu_order', 'ASC']],
+                include: includePermissions
+            });
+        } catch (error: any) {
+            console.error('Error en getDashboardMenuItems:', error.message);
+            throw error;
+        }
+    }
 }

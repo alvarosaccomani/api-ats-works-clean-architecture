@@ -18,6 +18,9 @@ export class SequelizeMenu extends Model<MenuEntity, Omit<MenuEntity, 'id'>> {
   declare mnu_createdat: Date;
   declare mnu_updatedat: Date;
   declare per_uuid: string | null;
+  declare mnu_showondashboard: boolean;
+  declare mnu_dashboardicon: string | null;
+  declare mnu_dashboardtitle: string | null;
 }
 
 SequelizeMenu.init({
@@ -63,6 +66,18 @@ SequelizeMenu.init({
         defaultValue: true 
     },
     per_uuid: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    mnu_showondashboard: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    mnu_dashboardicon: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    mnu_dashboardtitle: {
         type: DataTypes.STRING,
         allowNull: true
     },
