@@ -26,11 +26,14 @@ const includePermissions = [
 ];
 
 export class SequelizeRepository implements MenuRepository {
-    async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string): Promise<MenuEntity[] | null> {
+    async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string, mnu_showondashboard?: boolean): Promise<MenuEntity[] | null> {
         try {
             const where: any = {};
             if (mnu_title) {
                 where.mnu_title = { [Op.iLike]: `%${mnu_title}%` };
+            }
+            if (mnu_showondashboard !== undefined) {
+                where.mnu_showondashboard = mnu_showondashboard;
             }
             const orderField = field_order || 'mnu_order';
             const orderDirection = mnu_orderby || 'ASC';

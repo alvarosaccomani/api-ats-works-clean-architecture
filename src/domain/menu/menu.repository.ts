@@ -1,7 +1,7 @@
 import { MenuEntity, MenuUpdateData } from "./menu.entity";
 
 export interface MenuRepository {
-    getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string): Promise<MenuEntity[] | null>;
+    getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string, mnu_showondashboard?: boolean): Promise<MenuEntity[] | null>;
     findMenuById(mnu_uuid: string): Promise<MenuEntity | null>;
     createMenu(menu: MenuEntity): Promise<MenuEntity | null>;
     updateMenu(mnu_uuid: string, menu: MenuUpdateData): Promise<MenuEntity | null>;

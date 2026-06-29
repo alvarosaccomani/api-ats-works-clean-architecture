@@ -16,11 +16,17 @@ export class MenuController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
-            const { mnu_title, page, perPage, field_order, mnu_orderby } = req.query;
+            const { mnu_title, page, perPage, field_order, mnu_orderby, mnu_showondashboard } = req.query;
+            
+            let showOnDashboardVal: boolean | undefined = undefined;
+            if (mnu_showondashboard === 'true') showOnDashboardVal = true;
+            if (mnu_showondashboard === 'false') showOnDashboardVal = false;
+
             const menus = await this.menuUseCase.getMenus(
                 getStringFromQuery(mnu_title),
                 getStringFromQuery(field_order),
-                getStringFromQuery(mnu_orderby)
+                getStringFromQuery(mnu_orderby),
+                showOnDashboardVal
             );
             if (page && perPage) {
                 res.status(200).send({

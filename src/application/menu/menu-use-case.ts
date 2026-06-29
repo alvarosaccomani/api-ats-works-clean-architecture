@@ -13,9 +13,9 @@ export class MenuUseCase {
         this.getDashboardMenuItems = this.getDashboardMenuItems.bind(this);
     }
 
-    public async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string) {
+    public async getMenus(mnu_title?: string, field_order?: string, mnu_orderby?: string, mnu_showondashboard?: boolean) {
         try {
-            const menus = await this.menuRepository.getMenus(mnu_title, field_order, mnu_orderby);
+            const menus = await this.menuRepository.getMenus(mnu_title, field_order, mnu_orderby, mnu_showondashboard);
             if (!menus) throw new Error('No hay menús disponibles.');
             return menus.map((menu: any) => ({
                 mnu_uuid: menu.mnu_uuid,
