@@ -5,6 +5,7 @@ import SocketAdapter from "../../services/socketAdapter";
 export class DashboardController {
     constructor(private dashboardUseCase: DashboardUseCase, private socketAdapter: SocketAdapter) {
         this.getAllCtrl = this.getAllCtrl.bind(this);
+        this.getAnalyticsCtrl = this.getAnalyticsCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -22,6 +23,25 @@ export class DashboardController {
                 success: false,
                 message: 'No se pudo recuperar los dashboards.',
                 error: error.message, // Mensaje claro del error
+            });
+        }
+    }
+
+    public async getAnalyticsCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const analytics = await this.dashboardUseCase.getDashboardAnalytics(cmp_uuid);
+            return res.status(200).send({
+                success: true,
+                message: 'Métricas de dashboard retornadas.',
+                data: analytics
+            });
+        } catch (error: any) {
+            console.error('Error en getAnalyticsCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo recuperar los datos de analíticas.',
+                error: error.message,
             });
         }
     }

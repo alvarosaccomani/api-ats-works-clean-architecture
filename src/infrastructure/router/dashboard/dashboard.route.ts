@@ -23,6 +23,7 @@ function configureDashboardRoutes(app: Express, socketAdapter: SocketAdapter) {
     
     const dashboardCtrl = new DashboardController(dashboardUseCase, socketAdapter);
     
+    app.get(`/${process.env.BASE_URL_API}/dashboards-analytics/:cmp_uuid`, dashboardCtrl.getAnalyticsCtrl);
     app.get(`/${process.env.BASE_URL_API}/dashboards/:cmp_uuid?/:filter?/:page?/:perPage?`, dashboardCtrl.getAllCtrl);
 }
 
