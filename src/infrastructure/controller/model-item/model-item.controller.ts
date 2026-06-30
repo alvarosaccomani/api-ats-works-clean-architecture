@@ -15,6 +15,7 @@ export class ModelItemController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
+            const filter = req.params.filter;
             const page = (req.params.page ? parseInt(req.params.page) : null);
             const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if (!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
@@ -25,14 +26,14 @@ export class ModelItemController {
                 });
             }
             if (page && perPage) {
-                const modelItems = await this.modelItemUseCase.getModelItems(cmp_uuid)
+                const modelItems = await this.modelItemUseCase.getModelItems(cmp_uuid, filter)
                 return res.status(200).send({
                     success: true,
                     message: 'Model items items retornados.',
                     ...paginator(modelItems, page.toString(), perPage.toString())
                 });
             } else {
-                const modelItems = await this.modelItemUseCase.getModelItems(cmp_uuid)
+                const modelItems = await this.modelItemUseCase.getModelItems(cmp_uuid, filter)
                 return res.status(200).send({
                     success: true,
                     message: 'Model items items retornados.',

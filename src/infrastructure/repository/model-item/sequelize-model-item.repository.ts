@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, Op } from 'sequelize';
 import { ModelItemEntity, ModelItemUpdateData } from "../../../domain/model-item/model-item.entity";
 import { ModelItemRepository } from "../../../domain/model-item/model-item.repository";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
@@ -8,13 +8,30 @@ import { SequelizeGroupDetailModelItem } from '../../model/group-detail-model-it
 import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ModelItemRepository {
-    async getModelItems(cmp_uuid: string): Promise<ModelItemEntity[] | null> {
+    async getModelItems(cmp_uuid: string, filter?: string): Promise<ModelItemEntity[] | null> {
         try {
+            const where: any = {
+                cmp_uuid: cmp_uuid ?? null
+            };
+
+            if (filter && filter !== 'null' && filter.trim() !== '') {
+                const search = `%${filter.toLowerCase()}%`;
+                where[Op.or] = [
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('mitm_name')),
+                        'LIKE',
+                        search
+                    ),
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('mitm_description')),
+                        'LIKE',
+                        search
+                    )
+                ];
+            }
 
             const modelItems = await SequelizeModelItem.findAll({ 
-                where: { 
-                    cmp_uuid: cmp_uuid ?? null
-                }
+                where
             });
             if(!modelItems) {
                 throw new Error(`No hay model items`)
