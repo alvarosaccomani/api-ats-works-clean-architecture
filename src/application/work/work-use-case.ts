@@ -32,7 +32,7 @@ export class WorkUseCase {
                 cmp_uuid: work.cmp_uuid,
                 wrk_uuid: work.wrk_uuid,
                 adr_uuid: work.adr_uuid,
-                adr: work.adr,
+                adr: this.mapWorkRoutes(work.adr),
                 wrk_description: work.wrk_description,
                 wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
                 wrk_workdateinit: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdateinit, 'America/Argentina/Buenos_Aires'),
@@ -79,7 +79,7 @@ export class WorkUseCase {
                 cmp_uuid: works.cmp_uuid,
                 wrk_uuid: works.wrk_uuid,
                 adr_uuid: works.adr_uuid,
-                adr: works.adr,
+                adr: this.mapWorkRoutes(works.adr),
                 wrk_description: works.wrk_description,
                 wrk_workdate: TimezoneConverter.toIsoStringInTimezone(works.wrk_workdate, 'America/Argentina/Buenos_Aires'),
                 wrk_workdateinit: TimezoneConverter.toIsoStringInTimezone(works.wrk_workdateinit, 'America/Argentina/Buenos_Aires'),
@@ -256,7 +256,7 @@ export class WorkUseCase {
                 cmp_uuid: work.cmp_uuid,
                 wrk_uuid: work.wrk_uuid,
                 adr_uuid: work.adr_uuid,
-                adr: work.adr,
+                adr: this.mapWorkRoutes(work.adr),
                 wrk_description: work.wrk_description,
                 wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
                 wrk_workdateinit: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdateinit, 'America/Argentina/Buenos_Aires'),
@@ -383,7 +383,7 @@ export class WorkUseCase {
                 cmp_uuid: work.cmp_uuid,
                 wrk_uuid: work.wrk_uuid,
                 adr_uuid: work.adr_uuid,
-                adr: work.adr,
+                adr: this.mapWorkRoutes(work.adr),
                 wrk_description: work.wrk_description,
                 wrk_workdate: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdate, 'America/Argentina/Buenos_Aires'),
                 wrk_workdateinit: TimezoneConverter.toIsoStringInTimezone(work.wrk_workdateinit, 'America/Argentina/Buenos_Aires'),
@@ -420,5 +420,18 @@ export class WorkUseCase {
             console.error('Error en getPendingWorksByUser (use case):', error.message);
             throw error;
         }
+    }
+
+    private mapWorkRoutes(adr: any): any {
+        if (adr) {
+            const adrPlain = typeof adr.get === 'function' ? adr.get({ plain: true }) : adr;
+            if (adrPlain.cus) {
+                const customerRoutes = adrPlain.cus.customerRoutes;
+                const activeRoute = customerRoutes?.find((cr: any) => cr.cusrou_active);
+                adrPlain.cus.rou = activeRoute?.rou || null;
+            }
+            return adrPlain;
+        }
+        return adr;
     }
 }
