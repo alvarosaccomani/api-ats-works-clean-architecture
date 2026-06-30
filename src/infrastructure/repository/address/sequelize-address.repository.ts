@@ -5,6 +5,7 @@ import { AddressRepository } from "../../../domain/address/address.repository";
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { SequelizeRoute } from "../../model/route/route.model";
+import { SequelizeCustomerRoute } from "../../model/customer-route/customer-route.model";
 
 export class SequelizeRepository implements AddressRepository {
     async getAddresses(cmp_uuid: string, cus_uuid: string): Promise<AddressEntity[] | null> {
@@ -128,11 +129,11 @@ export class SequelizeRepository implements AddressRepository {
     }
     async getAddressesWithClient(cmp_uuid: string, rou_uuid: string): Promise<AddressEntity[] | null> {
         try {
-            const customerWhere: any = {
-                cus_active: true
+            const customerRoutesWhere: any = {
+                cusrou_active: true
             };
             if (rou_uuid) {
-                customerWhere.rou_uuid = rou_uuid;
+                customerRoutesWhere.rou_uuid = rou_uuid;
             }
             const addresses = await SequelizeAddress.findAll({
                 where: {
@@ -142,11 +143,21 @@ export class SequelizeRepository implements AddressRepository {
                     {
                         as: 'cus',
                         model: SequelizeCustomer,
-                        where: customerWhere,
+                        where: {
+                            cus_active: true
+                        },
                         include: [
                             {
-                                as: 'rou',
-                                model: SequelizeRoute
+                                as: 'customerRoutes',
+                                model: SequelizeCustomerRoute,
+                                where: customerRoutesWhere,
+                                required: rou_uuid ? true : false,
+                                include: [
+                                    {
+                                        as: 'rou',
+                                        model: SequelizeRoute
+                                    }
+                                ]
                             }
                         ]
                     }

@@ -18,6 +18,27 @@ SequelizeCustomer.belongsTo(SequelizeRoute, {
     as: 'rou'
 });
 
+//Sequelize Customer Route Foreign Key
+SequelizeCustomer.hasMany(SequelizeCustomerRoute, {
+    foreignKey: "cmp_uuid",
+    sourceKey: 'cmp_uuid'
+});
+SequelizeCustomer.hasMany(SequelizeCustomerRoute, {
+    foreignKey: 'cus_uuid',
+    sourceKey: 'cus_uuid',
+    as: 'customerRoutes'
+});
+
+SequelizeCustomerRoute.belongsTo(SequelizeRoute, {
+    foreignKey: "cmp_uuid",
+    targetKey: "cmp_uuid"
+});
+SequelizeCustomerRoute.belongsTo(SequelizeRoute, {
+    foreignKey: 'rou_uuid',
+    targetKey: "rou_uuid",
+    as: 'rou'
+});
+
 //Sequelize Address Foreign Key
 SequelizeCustomer.hasMany(SequelizeAddress, {
     foreignKey: "cmp_uuid",
