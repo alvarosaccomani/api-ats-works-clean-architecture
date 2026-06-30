@@ -112,6 +112,7 @@ export class CustomerController {
                 });
             }
             const customer = await this.customerUseCase.createCustomer(body)
+            this.socketAdapter.emitEvent('customer_created', { cmp_uuid, customer });
             return res.status(200).json({
                 success: true,
                 message: 'Customer insertado.',
@@ -182,6 +183,7 @@ export class CustomerController {
                 });
             };
             const customer = await this.customerUseCase.deleteCustomer(cmp_uuid, cus_uuid)
+            this.socketAdapter.emitEvent('customer_deleted', { cmp_uuid, cus_uuid });
             return res.status(200).json({
                 success: true,
                 message: 'Customer eliminada.',
