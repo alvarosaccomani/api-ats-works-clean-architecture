@@ -7,6 +7,7 @@ import { DbErrorHandler } from '../../utils/db-error-handler';
 import { SequelizeAddress } from "../../model/address/address.model";
 import { SequelizeCustomer } from '../../model/customer/customer.model';
 import { SequelizeRoute } from '../../model/route/route.model';
+import { SequelizeCustomerRoute } from '../../model/customer-route/customer-route.model';
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { SequelizeUser } from "../../model/user/user.model";
 import { SequelizeModelItem } from "../../model/model-item/model-item.model";
@@ -79,9 +80,17 @@ export class SequelizeRepository implements WorkRepository {
                                 where: { cus_active: true },
                                 required: true,
                                 include: [
-                                    { 
-                                        as: 'rou', 
-                                        model: SequelizeRoute
+                                    {
+                                        as: 'customerRoutes',
+                                        model: SequelizeCustomerRoute,
+                                        where: { cusrou_active: true },
+                                        required: false,
+                                        include: [
+                                            {
+                                                as: 'rou',
+                                                model: SequelizeRoute
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -148,9 +157,17 @@ export class SequelizeRepository implements WorkRepository {
                                 as: 'cus', 
                                 model: SequelizeCustomer,
                                 include: [
-                                    { 
-                                        as: 'rou', 
-                                        model: SequelizeRoute
+                                    {
+                                        as: 'customerRoutes',
+                                        model: SequelizeCustomerRoute,
+                                        where: { cusrou_active: true },
+                                        required: false,
+                                        include: [
+                                            {
+                                                as: 'rou',
+                                                model: SequelizeRoute
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -374,9 +391,17 @@ export class SequelizeRepository implements WorkRepository {
                                 where: { cus_active: true },
                                 required: true,
                                 include: [
-                                    { 
-                                        as: 'rou', 
-                                        model: SequelizeRoute
+                                    {
+                                        as: 'customerRoutes',
+                                        model: SequelizeCustomerRoute,
+                                        where: { cusrou_active: true },
+                                        required: false,
+                                        include: [
+                                            {
+                                                as: 'rou',
+                                                model: SequelizeRoute
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -555,9 +580,17 @@ export class SequelizeRepository implements WorkRepository {
                                 as: 'cus', 
                                 model: SequelizeCustomer,
                                 include: [
-                                    { 
-                                        as: 'rou', 
-                                        model: SequelizeRoute
+                                    {
+                                        as: 'customerRoutes',
+                                        model: SequelizeCustomerRoute,
+                                        where: { cusrou_active: true },
+                                        required: false,
+                                        include: [
+                                            {
+                                                as: 'rou',
+                                                model: SequelizeRoute
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -652,8 +685,16 @@ export class SequelizeRepository implements WorkRepository {
                                 required: true,
                                 include: [
                                     {
-                                        as: 'rou',
-                                        model: SequelizeRoute
+                                        as: 'customerRoutes',
+                                        model: SequelizeCustomerRoute,
+                                        where: { cusrou_active: true },
+                                        required: false,
+                                        include: [
+                                            {
+                                                as: 'rou',
+                                                model: SequelizeRoute
+                                            }
+                                        ]
                                     }
                                 ]
                             }
