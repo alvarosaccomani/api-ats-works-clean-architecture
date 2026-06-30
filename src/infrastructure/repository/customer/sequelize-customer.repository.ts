@@ -76,11 +76,6 @@ export class SequelizeRepository implements CustomerRepository {
                 },
                 include: [
                     {
-                        as: 'rou',
-                        model: SequelizeRoute,
-                        attributes: ['rou_uuid', 'rou_name', 'rou_description']
-                    },
-                    {
                         as: 'adrs',
                         model: SequelizeAddress,
                         attributes: []
@@ -100,13 +95,18 @@ export class SequelizeRepository implements CustomerRepository {
                     'SequelizeCustomer.subp_uuid',
                     'SequelizeCustomer.cus_active',
                     'SequelizeCustomer.cus_createdat',
-                    'SequelizeCustomer.cus_updatedat',
-                    'rou.cmp_uuid',
-                    'rou.rou_uuid',
-                    'rou.rou_name',
-                    'rou.rou_description'
+                    'SequelizeCustomer.cus_updatedat'
                 ],
-                order: [[Sequelize.col(field_order || 'cus_fullname'), cus_orderby || 'ASC']]
+                order: [
+                    [
+                        Sequelize.col(
+                            field_order && field_order !== 'rou_order' 
+                                ? field_order 
+                                : 'cus_fullname'
+                        ), 
+                        cus_orderby || 'ASC'
+                    ]
+                ]
             });
             if(!customersDb) {
                 throw new Error(`No hay customers`)
@@ -148,6 +148,18 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_updatedat: customerPlain.cus_updatedat
                 };
             });
+
+            if (field_order === 'rou_order') {
+                customers.sort((a: any, b: any) => {
+                    const orderA = a.rou?.rou_order ?? 999999;
+                    const orderB = b.rou?.rou_order ?? 999999;
+                    if (cus_orderby === 'DESC') {
+                        return orderB - orderA;
+                    }
+                    return orderA - orderB;
+                });
+            }
+
             return customers;
         } catch (error: any) {
             console.error('Error en getCustomers:', error.message);
