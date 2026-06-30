@@ -38,8 +38,16 @@ export class SequelizeRepository implements WorkRepository {
             // Filtro por rango de fechas
             if (wrk_dateFrom || wrk_dateTo) {
                 const dateCondition: any = {};
-                if (wrk_dateFrom) dateCondition[Op.gte] = wrk_dateFrom;
-                if (wrk_dateTo) dateCondition[Op.lte] = wrk_dateTo;
+                if (wrk_dateFrom) {
+                    const from = new Date(wrk_dateFrom);
+                    from.setHours(0, 0, 0, 0);
+                    dateCondition[Op.gte] = from;
+                }
+                if (wrk_dateTo) {
+                    const to = new Date(wrk_dateTo);
+                    to.setHours(23, 59, 59, 999);
+                    dateCondition[Op.lte] = to;
+                }
                 andConditions.push({ wrk_workdate: dateCondition });
             }
 
@@ -462,8 +470,16 @@ export class SequelizeRepository implements WorkRepository {
             // Filtro por rango de fechas
             if (wrk_dateFrom || wrk_dateTo) {
                 const dateCondition: any = {};
-                if (wrk_dateFrom) dateCondition[Op.gte] = wrk_dateFrom;
-                if (wrk_dateTo) dateCondition[Op.lte] = wrk_dateTo;
+                if (wrk_dateFrom) {
+                    const from = new Date(wrk_dateFrom);
+                    from.setHours(0, 0, 0, 0);
+                    dateCondition[Op.gte] = from;
+                }
+                if (wrk_dateTo) {
+                    const to = new Date(wrk_dateTo);
+                    to.setHours(23, 59, 59, 999);
+                    dateCondition[Op.lte] = to;
+                }
                 andConditions.push({ wrk_workdate: dateCondition });
             }
 
