@@ -93,6 +93,7 @@ export class WorkController {
                 });
             }
             const work = await this.workUseCase.createWork(body)
+            this.socketAdapter.emitEvent('work_created', { cmp_uuid, work });
             return res.status(200).json({
                 success: true,
                 message: 'Work insertado.',
@@ -112,6 +113,7 @@ export class WorkController {
         try {
             const update = req.body;
             const work = await this.workUseCase.updateWork(update.cmp_uuid, update.wrk_uuid, update)
+            this.socketAdapter.emitEvent('work_updated', { cmp_uuid: update.cmp_uuid, work });
             return res.status(200).json({
                 success: true,
                 message: 'Work actualizado.',
@@ -139,6 +141,7 @@ export class WorkController {
                 });
             };
             const work = await this.workUseCase.deleteWork(cmp_uuid, wrk_uuid)
+            this.socketAdapter.emitEvent('work_deleted', { cmp_uuid, wrk_uuid });
             return res.status(200).json({
                 success: true,
                 message: 'Work eliminado.',
