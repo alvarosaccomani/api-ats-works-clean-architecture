@@ -101,6 +101,7 @@ export class UserController {
                 });
             }
             const user = await this.userUseCase.registerUser(body)
+            this.socketAdapter.emitEvent('user_created', { user });
             return res.status(200).json({
                 success: true,
                 message: 'Usuario insertado.',
@@ -161,6 +162,7 @@ export class UserController {
                 });
             };
             const user = await this.userUseCase.deleteUser(usr_uuid)
+            this.socketAdapter.emitEvent('user_deleted', { usr_uuid });
             return res.status(200).json({
                 success: true,
                 message: 'Usuario eliminado.',
