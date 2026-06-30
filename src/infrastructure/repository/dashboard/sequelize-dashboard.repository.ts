@@ -7,6 +7,7 @@ import { SequelizeModelItem } from "../../model/model-item/model-item.model";
 import { SequelizeWork } from "../../model/work/work.model";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
+import { SequelizeWorkHistory } from "../../model/work-history/work-history.model";
 
 export class SequelizeRepository implements DashboardRepository {
     async getDashboards(cmp_uuid: string): Promise<DashboardEntity | null> {
@@ -125,9 +126,47 @@ export class SequelizeRepository implements DashboardRepository {
                 count: trendsMap[date]
             }));
 
+            // 2. Actividad Reciente (historial de trabajos)
+            const history = await SequelizeWorkHistory.findAll({
+                where: cmp_uuid ? { cmp_uuid } : {},
+                limit: 10,
+                order: [['wrkh_createdat', 'DESC']],
+                include: [
+                    {
+                        model: SequelizeWork,
+                        as: 'wrk',
+                        attributes: ['wrk_description', 'wrk_customer']
+                    },
+                    {
+                        model: SequelizeWorkState,
+                        as: 'wrks',
+                        attributes: ['wrks_name', 'wrks_bkcolor', 'wrks_frcolor']
+                    },
+                    {
+                        model: SequelizeUser,
+                        as: 'usr',
+                        attributes: ['usr_fullname', 'usr_nick']
+                    }
+                ]
+            });
+
+            const recentActivity = history.map((h: any) => ({
+                uuid: h.wrkh_uuid,
+                workUuid: h.wrk_uuid,
+                workDescription: h.wrk?.wrk_description || 'Trabajo sin descripción',
+                workCustomer: h.wrk?.wrk_customer || 'Sin cliente',
+                stateName: h.wrks?.wrks_name || 'Sin Estado',
+                stateBgColor: h.wrks?.wrks_bkcolor || '#ccc',
+                stateFrColor: h.wrks?.wrks_frcolor || '#333',
+                userFullName: h.usr?.usr_fullname || h.usr?.usr_nick || 'Sistema',
+                comment: h.wrkh_comment || '',
+                createdAt: h.wrkh_createdat
+            }));
+
             return {
                 workStates,
-                workTrends
+                workTrends,
+                recentActivity
             };
         } catch (error: any) {
             console.error('Error en getDashboardAnalytics:', error.message);
