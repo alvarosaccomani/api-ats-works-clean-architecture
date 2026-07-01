@@ -9,10 +9,12 @@ export interface WorkDetailEntity {
 	wrkd_value: string,
     wrkd_order: string,
     wrkd_groupkey: string,
+    wrkd_metrictype: string,
+	wrkd_isdashboard: boolean,
     wrkd_worker: string,
 	wrkd_createdat: Date,
     wrkd_updatedat: Date
 }
 
 //Update
-export type WorkDetailUpdateData = Pick<WorkDetailEntity, 'wrkd_key' | 'wrkd_name' | 'wrkd_description' | 'dtp_uuid' | 'wrkd_value' | 'wrkd_order' | 'wrkd_groupkey' | 'wrkd_worker'>
+export type WorkDetailUpdateData = Pick<WorkDetailEntity, 'wrkd_key' | 'wrkd_name' | 'wrkd_description' | 'dtp_uuid' | 'wrkd_value' | 'wrkd_order' | 'wrkd_groupkey' | 'wrkd_metrictype' | 'wrkd_isdashboard' | 'wrkd_worker'>
