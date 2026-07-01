@@ -55,8 +55,8 @@ export class SequelizeRepository implements DetailModelItemRepository {
     }
     async createDetailModelItem(detailModelItem: DetailModelItemEntity): Promise<DetailModelItemEntity | null> {
         try {
-            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active, dmitm_createdat, dmitm_updatedat } = detailModelItem
-            const result = await SequelizeDetailModelItem.create({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active, dmitm_createdat, dmitm_updatedat });
+            let { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active, dmitm_createdat, dmitm_updatedat, mety_uuid, dmitm_isdashboard } = detailModelItem
+            const result = await SequelizeDetailModelItem.create({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active, dmitm_createdat, dmitm_updatedat, mety_uuid, dmitm_isdashboard });
             if(!result) {
                 throw new Error(`No se ha agregado el detail model item`);
             }
@@ -79,7 +79,9 @@ export class SequelizeRepository implements DetailModelItemRepository {
                     dmitm_defaultvalue: detailModelItem.dmitm_defaultvalue,
                     dmitm_order: detailModelItem.dmitm_order,
                     gdmitm_uuid: detailModelItem.gdmitm_uuid,
-                    dmitm_active: detailModelItem.dmitm_active
+                    dmitm_active: detailModelItem.dmitm_active,
+                    mety_uuid: detailModelItem.mety_uuid,
+                    dmitm_isdashboard: detailModelItem.dmitm_isdashboard
                 }, 
                 { 
                     where: { cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid },

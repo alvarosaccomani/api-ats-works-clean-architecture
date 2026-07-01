@@ -15,10 +15,12 @@ export interface DetailModelItemEntity {
     dmitm_order: number,
     gdmitm_uuid: string,
     gdmitm?: GroupDetailModelItemEntity,
+    mety_uuid: string,
+	dmitm_isdashboard: boolean,
     dmitm_active: boolean,
 	dmitm_createdat: Date,
     dmitm_updatedat: Date
 }
 
 //Update
-export type DetailModelItemUpdateData = Pick<DetailModelItemEntity, 'dmitm_key' | 'dmitm_name' | 'dmitm_description' | 'dtp_uuid' | 'dmitm_arrayvalues' | 'dmitm_defaultvalue' | 'dmitm_order' | 'gdmitm_uuid' | 'dmitm_active'>
+export type DetailModelItemUpdateData = Pick<DetailModelItemEntity, 'dmitm_key' | 'dmitm_name' | 'dmitm_description' | 'dtp_uuid' | 'dmitm_arrayvalues' | 'dmitm_defaultvalue' | 'dmitm_order' | 'gdmitm_uuid' | 'mety_uuid' | 'dmitm_isdashboard' | 'dmitm_active'>

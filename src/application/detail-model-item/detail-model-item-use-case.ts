@@ -33,6 +33,8 @@ export class DetailModelItemUseCase {
                 dmitm_defaultvalue: detailModelItem.dmitm_defaultvalue,
                 dmitm_order: detailModelItem.dmitm_order,
                 gdmitm_uuid: detailModelItem.gdmitm_uuid,
+                mety_uuid: detailModelItem.mety_uuid,
+                dmitm_isdashboard: detailModelItem.dmitm_isdashboard,
                 dmitm_active: detailModelItem.dmitm_active,
                 dmitm_createdat: TimezoneConverter.toIsoStringInTimezone(detailModelItem.dmitm_createdat, 'America/Argentina/Buenos_Aires'),
                 dmitm_updatedat: TimezoneConverter.toIsoStringInTimezone(detailModelItem.dmitm_updatedat, 'America/Argentina/Buenos_Aires')
@@ -63,6 +65,8 @@ export class DetailModelItemUseCase {
                 dmitm_defaultvalue: detailModelItems.dmitm_defaultvalue,
                 dmitm_order: detailModelItems.dmitm_order,
                 gdmitm_uuid: detailModelItems.gdmitm_uuid,
+                mety_uuid: detailModelItems.mety_uuid,
+                dmitm_isdashboard: detailModelItems.dmitm_isdashboard,
                 dmitm_active: detailModelItems.dmitm_active,
                 dmitm_createdat: TimezoneConverter.toIsoStringInTimezone(detailModelItems.dmitm_createdat, 'America/Argentina/Buenos_Aires'),
                 dmitm_updatedat: TimezoneConverter.toIsoStringInTimezone(detailModelItems.dmitm_updatedat, 'America/Argentina/Buenos_Aires')
@@ -73,9 +77,9 @@ export class DetailModelItemUseCase {
         }
     }
     
-    public async createDetailModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_order: number, gdmitm_uuid: string, dmitm_active: boolean }) {
+    public async createDetailModelItem({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, mety_uuid, dmitm_isdashboard, dmitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_order: number, gdmitm_uuid: string, mety_uuid: string, dmitm_isdashboard: boolean, dmitm_active: boolean }) {
         try {
-            const detailModelItemsValue = new DetailModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active });
+            const detailModelItemsValue = new DetailModelItemValue({ cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, dmitm_key,	dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, mety_uuid, dmitm_isdashboard, dmitm_active });
             const detailModelItemsCreated = await this.detailModelItemRepository.createDetailModelItem(detailModelItemsValue);
             if(!detailModelItemsCreated) {
                 throw new Error(`No se pudo insertar el detail model item.`);
@@ -94,6 +98,8 @@ export class DetailModelItemUseCase {
                 dmitm_defaultvalue: detailModelItemsCreated.dmitm_defaultvalue,
                 dmitm_order: detailModelItemsCreated.dmitm_order,
                 gdmitm_uuid: detailModelItemsCreated.gdmitm_uuid,
+                mety_uuid: detailModelItemsCreated.mety_uuid,
+                dmitm_isdashboard: detailModelItemsCreated.dmitm_isdashboard,
                 dmitm_active: detailModelItemsCreated.dmitm_active,
                 dmitm_createdat: TimezoneConverter.toIsoStringInTimezone(detailModelItemsCreated.dmitm_createdat, 'America/Argentina/Buenos_Aires'),
                 dmitm_updatedat: TimezoneConverter.toIsoStringInTimezone(detailModelItemsCreated.dmitm_updatedat, 'America/Argentina/Buenos_Aires')
@@ -104,9 +110,9 @@ export class DetailModelItemUseCase {
         }
     }
 
-    public async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_order: number, gdmitm_uuid: string, dmitm_active: boolean }) {
+    public async updateDetailModelItem(cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, mety_uuid, dmitm_isdashboard, dmitm_active } : { cmp_uuid: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, dmitm_uuid: string, dmitm_key: string, dmitm_name: string, dmitm_description: string, dtp_uuid: string, dmitm_arrayvalues: string, dmitm_defaultvalue: string, dmitm_order: number, gdmitm_uuid: string, mety_uuid: string, dmitm_isdashboard: boolean, dmitm_active: boolean }) {
         try {
-            const detailModelItemsUpdated = await this.detailModelItemRepository.updateDetailModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, dmitm_active });
+            const detailModelItemsUpdated = await this.detailModelItemRepository.updateDetailModelItem(cmp_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, dmitm_uuid, { dmitm_key, dmitm_name, dmitm_description, dtp_uuid, dmitm_arrayvalues, dmitm_defaultvalue, dmitm_order, gdmitm_uuid, mety_uuid, dmitm_isdashboard, dmitm_active });
             if(!detailModelItemsUpdated) {
                 throw new Error(`No se pudo actualizar el detail model item.`);
             }
@@ -124,6 +130,8 @@ export class DetailModelItemUseCase {
                 dmitm_defaultvalue: detailModelItemsUpdated.dmitm_defaultvalue,
                 dmitm_order: detailModelItemsUpdated.dmitm_order,
                 gdmitm_uuid: detailModelItemsUpdated.gdmitm_uuid,
+                mety_uuid: detailModelItemsUpdated.mety_uuid,
+                dmitm_isdashboard: detailModelItemsUpdated.dmitm_isdashboard,
                 dmitm_active: detailModelItemsUpdated.dmitm_active,
                 dmitm_createdat: TimezoneConverter.toIsoStringInTimezone(detailModelItemsUpdated.dmitm_createdat, 'America/Argentina/Buenos_Aires'),
                 dmitm_updatedat: TimezoneConverter.toIsoStringInTimezone(detailModelItemsUpdated.dmitm_updatedat, 'America/Argentina/Buenos_Aires')

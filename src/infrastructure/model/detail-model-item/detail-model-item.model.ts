@@ -20,6 +20,8 @@ export class SequelizeDetailModelItem extends Model<DetailModelItemEntity, Omit<
 	declare dmitm_active: boolean;
   declare dmitm_order: number;
   declare gdmitm_uuid: string;
+  declare mety_uuid: string;
+  declare dmitm_isdashboard: boolean;
   declare dmitm_createdat: Date;
   declare dmitm_updatedat: Date;
 }
@@ -79,6 +81,14 @@ SequelizeDetailModelItem.init({
   },
   gdmitm_uuid: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  mety_uuid: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  dmitm_isdashboard: {
+    type: DataTypes.BOOLEAN,
     allowNull: true
   },
   dmitm_createdat: {
