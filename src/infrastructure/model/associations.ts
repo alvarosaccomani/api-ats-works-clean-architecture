@@ -2,6 +2,8 @@ import { SequelizeCustomer } from './customer/customer.model';
 import { SequelizeRoute } from './route/route.model';
 import { SequelizeAddress } from './address/address.model';
 import { SequelizeCustomerRoute } from './customer-route/customer-route.model';
+import { SequelizeMetricType } from './metric-type/metric-type.model';
+import { SequelizeDetailModelItem } from './detail-model-item/detail-model-item.model';
 
 //----------------------------------------------------------------
 // CUSTOMERS
@@ -65,10 +67,19 @@ SequelizeAddress.belongsTo(SequelizeCustomer, {
     as: 'cus'
 });
 
+//----------------------------------------------------------------
+// DETAIL MODEL ITEMS & METRIC TYPES
+//----------------------------------------------------------------
+SequelizeDetailModelItem.belongsTo(SequelizeMetricType, {
+    foreignKey: 'mety_uuid',
+    as: 'mety'
+});
+
 // Sincronizar (solo en desarrollo)
 if (process.env.NODE_ENV !== "production") {
     SequelizeCustomer.sync();
     SequelizeRoute.sync();
     SequelizeAddress.sync();
     SequelizeCustomerRoute.sync();
+    SequelizeMetricType.sync();
 }
