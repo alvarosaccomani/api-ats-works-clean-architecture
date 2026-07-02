@@ -3,6 +3,7 @@ import { DetailModelItemRepository } from "../../../domain/detail-model-item/det
 import { SequelizeDataType } from "../../model/data-type/data-type.model";
 import { SequelizeDetailModelItem } from "../../model/detail-model-item/detail-model-item.model";
 import { SequelizeGroupDetailModelItem } from "../../model/group-detail-model-item/group-detail-model-item.model";
+import { SequelizeMetricType } from "../../model/metric-type/metric-type.model";
 import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements DetailModelItemRepository {
@@ -41,6 +42,10 @@ export class SequelizeRepository implements DetailModelItemRepository {
                     {
                         as: 'gdmitm',
                         model: SequelizeGroupDetailModelItem
+                    },
+                    {
+                        as: 'mety',
+                        model: SequelizeMetricType
                     },
                 ]
             });
