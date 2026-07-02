@@ -106,21 +106,6 @@ export class ResourceModuleController {
         try {
             const remo_uuid = req.params.remo_uuid;
             const update = req.body;
-            if(!update.remo_name) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el módulo de recurso.',
-                    error: 'Debe proporcionar un Nombre para el módulo de recurso.'
-                })
-            };
-            const resourceModuleByName = await this.resourceModuleUseCase.findResourceModuleByName(update.remo_name, update.remo_uuid);
-            if(resourceModuleByName) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'No se pudo actualizar el módulo de recurso.',
-                    error: `El nombre ${update.remo_name} de módulo de recurso ya existe.`
-                });
-            }
             const resourceModule = await this.resourceModuleUseCase.updateResourceModule(remo_uuid, update)
             return res.status(200).json({
                 success: true,
