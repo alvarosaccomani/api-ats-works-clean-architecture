@@ -30,7 +30,7 @@ function configureCustomerRoutes(app: Express, socketAdapter: SocketAdapter) {
     app.put(`/${process.env.BASE_URL_API}/customer/:cmp_uuid/:cus_uuid`, customerCtrl.updateCtrl);
     app.delete(`/${process.env.BASE_URL_API}/customer/:cmp_uuid/:cus_uuid`, customerCtrl.deleteCtrl);
     app.delete(`/${process.env.BASE_URL_API}/customer-soft-delete/:cmp_uuid/:cus_uuid`, customerCtrl.softDeleteCtrl);
-    app.put(`/${process.env.BASE_URL_API}/customers/bulk-order`, customerCtrl.updateCustomersOrderCtrl);
+    app.put(`/${process.env.BASE_URL_API}/customers/bulk-order/:cmp_uuid/:rou_uuid`, customerCtrl.updateCustomersOrderCtrl);
 }
 
 export default configureCustomerRoutes;

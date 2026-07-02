@@ -124,6 +124,7 @@ export class SequelizeRepository implements CustomerRepository {
                 const customerPlain = customer.get({ plain: true });
                 const myRelations = allRelations.filter(rel => rel.cus_uuid === customerPlain.cus_uuid);
                 const myRoutes = allRoutes.filter(r => myRelations.some(rel => rel.rou_uuid === r.rou_uuid));
+                const activeRelation = rou_uuid ? myRelations.find(rel => rel.rou_uuid === rou_uuid) : null;
 
                 return {
                     cmp_uuid: customerPlain.cmp_uuid,
@@ -142,7 +143,7 @@ export class SequelizeRepository implements CustomerRepository {
                     cus_subscriptionplanbycustomer: customerPlain.cus_subscriptionplanbycustomer,
                     subp_uuid: customerPlain.subp_uuid,
                     subp: customerPlain.subp,
-                    cus_order: customerPlain.cus_order,
+                    cus_order: (activeRelation ? activeRelation.cusrou_order : customerPlain.cus_order) || 0,
                     cus_active: customerPlain.cus_active,
                     cus_createdat: customerPlain.cus_createdat,
                     cus_updatedat: customerPlain.cus_updatedat
@@ -153,6 +154,15 @@ export class SequelizeRepository implements CustomerRepository {
                 customers.sort((a: any, b: any) => {
                     const orderA = a.rou?.rou_order ?? 999999;
                     const orderB = b.rou?.rou_order ?? 999999;
+                    if (cus_orderby === 'DESC') {
+                        return orderB - orderA;
+                    }
+                    return orderA - orderB;
+                });
+            } else if (field_order === 'cus_order') {
+                customers.sort((a: any, b: any) => {
+                    const orderA = a.cus_order ?? 999999;
+                    const orderB = b.cus_order ?? 999999;
                     if (cus_orderby === 'DESC') {
                         return orderB - orderA;
                     }
@@ -374,14 +384,18 @@ export class SequelizeRepository implements CustomerRepository {
         }
     }
 
-    async updateCustomersOrder(orders: { cus_uuid: string, cus_order: number }[]): Promise<boolean> {
-        const transaction = await SequelizeCustomer.sequelize!.transaction();
+    async updateCustomersOrder(cmp_uuid: string, rou_uuid: string, orders: { cus_uuid: string, cus_order: number }[]): Promise<boolean> {
+        const transaction = await SequelizeCustomerRoute.sequelize!.transaction();
         try {
             for (const order of orders) {
-                await SequelizeCustomer.update(
-                    { cus_order: order.cus_order },
+                await SequelizeCustomerRoute.update(
+                    { cusrou_order: order.cus_order },
                     { 
-                        where: { cus_uuid: order.cus_uuid },
+                        where: { 
+                            cmp_uuid,
+                            rou_uuid,
+                            cus_uuid: order.cus_uuid 
+                        },
                         transaction 
                     }
                 );

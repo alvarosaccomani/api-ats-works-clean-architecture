@@ -259,9 +259,9 @@ export class CustomerUseCase {
         }
     }
 
-    public async updateCustomersOrder(orders: { cus_uuid: string, cus_order: number }[]) {
+    public async updateCustomersOrder(cmp_uuid: string, rou_uuid: string, orders: { cus_uuid: string, cus_order: number }[]) {
         try {
-            return await this.customerRepository.updateCustomersOrder(orders);
+            return await this.customerRepository.updateCustomersOrder(cmp_uuid, rou_uuid, orders);
         } catch (error: any) {
             console.error('Error en updateCustomersOrder (usecase):', error.message);
             throw error;

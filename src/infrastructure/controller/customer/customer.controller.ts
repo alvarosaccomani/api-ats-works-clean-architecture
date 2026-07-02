@@ -270,7 +270,24 @@ export class CustomerController {
 
     public async updateCustomersOrderCtrl(req: Request, res: Response) {
         try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const rou_uuid = req.params.rou_uuid;
             const { orders } = req.body;
+
+            if(!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el orden de los clientes.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+            if(!rou_uuid || rou_uuid.toLowerCase() === 'null' || rou_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el orden de los clientes.',
+                    error: 'Debe proporcionar un Id de recorrido.'
+                });
+            }
             if (!orders || !Array.isArray(orders)) {
                 return res.status(400).json({
                     success: false,
@@ -278,7 +295,7 @@ export class CustomerController {
                     error: 'Debe proporcionar un listado de órdenes válido.'
                 });
             }
-            await this.customerUseCase.updateCustomersOrder(orders);
+            await this.customerUseCase.updateCustomersOrder(cmp_uuid, rou_uuid, orders);
             return res.status(200).send({
                 success: true,
                 message: 'Orden de clientes actualizado con éxito.'
