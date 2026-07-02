@@ -67,11 +67,18 @@ SequelizeAddress.belongsTo(SequelizeCustomer, {
     as: 'cus'
 });
 
+import { SequelizeWorkDetail } from './work-detail/work-detail.model';
+
 //----------------------------------------------------------------
 // DETAIL MODEL ITEMS & METRIC TYPES
 //----------------------------------------------------------------
 SequelizeDetailModelItem.belongsTo(SequelizeMetricType, {
     foreignKey: 'mety_uuid',
+    as: 'mety'
+});
+
+SequelizeWorkDetail.belongsTo(SequelizeMetricType, {
+    foreignKey: 'wrkd_metrictype',
     as: 'mety'
 });
 
@@ -82,4 +89,5 @@ if (process.env.NODE_ENV !== "production") {
     SequelizeAddress.sync();
     SequelizeCustomerRoute.sync();
     SequelizeMetricType.sync();
+    SequelizeWorkDetail.sync();
 }
