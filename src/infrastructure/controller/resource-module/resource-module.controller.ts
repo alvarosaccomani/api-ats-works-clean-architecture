@@ -14,17 +14,18 @@ export class ResourceModuleController {
 
     public async getAllCtrl(req: Request, res: Response) {
         try {
+            const filter = req.params.filter;
             const page = (req.params.page ? parseInt(req.params.page) : null);
             const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
             if (page && perPage) {
-                const items = await this.resourceModuleUseCase.getResourceModules()
+                const items = await this.resourceModuleUseCase.getResourceModules(filter)
                 return res.status(200).send({
                     success: true,
                     message: 'Módulos de recursos retornados.',
                     ...paginator(items, page.toString(), perPage.toString())
                 });
             } else {
-                const items = await this.resourceModuleUseCase.getResourceModules()
+                const items = await this.resourceModuleUseCase.getResourceModules(filter)
                 return res.status(200).send({
                     success: true,
                     message: 'Módulos de recursos retornados.',

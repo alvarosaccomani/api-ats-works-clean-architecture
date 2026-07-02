@@ -1,13 +1,31 @@
 import { ResourceModuleEntity, ResourceModuleUpdateData } from "../../../domain/resource-module/resource-module.entity";
 import { ResourceModuleRepository } from "../../../domain/resource-module/resource-module.repository";
 import { SequelizeResourceModule } from "../../model/resource-module/resource-module.model";
-import { Op } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 import { DbErrorHandler } from '../../utils/db-error-handler';
 
 export class SequelizeRepository implements ResourceModuleRepository {
-    async getResourceModules(): Promise<ResourceModuleEntity[] | null> {
+    async getResourceModules(filter?: string): Promise<ResourceModuleEntity[] | null> {
         try {
-            const resourceModules = await SequelizeResourceModule.findAll();
+            const where: any = {};
+
+            if (filter && filter !== 'null' && filter.trim() !== '') {
+                const search = `%${filter.toLowerCase()}%`;
+                where[Op.or] = [
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('remo_name')),
+                        'LIKE',
+                        search
+                    ),
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('remo_description')),
+                        'LIKE',
+                        search
+                    )
+                ];
+            }
+
+            const resourceModules = await SequelizeResourceModule.findAll({ where });
             if(!resourceModules) {
                 throw new Error(`No hay módulos de recurso`)
             };

@@ -14,9 +14,9 @@ export class ResourceModuleUseCase {
         this.findResourceModuleByName = this.findResourceModuleByName.bind(this);
     }
 
-    public async getResourceModules() {
+    public async getResourceModules(filter?: string) {
         try {
-            const resourceModules = await this.resourceModuleRepository.getResourceModules();
+            const resourceModules = await this.resourceModuleRepository.getResourceModules(filter);
             if(!resourceModules) {
                 throw new Error('No hay módulos de recurso.');
             }
