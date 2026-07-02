@@ -8,6 +8,9 @@ import { SequelizeWork } from "../../model/work/work.model";
 import { SequelizeCustomer } from "../../model/customer/customer.model";
 import { SequelizeWorkState } from "../../model/work-state/work-state.model";
 import { SequelizeWorkHistory } from "../../model/work-history/work-history.model";
+import { SequelizeWorkDetail } from "../../model/work-detail/work-detail.model";
+import { SequelizeMetricType } from "../../model/metric-type/metric-type.model";
+import { Op } from "sequelize";
 
 export class SequelizeRepository implements DashboardRepository {
     async getDashboards(cmp_uuid: string): Promise<DashboardEntity | null> {
@@ -163,10 +166,72 @@ export class SequelizeRepository implements DashboardRepository {
                 createdAt: h.wrkh_createdat
             }));
 
+            // 3. Métricas dinámicas agrupadas
+            const details: any = await SequelizeWorkDetail.findAll({
+                where: {
+                    cmp_uuid: cmp_uuid,
+                    wrkd_isdashboard: true,
+                    wrkd_metrictype: { [Op.ne]: null as any }
+                } as any,
+                include: [
+                    {
+                        model: SequelizeMetricType,
+                        as: 'mety',
+                        attributes: ['mety_cod', 'mety_name']
+                    }
+                ]
+            });
+
+            const metricsGroups: { [key: string]: { name: string, code: string, values: number[] } } = {};
+
+            for (const detail of details) {
+                const metyCod = (detail as any).mety?.mety_cod;
+                if (!metyCod) continue;
+
+                const key = detail.wrkd_key || 'key';
+                const valueNum = parseFloat(detail.wrkd_value || '0');
+                if (isNaN(valueNum)) continue;
+
+                if (!metricsGroups[key]) {
+                    metricsGroups[key] = {
+                        name: detail.wrkd_name || key,
+                        code: metyCod,
+                        values: []
+                    };
+                }
+                metricsGroups[key].values.push(valueNum);
+            }
+
+            const dynamicMetrics = Object.keys(metricsGroups).map(key => {
+                const group = metricsGroups[key];
+                let value = 0;
+                if (group.values.length > 0) {
+                    if (group.code === 'SUM') {
+                        value = group.values.reduce((acc, v) => acc + v, 0);
+                    } else if (group.code === 'AVG') {
+                        const sum = group.values.reduce((acc, v) => acc + v, 0);
+                        value = parseFloat((sum / group.values.length).toFixed(2));
+                    } else if (group.code === 'COUNT') {
+                        value = group.values.length;
+                    } else if (group.code === 'MIN') {
+                        value = Math.min(...group.values);
+                    } else if (group.code === 'MAX') {
+                        value = Math.max(...group.values);
+                    }
+                }
+                return {
+                    key,
+                    name: group.name,
+                    metricCode: group.code,
+                    value
+                };
+            });
+
             return {
                 workStates,
                 workTrends,
-                recentActivity
+                recentActivity,
+                dynamicMetrics
             };
         } catch (error: any) {
             console.error('Error en getDashboardAnalytics:', error.message);
