@@ -13,6 +13,7 @@ export class CustomerController {
         this.deleteCtrl = this.deleteCtrl.bind(this);
         this.softDeleteCtrl = this.softDeleteCtrl.bind(this);
         this.getByUserIdCtrl = this.getByUserIdCtrl.bind(this);
+        this.updateCustomersOrderCtrl = this.updateCustomersOrderCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -262,6 +263,31 @@ export class CustomerController {
             return res.status(400).json({
                 success: false,
                 message: 'No se pudo recuperar el customer.',
+                error: error.message,
+            });
+        }
+    }
+
+    public async updateCustomersOrderCtrl(req: Request, res: Response) {
+        try {
+            const { orders } = req.body;
+            if (!orders || !Array.isArray(orders)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el orden de los clientes.',
+                    error: 'Debe proporcionar un listado de órdenes válido.'
+                });
+            }
+            await this.customerUseCase.updateCustomersOrder(orders);
+            return res.status(200).send({
+                success: true,
+                message: 'Orden de clientes actualizado con éxito.'
+            });
+        } catch (error: any) {
+            console.error('Error en updateCustomersOrderCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo actualizar el orden de los clientes.',
                 error: error.message,
             });
         }

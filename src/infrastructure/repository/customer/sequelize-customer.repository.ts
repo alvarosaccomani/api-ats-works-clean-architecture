@@ -373,4 +373,25 @@ export class SequelizeRepository implements CustomerRepository {
             throw error;
         }
     }
+
+    async updateCustomersOrder(orders: { cus_uuid: string, cus_order: number }[]): Promise<boolean> {
+        const transaction = await SequelizeCustomer.sequelize!.transaction();
+        try {
+            for (const order of orders) {
+                await SequelizeCustomer.update(
+                    { cus_order: order.cus_order },
+                    { 
+                        where: { cus_uuid: order.cus_uuid },
+                        transaction 
+                    }
+                );
+            }
+            await transaction.commit();
+            return true;
+        } catch (error: any) {
+            await transaction.rollback();
+            console.error('Error en updateCustomersOrder:', error.message);
+            throw error;
+        }
+    }
 }

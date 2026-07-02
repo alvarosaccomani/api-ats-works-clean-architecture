@@ -9,4 +9,5 @@ export interface CustomerRepository {
     softDeleteCustomer(cmp_uuid: string, cus_uuid: string): Promise<CustomerEntity | null>;
     findCustomerByName(cmp_uuid: string, cus_fullname: string, excludeUuid?: string | null): Promise<CustomerEntity | null>;
     findCustomerByUserId(cmp_uuid: string, usr_uuid: string): Promise<CustomerEntity | null>;
+    updateCustomersOrder(orders: { cus_uuid: string, cus_order: number }[]): Promise<boolean>;
 }

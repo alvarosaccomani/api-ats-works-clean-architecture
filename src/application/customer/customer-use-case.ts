@@ -14,6 +14,7 @@ export class CustomerUseCase {
         this.softDeleteCustomer = this.softDeleteCustomer.bind(this);
         this.findCustomerByName = this.findCustomerByName.bind(this);
         this.findCustomerByUserId = this.findCustomerByUserId.bind(this);
+        this.updateCustomersOrder = this.updateCustomersOrder.bind(this);
     }
 
     public async getCustomers(cmp_uuid: string, cus_fullname: string | undefined, cus_email: string | undefined, rou_uuid: string | undefined, field_order: string | undefined, cus_orderby: string | undefined) {
@@ -254,6 +255,15 @@ export class CustomerUseCase {
             };
         } catch (error: any) {
             console.error('Error en findCustomerByUserId (use case):', error.message);
+            throw error;
+        }
+    }
+
+    public async updateCustomersOrder(orders: { cus_uuid: string, cus_order: number }[]) {
+        try {
+            return await this.customerRepository.updateCustomersOrder(orders);
+        } catch (error: any) {
+            console.error('Error en updateCustomersOrder (usecase):', error.message);
             throw error;
         }
     }
