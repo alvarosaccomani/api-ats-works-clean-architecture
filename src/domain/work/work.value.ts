@@ -31,6 +31,7 @@ export class WorkValue implements WorkEntity {
     wrk_updatedat: Date;
     workDetails: WorkDetailEntity[];
     wrk_order: number;
+    wrk_defaultroute?: string;
 
     constructor({
         cmp_uuid,
@@ -59,7 +60,8 @@ export class WorkValue implements WorkEntity {
         wrk_createdat,
         wrk_updatedat,
         workDetails,
-        wrk_order
+        wrk_order,
+        wrk_defaultroute
     }: {
         cmp_uuid: string,
         wrk_uuid: string,
@@ -87,7 +89,8 @@ export class WorkValue implements WorkEntity {
         wrk_createdat?: Date,
         wrk_updatedat?: Date,
         workDetails?: WorkDetailEntity[],
-        wrk_order: number
+        wrk_order: number,
+        wrk_defaultroute?: string
     }) {
         this.cmp_uuid = cmp_uuid;
         this.wrk_uuid = uuid();
@@ -116,5 +119,6 @@ export class WorkValue implements WorkEntity {
         this.wrk_updatedat = wrk_updatedat ?? moment().toDate();
         this.workDetails = workDetails ?? [];
         this.wrk_order = wrk_order;
+        this.wrk_defaultroute = wrk_defaultroute;
     }
 }

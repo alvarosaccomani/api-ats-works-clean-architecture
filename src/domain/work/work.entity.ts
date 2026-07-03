@@ -38,6 +38,7 @@ export interface WorkEntity {
     mitm_uuid: string,
     mitm?: ModelItemEntity,
     wrk_order: number,
+    wrk_defaultroute?: string,
     workDetails?: WorkDetailEntity[],
     workAttachments?: WorkAttachmentEntity[],
 	wrk_createdat: Date,
@@ -45,4 +46,4 @@ export interface WorkEntity {
 }
 
 //Update
-export type WorkUpdateData = Pick<WorkEntity, 'adr_uuid' | 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid1' | 'wrk_operator_uuid2' | 'wrk_operator_uuid3' | 'wrk_operator_uuid4' | 'wrk_customer' | 'wrk_address' | 'wrk_lat' | 'wrk_lng' | 'wrk_phone' | 'wrk_route' | 'twrk_uuid' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid' | 'wrk_order'> & { comment?: string }
+export type WorkUpdateData = Pick<WorkEntity, 'adr_uuid' | 'wrk_description' | 'wrk_workdate' | 'wrk_workdateinit' | 'wrk_workdatefinish' | 'wrks_uuid' | 'wrk_user_uuid' | 'wrk_operator_uuid1' | 'wrk_operator_uuid2' | 'wrk_operator_uuid3' | 'wrk_operator_uuid4' | 'wrk_customer' | 'wrk_address' | 'wrk_lat' | 'wrk_lng' | 'wrk_phone' | 'wrk_route' | 'twrk_uuid' | 'itm_uuid' | 'cmpitm_uuid' | 'mitm_uuid' | 'wrk_order' | 'wrk_defaultroute'> & { comment?: string }

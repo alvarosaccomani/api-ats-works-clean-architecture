@@ -62,6 +62,7 @@ export class WorkUseCase {
                 mitm_uuid: work.mitm_uuid,
                 mitm: work.mitm,
                 wrk_order: work.wrk_order,
+                wrk_defaultroute: work.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
@@ -112,6 +113,7 @@ export class WorkUseCase {
                 workDetails: works.workDetails,
                 workAttachments: works.workAttachments,
                 wrk_order: works.wrk_order,
+                wrk_defaultroute: works.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(works.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(works.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -121,9 +123,9 @@ export class WorkUseCase {
         }
     }
 
-    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails, wrk_order }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, workDetails: WorkDetailEntity[], wrk_order: number }) {
+    public async createWork({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails, wrk_order, wrk_defaultroute }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, workDetails: WorkDetailEntity[], wrk_order: number, wrk_defaultroute?: string }) {
         try {
-            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails, wrk_order });
+            const worksValue = new WorkValue({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, workDetails, wrk_order, wrk_defaultroute });
             const worksCreated = await this.workRepository.createWork(worksValue);
             if (!worksCreated) {
                 throw new Error(`No se pudo insertar el work.`);
@@ -161,6 +163,7 @@ export class WorkUseCase {
                 cmpitm_uuid: worksCreated.cmpitm_uuid,
                 mitm_uuid: worksCreated.mitm_uuid,
                 wrk_order: worksCreated.wrk_order,
+                wrk_defaultroute: worksCreated.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksCreated.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksCreated.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -170,9 +173,9 @@ export class WorkUseCase {
         }
     }
 
-    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, comment }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, wrk_order: number, comment?: string }) {
+    public async updateWork(cmp_uuid: string, wrk_uuid: string, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_defaultroute, comment }: { cmp_uuid: string, wrk_uuid: string, adr_uuid: string, wrk_description: string, wrk_workdate: Date, wrk_workdateinit: Date, wrk_workdatefinish: Date, wrks_uuid: string, wrk_user_uuid: string, wrk_operator_uuid1: string, wrk_operator_uuid2: string, wrk_operator_uuid3: string, wrk_operator_uuid4: string, wrk_customer: string, wrk_address: string, wrk_phone: string, wrk_lat: number, wrk_lng: number, twrk_uuid: string, wrk_route: string, itm_uuid: string, cmpitm_uuid: string, mitm_uuid: string, wrk_order: number, wrk_defaultroute?: string, comment?: string }) {
         try {
-            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, comment });
+            const worksUpdated = await this.workRepository.updateWork(cmp_uuid, wrk_uuid, { adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_phone, wrk_lat, wrk_lng, twrk_uuid, wrk_route, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_defaultroute, comment });
             if (!worksUpdated) {
                 throw new Error(`No se pudo actualizar el work.`);
             }
@@ -197,6 +200,7 @@ export class WorkUseCase {
                 cmpitm_uuid: worksUpdated.cmpitm_uuid,
                 mitm_uuid: worksUpdated.mitm_uuid,
                 wrk_order: worksUpdated.wrk_order,
+                wrk_defaultroute: worksUpdated.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksUpdated.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksUpdated.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -233,6 +237,7 @@ export class WorkUseCase {
                 cmpitm_uuid: worksDeleted.cmpitm_uuid,
                 mitm_uuid: worksDeleted.mitm_uuid,
                 wrk_order: worksDeleted.wrk_order,
+                wrk_defaultroute: worksDeleted.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksDeleted.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksDeleted.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -290,6 +295,7 @@ export class WorkUseCase {
                 mitm_uuid: work.mitm_uuid,
                 mitm: work.mitm,
                 wrk_order: work.wrk_order,
+                wrk_defaultroute: work.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
@@ -325,7 +331,8 @@ export class WorkUseCase {
                 wrk_lng: work.wrk_lng,
                 wrk_route: work.wrk_route,
                 wrk_phone: work.wrk_phone,
-                wrk_order: work.wrk_order
+                wrk_order: work.wrk_order,
+                wrk_defaultroute: work.wrk_defaultroute
             }));
         } catch (error: any) {
             console.error('Error en getWorkScheduler (use case):', error.message);
@@ -360,7 +367,8 @@ export class WorkUseCase {
                 wrk_phone: work.wrk_phone,
                 mitm_uuid: work.mitm_uuid,
                 mitm: work.mitm,
-                wrk_order: work.wrk_order
+                wrk_order: work.wrk_order,
+                wrk_defaultroute: work.wrk_defaultroute
             }));
         } catch (error: any) {
             console.error('Error en getWorksByAddress (use case):', error.message);
@@ -423,6 +431,7 @@ export class WorkUseCase {
                 workDetails: work.workDetails,
                 workAttachments: work.workAttachments,
                 wrk_order: work.wrk_order,
+                wrk_defaultroute: work.wrk_defaultroute,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
