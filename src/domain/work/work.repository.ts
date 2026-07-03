@@ -11,4 +11,5 @@ export interface WorkRepository {
     getWorksScheduler(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
     getWorksByAddress(cmp_uuid: string, cus_uuid: string | undefined, adr_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
     getPendingWorksByUser(cmp_uuid: string, usr_uuid: string, wrks_uuid: string | undefined, wrk_route: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined): Promise<WorkEntity[] | null>;
+    updateWorksOrder(cmp_uuid: string, orders: { wrk_uuid: string, wrk_order: number }[]): Promise<boolean>;
 }

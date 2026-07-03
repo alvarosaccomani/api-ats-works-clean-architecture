@@ -29,6 +29,7 @@ function configureWorkRoutes(app: Express, socketAdapter: SocketAdapter) {
     app.get(`/${process.env.BASE_URL_API}/work/:cmp_uuid/:wrk_uuid`, workCtrl.getCtrl);
     app.post(`/${process.env.BASE_URL_API}/work`, workCtrl.insertCtrl);
     app.put(`/${process.env.BASE_URL_API}/work/:cmp_uuid/:wrk_uuid`, workCtrl.updateCtrl);
+    app.put(`/${process.env.BASE_URL_API}/works/bulk-order/:cmp_uuid`, workCtrl.updateWorksOrderCtrl);
     app.delete(`/${process.env.BASE_URL_API}/work/:cmp_uuid/:wrk_uuid`, workCtrl.deleteCtrl);
     app.get(`/${process.env.BASE_URL_API}/pending-works/:cmp_uuid`, workCtrl.getPendingWorksCtrl);
     app.get(`/${process.env.BASE_URL_API}/pending-works-by-user/:cmp_uuid/:usr_uuid`, workCtrl.getPendingWorksByUserCtrl);

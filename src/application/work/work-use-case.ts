@@ -20,6 +20,7 @@ export class WorkUseCase {
         this.getWorksScheduler = this.getWorksScheduler.bind(this);
         this.getWorksByAddress = this.getWorksByAddress.bind(this);
         this.getPendingWorksByUser = this.getPendingWorksByUser.bind(this);
+        this.updateWorksOrder = this.updateWorksOrder.bind(this);
     }
 
     public async getWorks(cmp_uuid: string, wrk_dateFrom: Date | undefined, wrk_dateTo: Date | undefined, wrk_fullname: string | undefined, wrks_uuid: string | undefined, field_order: string | undefined, wrk_orderby: string | undefined) {
@@ -60,6 +61,7 @@ export class WorkUseCase {
                 cmpitm_uuid: work.cmpitm_uuid,
                 mitm_uuid: work.mitm_uuid,
                 mitm: work.mitm,
+                wrk_order: work.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
@@ -109,6 +111,7 @@ export class WorkUseCase {
                 mitm: works.mitm,
                 workDetails: works.workDetails,
                 workAttachments: works.workAttachments,
+                wrk_order: works.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(works.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(works.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -157,6 +160,7 @@ export class WorkUseCase {
                 itm_uuid: worksCreated.itm_uuid,
                 cmpitm_uuid: worksCreated.cmpitm_uuid,
                 mitm_uuid: worksCreated.mitm_uuid,
+                wrk_order: worksCreated.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksCreated.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksCreated.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -192,6 +196,7 @@ export class WorkUseCase {
                 itm_uuid: worksUpdated.itm_uuid,
                 cmpitm_uuid: worksUpdated.cmpitm_uuid,
                 mitm_uuid: worksUpdated.mitm_uuid,
+                wrk_order: worksUpdated.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksUpdated.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksUpdated.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -227,6 +232,7 @@ export class WorkUseCase {
                 itm_uuid: worksDeleted.itm_uuid,
                 cmpitm_uuid: worksDeleted.cmpitm_uuid,
                 mitm_uuid: worksDeleted.mitm_uuid,
+                wrk_order: worksDeleted.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(worksDeleted.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(worksDeleted.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             };
@@ -283,6 +289,7 @@ export class WorkUseCase {
                 cmpitm_uuid: work.cmpitm_uuid,
                 mitm_uuid: work.mitm_uuid,
                 mitm: work.mitm,
+                wrk_order: work.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
@@ -317,7 +324,8 @@ export class WorkUseCase {
                 wrk_lat: work.wrk_lat,
                 wrk_lng: work.wrk_lng,
                 wrk_route: work.wrk_route,
-                wrk_phone: work.wrk_phone
+                wrk_phone: work.wrk_phone,
+                wrk_order: work.wrk_order
             }));
         } catch (error: any) {
             console.error('Error en getWorkScheduler (use case):', error.message);
@@ -351,7 +359,8 @@ export class WorkUseCase {
                 wrk_route: work.wrk_route,
                 wrk_phone: work.wrk_phone,
                 mitm_uuid: work.mitm_uuid,
-                mitm: work.mitm
+                mitm: work.mitm,
+                wrk_order: work.wrk_order
             }));
         } catch (error: any) {
             console.error('Error en getWorksByAddress (use case):', error.message);
@@ -413,6 +422,7 @@ export class WorkUseCase {
                 mitm: work.mitm,
                 workDetails: work.workDetails,
                 workAttachments: work.workAttachments,
+                wrk_order: work.wrk_order,
                 wrk_createdat: TimezoneConverter.toIsoStringInTimezone(work.wrk_createdat, 'America/Argentina/Buenos_Aires'),
                 wrk_updatedat: TimezoneConverter.toIsoStringInTimezone(work.wrk_updatedat, 'America/Argentina/Buenos_Aires')
             }));
@@ -433,5 +443,14 @@ export class WorkUseCase {
             return adrPlain;
         }
         return adr;
+    }
+
+    public async updateWorksOrder(cmp_uuid: string, orders: { wrk_uuid: string, wrk_order: number }[]) {
+        try {
+            return await this.workRepository.updateWorksOrder(cmp_uuid, orders);
+        } catch (error: any) {
+            console.error('Error en updateWorksOrder (usecase):', error.message);
+            throw error;
+        }
     }
 }

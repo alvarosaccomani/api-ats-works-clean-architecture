@@ -780,4 +780,28 @@ export class SequelizeRepository implements WorkRepository {
             throw error;
         }
     }
+
+    async updateWorksOrder(cmp_uuid: string, orders: { wrk_uuid: string, wrk_order: number }[]): Promise<boolean> {
+        const transaction = await SequelizeWork.sequelize!.transaction();
+        try {
+            for (const order of orders) {
+                await SequelizeWork.update(
+                    { wrk_order: order.wrk_order },
+                    { 
+                        where: { 
+                            cmp_uuid,
+                            wrk_uuid: order.wrk_uuid 
+                        },
+                        transaction 
+                    }
+                );
+            }
+            await transaction.commit();
+            return true;
+        } catch (error: any) {
+            await transaction.rollback();
+            console.error('Error en updateWorksOrder:', error.message);
+            throw error;
+        }
+    }
 }

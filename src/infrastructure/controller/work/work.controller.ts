@@ -15,6 +15,7 @@ export class WorkController {
         this.getWorksSchedulerCtrl = this.getWorksSchedulerCtrl.bind(this);
         this.getWorksByAddressCtrl = this.getWorksByAddressCtrl.bind(this);
         this.getPendingWorksByUserCtrl = this.getPendingWorksByUserCtrl.bind(this);
+        this.updateWorksOrderCtrl = this.updateWorksOrderCtrl.bind(this);
     }
 
     public async getAllCtrl(req: Request, res: Response) {
@@ -306,6 +307,45 @@ export class WorkController {
                 success: false,
                 message: 'No se pudo recuperar los pending works del usuario.',
                 error: error.message,
+            });
+        }
+    }
+
+    public async updateWorksOrderCtrl(req: Request, res: Response) {
+        try {
+            const cmp_uuid = req.params.cmp_uuid;
+            const orders = req.body.orders;
+
+            if (!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el orden de los trabajos.',
+                    error: 'Debe proporcionar un Id de company.'
+                });
+            }
+
+            if (!orders || !Array.isArray(orders)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el orden de los trabajos.',
+                    error: 'Debe proporcionar una lista de ordenes válida.'
+                });
+            }
+
+            await this.workUseCase.updateWorksOrder(cmp_uuid, orders);
+
+            this.socketAdapter.emitEvent('works_bulk_ordered', { cmp_uuid });
+
+            return res.status(200).json({
+                success: true,
+                message: 'Orden de trabajos actualizado correctamente.'
+            });
+        } catch (error: any) {
+            console.error('Error en updateWorksOrderCtrl (controller):', error.message);
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo actualizar el orden de los trabajos.',
+                error: error.message
             });
         }
     }
