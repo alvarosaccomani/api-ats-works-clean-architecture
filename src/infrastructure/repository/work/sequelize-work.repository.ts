@@ -40,12 +40,12 @@ export class SequelizeRepository implements WorkRepository {
                 const dateCondition: any = {};
                 if (wrk_dateFrom) {
                     const from = new Date(wrk_dateFrom);
-                    from.setHours(0, 0, 0, 0);
+                    from.setUTCHours(0, 0, 0, 0);
                     dateCondition[Op.gte] = from;
                 }
                 if (wrk_dateTo) {
                     const to = new Date(wrk_dateTo);
-                    to.setHours(23, 59, 59, 999);
+                    to.setUTCHours(23, 59, 59, 999);
                     dateCondition[Op.lte] = to;
                 }
                 andConditions.push({ wrk_workdate: dateCondition });
@@ -245,8 +245,26 @@ export class SequelizeRepository implements WorkRepository {
     }
     async createWork(work: WorkEntity): Promise<WorkEntity | null> {
         try {
-            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_createdat, wrk_updatedat } = work
-            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_createdat, wrk_updatedat });
+            let { cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_defaultroute, wrk_createdat, wrk_updatedat } = work
+
+            if (!wrk_order || wrk_order === 0) {
+                const startOfDay = new Date(wrk_workdate);
+                startOfDay.setUTCHours(0, 0, 0, 0);
+                const endOfDay = new Date(wrk_workdate);
+                endOfDay.setUTCHours(23, 59, 59, 999);
+
+                const maxOrder = await SequelizeWork.max('wrk_order', {
+                    where: {
+                        cmp_uuid,
+                        wrk_workdate: {
+                            [Op.between]: [startOfDay, endOfDay]
+                        }
+                    }
+                });
+                wrk_order = (maxOrder as number || 0) + 1;
+            }
+
+            const result = await SequelizeWork.create({ cmp_uuid, wrk_uuid, adr_uuid, wrk_description, wrk_workdate, wrk_workdateinit, wrk_workdatefinish, wrks_uuid, wrk_user_uuid, wrk_operator_uuid1, wrk_operator_uuid2, wrk_operator_uuid3, wrk_operator_uuid4, wrk_customer, wrk_address, wrk_lat, wrk_lng, wrk_phone, wrk_route, twrk_uuid, itm_uuid, cmpitm_uuid, mitm_uuid, wrk_order, wrk_defaultroute, wrk_createdat, wrk_updatedat });
             if(!result) {
                 throw new Error(`No se ha agregado el work`);
             }
@@ -299,6 +317,7 @@ export class SequelizeRepository implements WorkRepository {
                     cmpitm_uuid: work.cmpitm_uuid,
                     mitm_uuid: work.mitm_uuid,
                     wrk_order: work.wrk_order,
+                    wrk_defaultroute: work.wrk_defaultroute,
                 }, 
                 { 
                     where: { cmp_uuid, wrk_uuid },
