@@ -15,9 +15,9 @@ export class ModelItemController {
     public async getAllCtrl(req: Request, res: Response) {
         try {
             const cmp_uuid = req.params.cmp_uuid;
-            const filter = req.params.filter;
-            const page = (req.params.page ? parseInt(req.params.page) : null);
-            const perPage = (req.params.perPage ? parseInt(req.params.perPage) : null);
+            const filter = (req.query.filter as string) || req.params.filter;
+            const page = req.query.page ? parseInt(req.query.page as string) : (req.params.page ? parseInt(req.params.page) : null);
+            const perPage = req.query.perPage ? parseInt(req.query.perPage as string) : (req.params.perPage ? parseInt(req.params.perPage) : null);
             if (!cmp_uuid || cmp_uuid.toLowerCase() === 'null' || cmp_uuid.toLowerCase() === 'undefined') {
                 return res.status(400).json({
                     success: false,
