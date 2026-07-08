@@ -148,7 +148,7 @@ export class SequelizeRepository implements DashboardRepository {
                     {
                         model: SequelizeUser,
                         as: 'usr',
-                        attributes: ['usr_fullname', 'usr_nick']
+                        attributes: ['usr_name', 'usr_surname', 'usr_nick']
                     }
                 ]
             });
@@ -161,7 +161,9 @@ export class SequelizeRepository implements DashboardRepository {
                 stateName: h.wrks?.wrks_name || 'Sin Estado',
                 stateBgColor: h.wrks?.wrks_bkcolor || '#ccc',
                 stateFrColor: h.wrks?.wrks_frcolor || '#333',
-                userFullName: h.usr?.usr_fullname || h.usr?.usr_nick || 'Sistema',
+                userFullName: (h.usr?.usr_name || h.usr?.usr_surname)
+                    ? `${h.usr.usr_name || ''} ${h.usr.usr_surname || ''}`.trim()
+                    : h.usr?.usr_nick || 'Sistema',
                 comment: h.wrkh_comment || '',
                 createdAt: h.wrkh_createdat
             }));
